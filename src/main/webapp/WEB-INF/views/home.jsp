@@ -74,7 +74,8 @@
 			</sec:authorize>
 			
 			<sec:authorize access="isAnonymous()">
-			    <a href="${pageContext.request.contextPath}/login">Login</a>
+			    <a href="${pageContext.request.contextPath}/login">Login</a> |
+			    <a href="${pageContext.request.contextPath}/users/register">Register</a>
 			</sec:authorize>
 
 		</nav>

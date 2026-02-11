@@ -24,21 +24,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String registerUser(@Valid User user) {
 		log.info("Registering user: {}", user);
-		// Check if email already exists
-		if(userRepository.existsByEmail(user.getEmail())) {
-			log.warn("Registration failed: Email {} already exists", user.getEmail());
-			//custome exception can be created for better handling
-			throw new EmailAlreadyExistsException("Email already exists");
-		}
-		//check if username already exists
-		if(userRepository.existsByUsername(user.getUsername())) {
-			log.warn("Registration failed: Username {} already exists", user.getUsername());
-			//custome exception can be created for better handling
-			throw new UserNameAlreadyExists("Username already exists");
-		}
-
 		user.setPassword(this.encoder.encode(user.getPassword()));
-		return this.userRepository.save(user).getId() + "";
+		return this.userRepository.save(user).getFullName();
 	}
-	
+
+	@Override
+	public boolean doesUniqueEmailExists(String email) {
+		return this.userRepository.existsByEmail(email);
+	}
+
+	@Override
+	public boolean doesUniqueUsernameExists(String username) {
+		return userRepository.existsByUsername(username);
+	}
+
 }
