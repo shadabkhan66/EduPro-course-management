@@ -35,7 +35,7 @@ public class CourseController {
 		//adding data to the model to be used in the view
 		model.addAttribute("courses", courseService.getAllTheAvailableCourses());
 		model.addAttribute("numberOfCourses", this.courseService.getNumberOfAvailabelCourses());
-		return "courseList"; // returns the logical view name
+		return "course/course-list"; // returns the logical view name
 	}
 	
 	@GetMapping("/add")
@@ -45,7 +45,7 @@ public class CourseController {
 		model.addAttribute("pageHeading", "Create New Course"); 
 		model.addAttribute("submitButtonLabel", "Register Course"); 
 		model.addAttribute("isEditMode", false); // Flag to indicate this is an add form, not edit
-		return "form"; // returns the logical view name for the add course form
+		return "course/course-form"; // returns the logical view name for the add course form
 	}
 	
 	@PostMapping
@@ -72,7 +72,7 @@ public class CourseController {
 	        model.addAttribute("pageHeading", course.getId() != null ? "Edit Course" : "Create New Course");
 	        model.addAttribute("submitButtonLabel", course.getId() != null ? "Update Course" : "Register Course");
 	        model.addAttribute("isEditMode", course.getId() != null); // Set edit mode based on whether the course has an ID
-	        return "form"; // return to the form view if there are validation errors
+	        return "course/course-form"; // return to the form view if there are validation errors
 	    }
 		
 	    log.info("Registering course: {}", course);
@@ -105,7 +105,7 @@ public class CourseController {
 		model.addAttribute("submitButtonLabel", "Update Course");
 		model.addAttribute("isEditMode", true); // Flag to indicate this is an edit form
 		log.info("Course fetched successfully for editing: {}", course);
-		return "form"; // returns the logical view name for the edit course form
+		return "course/course-form"; // returns the logical view name for the edit course form
 	}
 	
 	
@@ -132,7 +132,7 @@ public class CourseController {
 			model.addAttribute("pageHeading", "Edit Course");
 			model.addAttribute("submitButtonLabel", "Update Course");
 			model.addAttribute("isEditMode", true); // Flag to indicate this is an edit form
-	        return "form"; // return to the form view if there are validation errors
+	        return "course/course-form"; // return to the form view if there are validation errors
 	    }
 	    
 	    try {

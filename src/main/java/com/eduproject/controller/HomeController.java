@@ -23,13 +23,13 @@ public class HomeController {
 			log.info("Accessing home page after logout, showing logout message");
 		}
 		log.info("Accessing home page without logout parameter");
-		return "home";
+		return "home/home";
 	}
 	
 	@GetMapping("/login")
 	public String login() {
 		log.info("Accessing login page");
-		return "login";
+		return "auth/login";
 	}
 	
 	@GetMapping("/whoami")
