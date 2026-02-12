@@ -33,6 +33,7 @@ public class CourseController {
 
 		
 		//adding data to the model to be used in the view
+		model.addAttribute("pageTitle", "Course List");
 		model.addAttribute("courses", courseService.getAllTheAvailableCourses());
 		model.addAttribute("numberOfCourses", this.courseService.getNumberOfAvailabelCourses());
 		return "course/course-list"; // returns the logical view name

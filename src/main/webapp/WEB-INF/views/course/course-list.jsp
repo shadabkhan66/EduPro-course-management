@@ -1,83 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
 
-<%-- Tag Libraries --%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ include file="../fragments/header.jsp" %>
 
-<%--
-    EL        : ${}
-    JSTL     : <c:forEach>, <c:if>, <c:choose>
-    Spring   : <spring:message>, <form:form>
---%>
 
-<html>
-<head>
-    <title>Course List</title>
-
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-	
-	<script type="text/javascript">
-	    function confirmDelete(courseTitle) {
-	        return confirm("Are you sure you want to delete the course: \"" + courseTitle + "\" ?");
-	    }
-	</script>
-
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f9f9f9;
-        }
-
-        .container {
-            width: 70%;
-            margin: 30px auto;
-            background: #ffffff;
-            padding: 20px 30px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            text-align: center;
-            color: tomato;
-        }
-
-        .info {
-            text-align: center;
-            color: #555;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-
-        .edit {
-            color: #2b8cff;
-        }
-
-        .delete {
-            color: #ff005d;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-
-<body>
 <div class="container">
 
     <h2>Course List</h2>
@@ -166,5 +90,6 @@
 
 	
 </div>
-</body>
-</html>
+
+
+<%@ include file="../fragments/footer.jsp" %>
