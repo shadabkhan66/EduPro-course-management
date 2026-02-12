@@ -42,7 +42,7 @@ public class UserController {
 	public String showRegistrationForm(Model model) {
 		log.info("Displaying user registration form");
 		model.addAttribute("user", new User()); // for form binding
-		return "user/user_form";
+		return "user/user-form";
 	}
 
 	// Handle registration submission
@@ -63,7 +63,7 @@ public class UserController {
 		}
 		if(result.hasErrors()) {
 			log.error("Validation failed: {}", result.getAllErrors());
-			return "user/user_form";
+			return "user/user-form";
 		}
 
 
