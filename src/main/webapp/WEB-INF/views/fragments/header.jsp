@@ -32,6 +32,7 @@
                 margin: 0;
                 padding: 0;
                 background-color: #f4f6f9;
+
             }
 
             /* ========== Header ========== */
@@ -204,13 +205,14 @@
                 margin-top: 40px;
                 border-top: 1px solid #ddd;
                 color: #666;
+
             }
 
         </style>
 	</head>
 <body>
    <header>
-	    <h1>Academic sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</h1>
+	    <h1>Academic </h1>
 	    <p>This is a simple JSP page.</p>
 	    
 	    <nav>

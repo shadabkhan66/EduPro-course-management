@@ -40,7 +40,7 @@
                 <c:forEach var="course" items="${courses}">
                     <tr>
                         <td>${course.id}</td>
-                        <td>${course.title}</td>
+                        <td><a href="${pageContext.request.contextPath}/courses/${course.id}">${course.title}</a></td>
                         <td>${course.description}</td>
                         <td>${course.durationInHours}</td>
                         <td>${course.fees}</td>

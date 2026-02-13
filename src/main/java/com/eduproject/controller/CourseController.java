@@ -38,7 +38,16 @@ public class CourseController {
 		model.addAttribute("numberOfCourses", this.courseService.getNumberOfAvailabelCourses());
 		return "course/course-list"; // returns the logical view name
 	}
-	
+
+	@GetMapping("/{id}")
+	public String viewCourse(@PathVariable long id, Model model) {
+		CourseVO courseVo = this.courseService.getCourseById(id);
+
+		model.addAttribute("course", courseVo);
+		return "course/course-view";
+
+	}
+
 	@GetMapping("/add")
 	public String showAddCourseForm(Model model) {
 		log.info("Showing add course form");
@@ -99,6 +108,7 @@ public class CourseController {
 		catch (CourseNotFoundException e) {
 			log.error("Error fetching course with ID {}: {}", courseId, e.getMessage());
 			// Handle the error, e.g., redirect to an error page or show a message
+
 			return "redirect:/courses?error=CourseNotFoundForEditing";
 		}
 		model.addAttribute("course", course); // Add the course to the model for the form
