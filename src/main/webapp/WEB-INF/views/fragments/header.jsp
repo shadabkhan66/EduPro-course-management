@@ -148,6 +148,41 @@
                 border-color: #2b8cff;
                 outline: none;
             }
+            /* ===== Modern Details Card ===== */
+
+            .details-card {
+                background: #ffffff;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            }
+
+            .details-card h2 {
+                text-align: center;
+                color: #2b8cff;
+                margin-bottom: 25px;
+            }
+
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 12px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+
+            .label {
+                font-weight: 600;
+                color: #555;
+            }
+
+            .value {
+                color: #333;
+            }
+
 
             /* ========== Validation Errors ========== */
             .error {
