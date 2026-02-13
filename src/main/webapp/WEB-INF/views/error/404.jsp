@@ -1,6 +1,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +46,15 @@
     <div class="error-code">404</div>
 
     <div class="error-message">
-        Oops! The page you are looking for does not exist.
+        <c:choose>
+            <c:when test="${not empty errorMessage}">
+                ${errorMessage}
+            </c:when>
+            <c:otherwise>
+                Oops! The page you are looking for does not exist.
+            </c:otherwise>
+        </c:choose>
+        
     </div>
 
     <div class="error-description">
