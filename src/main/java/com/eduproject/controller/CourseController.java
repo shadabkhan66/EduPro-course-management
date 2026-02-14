@@ -35,7 +35,7 @@ public class CourseController {
 		//adding data to the model to be used in the view
 		model.addAttribute("pageTitle", "Course List");
 		model.addAttribute("courses", courseService.getAllTheAvailableCourses());
-		model.addAttribute("numberOfCourses", this.courseService.getNumberOfAvailabelCourses());
+		model.addAttribute("numberOfCourses", this.courseService.getNumberOfAvailableCourses());
 		return "course/course-list"; // returns the logical view name
 	}
 
@@ -86,7 +86,7 @@ public class CourseController {
 	    }
 		
 	    log.info("Registering course: {}", course);
-	    String savedCourseName = courseService.registerNewCourse(course);
+	    String savedCourseName = courseService.registerCourse(course);
 	    log.info("Course registered successfully: {}", savedCourseName);
 	    
 	    redirectAttributes.addFlashAttribute("successMessage",

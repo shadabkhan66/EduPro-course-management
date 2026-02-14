@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class AuthorizeUrlsSecurityConfig {
+public class SecurityConfig {
 
 	/*
 	 * Security Filter Chain is a sequence of Spring Security filters that intercepts HTTP requests before controller execution to enforce authentication and authorization rules. Requests failing these security checks are rejected, while valid requests are allowed to proceed. 
@@ -68,7 +68,7 @@ public class AuthorizeUrlsSecurityConfig {
 	}*/
 
     @Bean
-    PasswordEncoder encodePass() {
+    PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	

@@ -10,7 +10,7 @@ public interface CourseService {
 	
 	List<CourseVO> getAllTheAvailableCourses();
 
-	String registerNewCourse(@Valid CourseVO courseVo);
+	String registerCourse(@Valid CourseVO courseVo);
 
 	boolean existsByTitle(String title);
 
@@ -20,7 +20,7 @@ public interface CourseService {
 
 	void updateCourseDetails(CourseVO courseVo);
 
-	Long getNumberOfAvailabelCourses();
+	Long getNumberOfAvailableCourses();
 
 	boolean existsByTitleExcludingCurrentCourseTitle(String title, Long id);
 

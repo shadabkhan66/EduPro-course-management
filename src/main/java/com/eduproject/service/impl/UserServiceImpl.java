@@ -1,7 +1,5 @@
-package com.eduproject.service.imp;
+package com.eduproject.service.impl;
 
-import com.eduproject.exception.EmailAlreadyExistsException;
-import com.eduproject.exception.UserNameAlreadyExists;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

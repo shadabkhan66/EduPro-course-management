@@ -33,7 +33,7 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-@ToString
+@ToString(exclude = "password")
 @AllArgsConstructor
 
 public class User implements UserDetails{
