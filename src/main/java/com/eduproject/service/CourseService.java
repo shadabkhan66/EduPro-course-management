@@ -2,26 +2,23 @@ package com.eduproject.service;
 
 import java.util.List;
 
-import com.eduproject.model.CourseVO;
-
-import jakarta.validation.Valid;
+import com.eduproject.model.CourseDTO;
 
 public interface CourseService {
-	
-	List<CourseVO> getAllTheAvailableCourses();
 
-	String registerCourse(@Valid CourseVO courseVo);
+	List<CourseDTO> getAllCourses();
 
-	boolean existsByTitle(String title);
+	CourseDTO getCourseById(Long courseId);
 
-	CourseVO getCourseById(Long courseId);
+	String createCourse(CourseDTO courseDto);
+
+	void updateCourse(CourseDTO courseDto);
 
 	void deleteCourseById(Long courseId);
 
-	void updateCourseDetails(CourseVO courseVo);
+	long getCourseCount();
 
-	Long getNumberOfAvailableCourses();
+	boolean existsByTitle(String title);
 
-	boolean existsByTitleExcludingCurrentCourseTitle(String title, Long id);
-
+	boolean existsByTitleExcludingId(String title, Long id);
 }

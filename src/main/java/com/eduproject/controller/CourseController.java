@@ -11,13 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eduproject.exception.CourseNotFoundException;
-import com.eduproject.model.CourseVO;
+import com.eduproject.model.CourseDTO;
 import com.eduproject.service.CourseService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Handles all course-related web requests.
+ *
+ * URL Design (RESTful naming):
+ *   GET  /courses              → list all courses
+ *   GET  /courses/{id}         → view single course
+ *   GET  /courses/new          → show create form
+ *   POST /courses              → handle create
+ *   GET  /courses/{id}/edit    → show edit form
+ *   POST /courses/{id}         → handle update
+ *   POST /courses/{id}/delete  → handle delete
+ */
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -26,164 +38,126 @@ public class CourseController {
 
 	private final CourseService courseService;
 
+	// ==================== LIST ====================
+
 	@GetMapping
 	public String listCourses(Model model) {
-
 		log.info("Listing all courses");
-
-		
-		//adding data to the model to be used in the view
-		model.addAttribute("pageTitle", "Course List");
-		model.addAttribute("courses", courseService.getAllTheAvailableCourses());
-		model.addAttribute("numberOfCourses", this.courseService.getNumberOfAvailableCourses());
-		return "course/course-list"; // returns the logical view name
+		model.addAttribute("courses", courseService.getAllCourses());
+		model.addAttribute("courseCount", courseService.getCourseCount());
+		return "course/list";
 	}
+
+	// ==================== VIEW ====================
 
 	@GetMapping("/{id}")
-	public String viewCourse(@PathVariable long id, Model model) {
-		CourseVO courseVo = this.courseService.getCourseById(id);
-
-		model.addAttribute("course", courseVo);
-		return "course/course-view";
-
+	public String viewCourse(@PathVariable Long id, Model model) {
+		log.info("Viewing course with ID: {}", id);
+		model.addAttribute("course", courseService.getCourseById(id));
+		return "course/view";
 	}
 
-	@GetMapping("/add")
-	public String showAddCourseForm(Model model) {
-		log.info("Showing add course form");
-		model.addAttribute("course", new CourseVO()); // Add an empty CourseVO for the form
-		model.addAttribute("pageHeading", "Create New Course"); 
-		model.addAttribute("submitButtonLabel", "Register Course"); 
-		model.addAttribute("isEditMode", false); // Flag to indicate this is an add form, not edit
-		return "course/course-form"; // returns the logical view name for the add course form
+	// ==================== CREATE ====================
+
+	@GetMapping("/new")
+	public String showCreateForm(Model model) {
+		log.info("Showing create course form");
+		model.addAttribute("courseDTO", new CourseDTO());
+		model.addAttribute("pageHeading", "Create New Course");
+		model.addAttribute("submitLabel", "Create Course");
+		model.addAttribute("editMode", false);
+		return "course/form";
 	}
-	
+
 	@PostMapping
-	public String registerCourse(
-	        @Valid @ModelAttribute("course") CourseVO course,
-	        BindingResult bindingResult,
-	        Model model,
-	        RedirectAttributes redirectAttributes) {
-
-		log.info("Received course registration request: {}", course);
-		
-	    // Check DB uniqueness
-	    if (courseService.existsByTitle(course.getTitle())) {
-	        bindingResult.rejectValue("title", "error.course", "Course title already exists");
-	    }
-	    
-		
-	    if (bindingResult.hasErrors()) {
-	        log.warn("Validation errors while registering course: {}", bindingResult.getAllErrors());
-
-	        //return to the form with error messages and previously entered valide data
-	        // Why we don't need to add the course object back to the model here? Because @ModelAttribute already adds it to the model, and it will contain the submitted data along with validation errors. So we can directly use it in the view to display error messages and pre-populate the form fields with the submitted data.
-	        // The course object with validation errors is already in the model due to @ModelAttribute, BindingResult will also be available in the model for the view to display error messages
-	        model.addAttribute("pageHeading", course.getId() != null ? "Edit Course" : "Create New Course");
-	        model.addAttribute("submitButtonLabel", course.getId() != null ? "Update Course" : "Register Course");
-	        model.addAttribute("isEditMode", course.getId() != null); // Set edit mode based on whether the course has an ID
-	        return "course/course-form"; // return to the form view if there are validation errors
-	    }
-		
-	    log.info("Registering course: {}", course);
-	    String savedCourseName = courseService.registerCourse(course);
-	    log.info("Course registered successfully: {}", savedCourseName);
-	    
-	    redirectAttributes.addFlashAttribute("successMessage",
-	            "Course Name :"+ savedCourseName + (course.getId() != null ? " updated successfully!" : " registered successfully!"));
-
-	    return "redirect:/courses";
-	}
-	
-	@GetMapping("/edit/{courseId}")
-	public String showEditCourseForm(@PathVariable Long courseId, Model model) {
-
-		// Implementation for showing edit course form
-		log.info("Showing edit course form for courseId: {}", courseId);
-		CourseVO course;
-		try {
-			
-			 course =  this.courseService.getCourseById(courseId);
-		}
-		catch (CourseNotFoundException e) {
-			log.error("Error fetching course with ID {}: {}", courseId, e.getMessage());
-			// Handle the error, e.g., redirect to an error page or show a message
-
-			return "redirect:/courses?error=CourseNotFoundForEditing";
-		}
-		model.addAttribute("course", course); // Add the course to the model for the form
-		model.addAttribute("pageHeading", "Edit Course");
-		model.addAttribute("submitButtonLabel", "Update Course");
-		model.addAttribute("isEditMode", true); // Flag to indicate this is an edit form
-		log.info("Course fetched successfully for editing: {}", course);
-		return "course/course-form"; // returns the logical view name for the edit course form
-	}
-	
-	
-	@PostMapping("/{courseId}")
-	public String editCourseForm(
+	public String createCourse(
+			@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO,
+			BindingResult bindingResult,
 			Model model,
-	        @Valid @ModelAttribute("course") CourseVO courseVo,
-	        BindingResult bindingResult,
-	        RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes) {
 
-	    log.info("Received request to edit course with ID: {}", courseVo.getId());
-	    
-	    // Check DB uniqueness by editing course title, my mistakely placing the course title which is already present
-	    if(this.courseService.existsByTitleExcludingCurrentCourseTitle(courseVo.getTitle(), courseVo.getId())) {
-	    	bindingResult.rejectValue("title", "error.course", "Course title already exists");
-	    }
-	    
-	    if (bindingResult.hasErrors()) {
-	        log.warn("Validation errors while registering course: {}", bindingResult.getAllErrors());
+		log.info("Creating course: {}", courseDTO.getTitle());
 
-	        //return to the form with error messages and previously entered valide data
-	        // Why we don't need to add the course object back to the model here? Because @ModelAttribute already adds it to the model, and it will contain the submitted data along with validation errors. So we can directly use it in the view to display error messages and pre-populate the form fields with the submitted data.
-	        // The course object with validation errors is already in the model due to @ModelAttribute, BindingResult will also be available in the model for the view to display error messages
-			model.addAttribute("pageHeading", "Edit Course");
-			model.addAttribute("submitButtonLabel", "Update Course");
-			model.addAttribute("isEditMode", true); // Flag to indicate this is an edit form
-	        return "course/course-form"; // return to the form view if there are validation errors
-	    }
-	    
-	    try {
-	        this.courseService.updateCourseDetails(courseVo);
-	        log.info("Course updated successfully: {}", courseVo);
-
-	        redirectAttributes.addFlashAttribute(
-	            "successMessage",
-	            "Course Name : " + courseVo.getTitle() + " updated successfully!"
-	        );
-
-	    } catch (CourseNotFoundException e) {
-	        log.error("Error updating course: {}", e.getMessage());
-
-	        redirectAttributes.addFlashAttribute(
-	            "errorMessage",
-	            "Course not found. Update failed."
-	        );
-	    }
-
-	    return "redirect:/courses";
-	}
-	
-
-	@PostMapping("/delete/{courseId}")
-	public String deleteCourse(@PathVariable Long courseId, RedirectAttributes redirectAttributes) {
-		// Implementation for deleting a course
-		log.info("Received request to delete course with ID: {}", courseId);
-		try {
-			CourseVO course = this.courseService.getCourseById(courseId);
-			this.courseService.deleteCourseById(courseId);
-			log.info("Course deleted successfully with ID: {}", courseId);
-			redirectAttributes.addFlashAttribute("successMessage",
-		            "Course Name :"+ course.getTitle()+" deleted successfully!");
-		} catch (CourseNotFoundException e) {
-			log.error("Error deleting course with ID {}: {}", courseId, e.getMessage());
-			redirectAttributes.addFlashAttribute("errorMessage", "Course not found for deletion");
+		if (courseService.existsByTitle(courseDTO.getTitle())) {
+			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
 		}
-		
+
+		if (bindingResult.hasErrors()) {
+			log.warn("Validation errors: {}", bindingResult.getAllErrors());
+			model.addAttribute("pageHeading", "Create New Course");
+			model.addAttribute("submitLabel", "Create Course");
+			model.addAttribute("editMode", false);
+			return "course/form";
+		}
+
+		String savedTitle = courseService.createCourse(courseDTO);
+		redirectAttributes.addFlashAttribute("successMessage", "Course '" + savedTitle + "' created successfully!");
 		return "redirect:/courses";
 	}
-	
+
+	// ==================== EDIT ====================
+
+	@GetMapping("/{id}/edit")
+	public String showEditForm(@PathVariable Long id, Model model) {
+		log.info("Showing edit form for course ID: {}", id);
+		model.addAttribute("courseDTO", courseService.getCourseById(id));
+		model.addAttribute("pageHeading", "Edit Course");
+		model.addAttribute("submitLabel", "Update Course");
+		model.addAttribute("editMode", true);
+		return "course/form";
+	}
+
+	@PostMapping("/{id}")
+	public String updateCourse(
+			@PathVariable Long id,
+			@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO,
+			BindingResult bindingResult,
+			Model model,
+			RedirectAttributes redirectAttributes) {
+
+		log.info("Updating course ID: {}", id);
+
+		// Security: trust the URL path ID, not the form's hidden field
+		courseDTO.setId(id);
+
+		if (courseService.existsByTitleExcludingId(courseDTO.getTitle(), id)) {
+			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
+		}
+
+		if (bindingResult.hasErrors()) {
+			log.warn("Validation errors: {}", bindingResult.getAllErrors());
+			model.addAttribute("pageHeading", "Edit Course");
+			model.addAttribute("submitLabel", "Update Course");
+			model.addAttribute("editMode", true);
+			return "course/form";
+		}
+
+		try {
+			courseService.updateCourse(courseDTO);
+			redirectAttributes.addFlashAttribute("successMessage",
+					"Course '" + courseDTO.getTitle() + "' updated successfully!");
+		} catch (CourseNotFoundException e) {
+			log.error("Course not found during update: {}", e.getMessage());
+			redirectAttributes.addFlashAttribute("errorMessage", "Course not found. Update failed.");
+		}
+
+		return "redirect:/courses";
+	}
+
+	// ==================== DELETE ====================
+
+	@PostMapping("/{id}/delete")
+	public String deleteCourse(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+		log.info("Deleting course ID: {}", id);
+		try {
+			CourseDTO course = courseService.getCourseById(id);
+			courseService.deleteCourseById(id);
+			redirectAttributes.addFlashAttribute("successMessage",
+					"Course '" + course.getTitle() + "' deleted successfully!");
+		} catch (CourseNotFoundException e) {
+			log.error("Course not found for deletion: {}", e.getMessage());
+			redirectAttributes.addFlashAttribute("errorMessage", "Course not found for deletion.");
+		}
+		return "redirect:/courses";
+	}
 }

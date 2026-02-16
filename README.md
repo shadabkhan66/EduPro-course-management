@@ -1,37 +1,39 @@
 # EduPro -- Course Management System
 
-A Spring Boot web application for managing courses with role-based access control, built as a learning project to explore Spring MVC, Spring Security, JPA/Hibernate, and JSP-based views.
+A Spring Boot web application for managing courses with role-based access control, built as a learning project to explore Spring MVC, Spring Security, JPA/Hibernate, Thymeleaf, and testing.
 
 ---
 
 ## Features
 
 - **Course Management** -- Create, view, edit, and delete courses (ADMIN only)
-- **User Registration** -- Self-service sign-up with uniqueness validation for username and email
-- **Role-Based Access Control** -- ADMIN users manage courses; regular users can browse
-- **Spring Security** -- Form-based authentication, CSRF protection, BCrypt password encoding
-- **Optimistic Locking** -- `@Version` field prevents concurrent update conflicts
-- **Audit Fields** -- Automatic `createdAt` / `updatedAt` timestamps on entities
-- **Dual Database Support** -- H2 (default, in-memory) for development, Oracle for production
-- **H2 Console** -- Built-in database browser at `/h2-console` for development
-- **Shared Layout** -- Common header/footer fragments with responsive navigation
+- **User Registration** -- Self-service sign-up with uniqueness validation
+- **Role-Based Access Control** -- ADMIN manages courses; students can browse
+- **Spring Security** -- Form-based auth, CSRF protection, BCrypt passwords
+- **Optimistic Locking** -- `@Version` prevents concurrent update conflicts
+- **Audit Fields** -- Automatic `createdAt` / `updatedAt` timestamps
+- **Dual Database** -- H2 (default, in-memory) for dev, Oracle for production
+- **H2 Console** -- Built-in database browser at `/h2-console`
+- **Thymeleaf Views** -- Natural HTML templates with auto CSRF and XSS protection
 - **Flash Messages** -- Success/error notifications with auto-fade
+- **Test Suite** -- Unit, controller, and repository tests
 
 ---
 
 ## Tech Stack
 
-| Layer        | Technology                                      |
-|-------------|------------------------------------------------|
-| Language    | Java 17                                         |
-| Framework   | Spring Boot 3.5                                 |
-| Web         | Spring MVC + JSP (JSTL, Spring Form Tags)       |
-| Security    | Spring Security 6 (form login, role-based)      |
-| Persistence | Spring Data JPA / Hibernate                     |
-| Database    | H2 (dev), Oracle (prod)                         |
-| Validation  | Bean Validation (Jakarta)                       |
-| Build       | Maven                                           |
-| Utilities   | Lombok                                          |
+| Layer        | Technology                                            |
+|-------------|------------------------------------------------------|
+| Language    | Java 17                                               |
+| Framework   | Spring Boot 3.5                                       |
+| Web         | Spring MVC + **Thymeleaf**                            |
+| Security    | Spring Security 6 (form login, role-based)            |
+| Persistence | Spring Data JPA / Hibernate                           |
+| Database    | H2 (dev), Oracle (prod)                               |
+| Validation  | Bean Validation (Jakarta)                             |
+| Testing     | JUnit 5, Mockito, MockMvc, @DataJpaTest              |
+| Build       | Maven                                                 |
+| Utilities   | Lombok                                                |
 
 ---
 
@@ -44,14 +46,15 @@ src/main/java/com/eduproject/
 │   ├── SecurityConfig.java             # Security filter chain, CSRF, role rules
 │   └── UserDetailService.java          # Custom UserDetailsService (DB-backed)
 ├── controller/
-│   ├── HomeController.java             # Home page + logout message handling
+│   ├── HomeController.java             # Home page + login + logout handling
 │   ├── CourseController.java           # CRUD endpoints for courses
 │   └── UserController.java            # User registration
 ├── model/
 │   ├── CourseEntity.java               # JPA entity with audit fields + @Version
-│   ├── CourseVO.java                   # Form-backing object with validation
+│   ├── CourseDTO.java                  # Form-backing DTO with validation
 │   ├── User.java                       # JPA entity implementing UserDetails
-│   └── Role.java                       # Enum: ROLE_USER, ROLE_ADMIN
+│   ├── UserRegistrationDTO.java        # Registration form DTO
+│   └── Role.java                       # Enum: ADMIN, STUDENT, TEACHER
 ├── repository/
 │   ├── CourseRepository.java           # Spring Data JPA repository
 │   └── UserRepository.java            # findByUsername, existsByEmail, etc.
@@ -59,27 +62,37 @@ src/main/java/com/eduproject/
 │   ├── CourseService.java              # Service interface
 │   ├── UserService.java               # Service interface
 │   └── impl/
-│       ├── CourseServiceImpl.java      # Business logic + VO <-> Entity mapping
-│       └── UserServiceImpl.java        # Registration + uniqueness checks
+│       ├── CourseServiceImpl.java      # Business logic + DTO ↔ Entity mapping
+│       └── UserServiceImpl.java        # Registration with BCrypt encoding
 ├── exception/
 │   ├── CourseNotFoundException.java    # Custom runtime exception
 │   └── GlobalExceptionHandler.java    # @ControllerAdvice error handling
 └── runner/
-    └── InsertDataInDB.java            # Seed data on startup (CommandLineRunner)
+    └── InsertDataInDB.java            # Seed data on startup
 
-src/main/webapp/
-├── css/style.css                       # External stylesheet (commented for learning)
-├── js/app.js                           # External JS (confirmation dialogs, flash msgs)
-└── WEB-INF/views/
-    ├── fragments/header.jsp            # Shared navigation + security-aware links
-    ├── fragments/footer.jsp            # Shared footer + JS includes
-    ├── home/home.jsp                   # Landing page with course count
-    ├── auth/login.jsp                  # Login form (plain HTML for Spring Security)
-    ├── course/course-list.jsp          # Course listing table
-    ├── course/course-form.jsp          # Create/Edit form (shared)
-    ├── course/course-view.jsp          # Course detail view
-    ├── user/user-form.jsp              # Registration form
-    └── error/404.jsp, 500.jsp          # Custom error pages
+src/main/resources/
+├── templates/                          # Thymeleaf templates
+│   ├── fragments/header.html           # Shared navigation
+│   ├── fragments/footer.html           # Shared footer
+│   ├── home.html                       # Landing page
+│   ├── auth/login.html                 # Login form
+│   ├── course/list.html                # Course listing
+│   ├── course/form.html                # Create/Edit form
+│   ├── course/view.html                # Course detail view
+│   ├── user/register.html              # Registration form
+│   └── error/404.html, 500.html        # Error pages
+├── static/css/style.css                # Stylesheet (annotated for learning)
+├── static/js/app.js                    # JavaScript helpers
+└── application.properties              # App configuration
+
+src/test/java/com/eduproject/
+├── service/
+│   ├── CourseServiceImplTest.java      # Unit tests (Mockito)
+│   └── UserServiceImplTest.java        # Unit tests (Mockito)
+├── controller/
+│   └── CourseControllerTest.java       # Web layer tests (@WebMvcTest)
+└── repository/
+    └── CourseRepositoryTest.java       # JPA tests (@DataJpaTest)
 ```
 
 ---
@@ -91,45 +104,59 @@ src/main/webapp/
 - **Java 17** or later
 - **Maven 3.8+**
 
-### Run with H2 (default)
+### Run
 
 ```bash
 mvn spring-boot:run
 ```
 
-The app starts at **http://localhost:8080** with an in-memory H2 database. Seed data (sample courses + admin user) is inserted automatically on startup.
+App starts at **http://localhost:8080** with H2 in-memory database and sample seed data.
 
-### Access H2 Console
+### Run Tests
 
-Navigate to **http://localhost:8080/h2-console** and connect with:
-
-| Setting     | Value                                               |
-|------------|-----------------------------------------------------|
-| JDBC URL   | `jdbc:h2:mem:edupro;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false` |
-| Username   | `sa`                                                |
-| Password   | *(leave empty)*                                     |
-
-### Run with Oracle
-
-1. Copy `application-oracle.properties.example` to `application-oracle.properties`
-2. Fill in your Oracle credentials
-3. Switch the active profile:
-
-```properties
-# In application.properties
-spring.profiles.active=oracle
+```bash
+mvn test
 ```
 
-4. Run: `mvn spring-boot:run`
+### H2 Console
+
+Navigate to **http://localhost:8080/h2-console** with:
+
+| Setting    | Value                                                              |
+|-----------|--------------------------------------------------------------------|
+| JDBC URL  | `jdbc:h2:mem:edupro;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false`     |
+| Username  | `sa`                                                               |
+| Password  | *(empty)*                                                          |
 
 ---
 
 ## Default Users (Seed Data)
 
-| Username | Password  | Role       |
-|----------|-----------|------------|
-| `admin`  | `admin123`| ROLE_ADMIN |
-| `user`   | `user123` | ROLE_USER  |
+| Username  | Password     | Role       |
+|-----------|-------------|------------|
+| `admin`   | `admin123`  | ROLE_ADMIN |
+| `student` | `student123`| ROLE_STUDENT |
+
+---
+
+## Version History
+
+| Version | Tag | Highlights |
+|---------|-----|-----------|
+| v0.1.0 | First stable | JSP views, CRUD, Spring Security, H2/Oracle |
+| **v0.2.0** | **Current** | **Thymeleaf migration, DTO redesign, test suite, security fixes** |
+
+---
+
+## Documentation
+
+| File | Description |
+|------|-------------|
+| [V2_MIGRATION.md](V2_MIGRATION.md) | v0.2.0 changes: JSP→Thymeleaf, testing, model redesign, FAQ |
+| [CHALLENGES.md](CHALLENGES.md) | 18 real problems faced with root cause analysis and fixes |
+| [CONCEPTS_LEARNED.md](CONCEPTS_LEARNED.md) | Key concepts and patterns learned |
+| [INTERVIEW_QNA.md](INTERVIEW_QNA.md) | Interview Q&A based on this project |
+| [CODE_REVIEW.md](CODE_REVIEW.md) | Self-review: design decisions, limitations, improvements |
 
 ---
 
@@ -137,41 +164,26 @@ spring.profiles.active=oracle
 
 | Decision | Why |
 |----------|-----|
-| **VO (Value Object) separate from Entity** | Keeps validation on the form-backing object; entity stays clean for JPA |
-| **Service interface + impl** | Follows Spring convention; allows swapping implementations |
-| **`@Version` for optimistic locking** | Prevents lost updates when two users edit the same course |
-| **`BeanUtils.copyProperties` with exclusions** | Safely copies VO fields to entity while preserving audit/version fields |
-| **`BindingResult.rejectValue()` for uniqueness** | Shows all validation errors at once instead of one-at-a-time exceptions |
-| **Plain HTML form for login** | Spring Security's login endpoint doesn't provide a model attribute for `<form:form>` |
-| **Custom `logoutSuccessHandler`** | Clean URL (`/`) with session-based flash message instead of `?logout` parameter |
-| **`readOnly = true` on read operations** | Performance optimization -- Hibernate skips dirty checking |
-
----
-
-## Documentation
-
-This project includes detailed learning documentation:
-
-| File | Description |
-|------|-------------|
-| [CHALLENGES.md](CHALLENGES.md) | 18 real problems faced during development, with root cause analysis and fixes |
-| [CONCEPTS_LEARNED.md](CONCEPTS_LEARNED.md) | Key concepts and patterns learned while building the project |
-| [INTERVIEW_QNA.md](INTERVIEW_QNA.md) | Interview questions and answers based on this project |
-| [CODE_REVIEW.md](CODE_REVIEW.md) | Self-review highlighting design decisions, limitations, and improvements |
+| **Thymeleaf over JSP** | Natural HTML templates, auto CSRF/XSS, JAR-compatible, IDE preview |
+| **Separate DTOs from Entities** | Clean boundary: form validation on DTO, JPA on entity |
+| **UserRegistrationDTO** | Security: prevents role escalation (user can't set ADMIN) |
+| **Three test layers** | Fast feedback: unit (ms), controller (s), repository (s) |
+| **`@Version` optimistic locking** | Prevents silent data loss on concurrent edits |
+| **`BindingResult.rejectValue()`** | Shows all validation errors at once (not one-at-a-time) |
+| **Service interface + impl** | Spring convention, allows easy mocking in tests |
 
 ---
 
 ## Known Limitations
 
-- **No pagination** -- Course list loads all records (fine for a POC, not for production)
-- **No caching** -- Every request hits the database
-- **No REST API** -- Server-rendered JSP only; no JSON endpoints
-- **Minimal tests** -- Only a context load test; needs unit and integration tests
-- **No database migration tool** -- Uses `ddl-auto=update` instead of Flyway/Liquibase
-- **JSP technology** -- Legacy view technology; modern Spring apps use Thymeleaf or a frontend framework
+- **No pagination** -- Course list loads all records
+- **No REST API** -- Server-rendered Thymeleaf only; no JSON endpoints
+- **No database migration tool** -- Uses `ddl-auto=update` instead of Flyway
+- **No CI/CD pipeline** -- Tests run locally only
+- **No Docker** -- Manual deployment
 
 ---
 
 ## License
 
-This is a learning/portfolio project. Feel free to reference it for educational purposes.
+Learning/portfolio project. Free to reference for educational purposes.

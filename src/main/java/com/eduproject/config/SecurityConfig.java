@@ -1,86 +1,79 @@
 package com.eduproject.config;
 
-import java.util.Arrays;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Spring Security configuration.
+ *
+ * Defines:
+ * - URL authorization rules (who can access what)
+ * - Form login configuration
+ * - Logout handling with flash messages
+ * - CSRF exception for H2 console (dev only)
+ * - Frame options for H2 console iframe support
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	/*
-	 * Security Filter Chain is a sequence of Spring Security filters that intercepts HTTP requests before controller execution to enforce authentication and authorization rules. Requests failing these security checks are rejected, while valid requests are allowed to proceed. 
-	*/
 	@Bean
-	SecurityFilterChain filterChain( HttpSecurity httpSecurity) throws Exception {
-		
-		return httpSecurity
-				.authorizeHttpRequests( auth ->auth
-					.requestMatchers("/courses").permitAll()
-					.requestMatchers("/courses/edit", "/courses/edit/**").hasRole("ADMIN")
-					.requestMatchers("/courses/add").hasRole("ADMIN")
-					.requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
-					.requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
-					.requestMatchers("/courses/delete", "/courses/delete/**").hasRole("ADMIN")
-					.requestMatchers("/whoami").authenticated()
-					// Allow H2 console access without authentication (dev only)
-					.requestMatchers("/h2-console/**").permitAll()
-					.anyRequest().permitAll()
-					)
-				.formLogin(  formLoginConfig -> formLoginConfig
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+		return http
+				.authorizeHttpRequests(auth -> auth
+						// Public pages
+						.requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
+						.requestMatchers("/courses").permitAll()
+						.requestMatchers("/courses/{id}").permitAll()
+						.requestMatchers("/users/register").permitAll()
+
+						// Admin-only course management
+						.requestMatchers("/courses/new").hasRole("ADMIN")
+						.requestMatchers("/courses/*/edit").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.POST, "/courses/*/delete").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
+
+						// Dev tools
+						.requestMatchers("/h2-console/**").permitAll()
+
+						// Everything else requires authentication
+						.requestMatchers("/whoami").authenticated()
+						.anyRequest().permitAll()
+				)
+				.formLogin(form -> form
 						.loginPage("/login")
 						.permitAll()
-						)
-				.logout( logoutConfig -> logoutConfig
-						.logoutUrl("/logout")
-						  .logoutSuccessHandler((request, response, authentication) -> {
-					            // Set flash attribute for logout message
-					            request.getSession().setAttribute("logoutMessage", "You have been logged out successfully.");
-					            response.sendRedirect("/");
-					        })
-						.permitAll()
-					)
-				// Disable CSRF for H2 console (it uses POST internally and doesn't send CSRF tokens)
-				.csrf( csrf -> csrf
-					.ignoringRequestMatchers("/h2-console/**")
 				)
-				// Allow H2 console to render in frames (it uses iframes internally)
-				.headers( headers -> headers
-					.frameOptions( frameOptions -> frameOptions.sameOrigin() )
+				.logout(logout -> logout
+						.logoutUrl("/logout")
+						.logoutSuccessHandler((request, response, authentication) -> {
+							request.getSession().setAttribute("logoutMessage",
+									"You have been logged out successfully.");
+							response.sendRedirect(request.getContextPath() + "/");
+						})
+						.permitAll()
+				)
+				// H2 console: disable CSRF (it makes internal POSTs without tokens)
+				.csrf(csrf -> csrf
+						.ignoringRequestMatchers("/h2-console/**")
+				)
+				// H2 console: allow iframes from same origin
+				.headers(headers -> headers
+						.frameOptions(frame -> frame.sameOrigin())
 				)
 				.build();
 	}
-	
-/*	@Bean
-	UserDetailsService userStore(PasswordEncoder encoder) {
-		
-		var user1 = User.withUsername("user")
-				.password(encoder.encode("user123"))
-				.roles("USER")
-				.build();
-		
-		var user2 = User.withUsername("admin")
-				.password(encoder.encode("admin123"))
-				.roles("ADMIN")
-				.build();
-		
-		return new InMemoryUserDetailsManager(Arrays.asList(user1,user2));
-	}*/
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
+	@Bean
+	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
 }

@@ -5,48 +5,56 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eduproject.exception.CourseNotFoundException;
+import com.eduproject.model.CourseDTO;
 import com.eduproject.model.CourseEntity;
-import com.eduproject.model.CourseVO;
 import com.eduproject.repository.CourseRepository;
 import com.eduproject.service.CourseService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class CourseServiceImpl implements CourseService{
+public class CourseServiceImpl implements CourseService {
 
 	private final CourseRepository courseRepository;
 
-
 	@Override
-	public List<CourseVO> getAllTheAvailableCourses() {
-		return this.courseRepository.findAll().stream().map(this::convertEntityToVO).toList();
-	}
-
-	@Override
-	@Transactional
-	public String registerCourse(@Valid CourseVO courseVo) {
-		return this.courseRepository.save(convertVOToEntity(courseVo)).getTitle();
+	@Transactional(readOnly = true)
+	public List<CourseDTO> getAllCourses() {
+		return courseRepository.findAll()
+				.stream()
+				.map(this::toDTO)
+				.toList();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean existsByTitle(String title) {
-		 return this.courseRepository.findByTitle(title).isPresent();
-
+	public CourseDTO getCourseById(Long courseId) {
+		return courseRepository.findById(courseId)
+				.map(this::toDTO)
+				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
 	}
 
 	@Override
-	public CourseVO getCourseById(Long courseId) {
-		CourseVO courseVO = courseRepository.findById(courseId)
-				.map(this::convertEntityToVO) // convert entity to VO if present
-				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
-		return courseVO;
+	@Transactional
+	public String createCourse(CourseDTO courseDto) {
+		CourseEntity entity = toEntity(courseDto);
+		return courseRepository.save(entity).getTitle();
+	}
+
+	@Override
+	@Transactional
+	public void updateCourse(CourseDTO courseDto) {
+		// Load the managed entity first to preserve version, audit fields
+		CourseEntity entity = courseRepository.findById(courseDto.getId())
+				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseDto.getId() + " not found"));
+
+		// Copy only user-editable fields; exclude id, version, and audit columns
+		BeanUtils.copyProperties(courseDto, entity, "id", "version", "createdBy", "createdDate");
+		courseRepository.save(entity);
 	}
 
 	@Override
@@ -59,41 +67,35 @@ public class CourseServiceImpl implements CourseService{
 	}
 
 	@Override
-	@Transactional
-	public void updateCourseDetails(CourseVO courseVo) {
-
-		//i am fetching the orignal first , overriding changed propery form courseVO into Orignal Entity , while keeping the same metadatas
-		//doubt if  i am doing it correct or not
-		CourseEntity courseEntity = this.courseRepository.findById(courseVo.getId()).orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseVo.getId() + " not found"));
-		BeanUtils.copyProperties(courseVo,courseEntity);
-		this.courseRepository.save(courseEntity);
+	@Transactional(readOnly = true)
+	public long getCourseCount() {
+		return courseRepository.count();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Long getNumberOfAvailableCourses() {
-		return this.courseRepository.count();
+	public boolean existsByTitle(String title) {
+		return courseRepository.findByTitle(title).isPresent();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean existsByTitleExcludingCurrentCourseTitle(String title, Long id) {
-		Optional<CourseEntity> courseWithTitle = courseRepository.findByTitle(title);
-
-		boolean isCoursePresent = courseWithTitle.isPresent();
-
-		return isCoursePresent && !courseWithTitle.get().getId().equals(id);
+	public boolean existsByTitleExcludingId(String title, Long id) {
+		Optional<CourseEntity> existing = courseRepository.findByTitle(title);
+		return existing.isPresent() && !existing.get().getId().equals(id);
 	}
 
-	private CourseVO convertEntityToVO(CourseEntity course) {
-		CourseVO courseVO = new CourseVO();
-		BeanUtils.copyProperties(course, courseVO);
-		return courseVO;
+	// --- Mapping methods ---
+
+	private CourseDTO toDTO(CourseEntity entity) {
+		CourseDTO dto = new CourseDTO();
+		BeanUtils.copyProperties(entity, dto);
+		return dto;
 	}
 
-	private CourseEntity convertVOToEntity(CourseVO courseVO) {
-		CourseEntity courseEntity = new CourseEntity();
-		BeanUtils.copyProperties(courseVO, courseEntity);
-		return courseEntity;
+	private CourseEntity toEntity(CourseDTO dto) {
+		CourseEntity entity = new CourseEntity();
+		BeanUtils.copyProperties(dto, entity);
+		return entity;
 	}
 }

@@ -1,0 +1,19 @@
+<!--
+    ============================================================
+    footer.html - Shared footer fragment (Thymeleaf)
+    ============================================================
+    THYMELEAF NOTES:
+
+    th:fragment="footer" defines a named fragment.
+    Other templates include it via: th:replace="~{fragments/footer :: footer}"
+
+    Unlike JSP includes (compile-time copy-paste), Thymeleaf fragments
+    are processed at render-time. Each page is a complete, valid HTML file
+    that can be previewed in a browser without a running server.
+    This is called "Natural Templates" - a key Thymeleaf advantage over JSP.
+    ============================================================
+-->
+<footer th:fragment="footer" class="site-footer"
+        xmlns:th="http://www.thymeleaf.org">
+    <p>EduPro Campus Management &copy; 2025 &mdash; Built with Spring Boot, Thymeleaf, Spring Security</p>
+</footer>

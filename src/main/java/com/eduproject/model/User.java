@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,69 +21,55 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-
+/**
+ * JPA entity representing a user in the system.
+ *
+ * Implements UserDetails so Spring Security can use this entity directly
+ * for authentication without needing a separate adapter class.
+ *
+ * DESIGN NOTE: Validation annotations are on UserRegistrationDTO (the form DTO),
+ * not here. The entity only has JPA column constraints (@Column).
+ */
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 @ToString(exclude = "password")
-@AllArgsConstructor
-
-public class User implements UserDetails{
-
-
-
-	@Builder
-	public User(String username, String password, String firstName, String lastName, String email, Role role) {
-		this.username = username;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.role = role;
-	}
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-
-	@NotBlank(message = "Username is required")
 	@Column(unique = true, nullable = false, length = 50)
-	@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
 	private String username;
 
-	@JsonIgnore // Don't serialize password in API responses
-	@NotBlank(message = "Password is required")
-	@Size(min = 6, message = "Password must be at least 6 characters")
+	@JsonIgnore
+	@Column(nullable = false)
 	private String password;
 
-	@NotBlank(message = "First name is required")
-	@Size(max = 50, message = "First name must be less than 50 characters")
 	@Column(nullable = false, length = 50)
 	private String firstName;
 
 	@Column(length = 50)
 	private String lastName;
 
-	@NotBlank(message = "Email is required")
-	@Size(max = 100, message = "Email must be less than 100 characters")
 	@Column(unique = true, nullable = false, length = 100)
-	@Email(message = "Email should be valid")
 	private String email;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 10)
-	@NotNull(message = "Role is required")
 	private Role role;
-
-
 
 	private boolean enabled = true;
 

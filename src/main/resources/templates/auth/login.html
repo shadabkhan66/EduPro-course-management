@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+    ============================================================
+    login.html - Login page
+    ============================================================
+    THYMELEAF NOTES:
+
+    th:action="@{/login}"
+      → Generates context-path-aware action URL
+      → AUTOMATICALLY inserts CSRF hidden field (no manual token needed!)
+
+    th:if="${param.error}"
+      → Checks for URL parameter ?error (Spring Security adds this on bad login)
+      → In JSP this was: <c:if test="${param.error != null}">
+
+    th:if="${successMessage}"
+      → Flash attribute from registration redirect
+      → Flash attributes are automatically available as model attributes in Thymeleaf
+    ============================================================
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EduPro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="site-main">
+        <div class="container container-narrow">
+
+            <h2 class="page-title text-center">Login</h2>
+            <p class="page-subtitle text-center">Sign in to your account</p>
+            <hr>
+
+            <!-- Flash message from registration success -->
+            <div th:if="${successMessage}" class="msg msg-success" th:text="${successMessage}">
+                Success placeholder
+            </div>
+
+            <!-- Spring Security error parameter -->
+            <div th:if="${param.error}" class="msg msg-error">
+                Invalid username or password
+            </div>
+
+            <!-- Spring Security logout parameter -->
+            <div th:if="${param.logout}" class="msg msg-success">
+                You have been logged out successfully
+            </div>
+
+            <!--
+                Plain HTML form (not Thymeleaf form binding).
+                Spring Security processes /login POST with fields named
+                exactly 'username' and 'password'.
+                th:action auto-adds CSRF token.
+            -->
+            <form th:action="@{/login}" method="post">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           placeholder="Enter your username"
+                           autocomplete="username" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"
+                           placeholder="Enter your password"
+                           autocomplete="current-password" required />
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </button>
+                </div>
+
+            </form>
+
+            <p class="text-center text-muted mt-2 text-small">
+                Don't have an account?
+                <a th:href="@{/users/register}">Register here</a>
+            </p>
+
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

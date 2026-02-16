@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--
+    ============================================================
+    course/list.html - Course listing page
+    ============================================================
+    THYMELEAF NOTES:
+
+    th:each="course : ${courses}"
+      → Iterates over a collection (replaces <c:forEach>)
+      → Creates a 'course' variable for each iteration
+
+    th:text="${course.title}"
+      → Sets the element's text content (escapes HTML = XSS-safe!)
+      → In JSP: ${course.title} was NOT auto-escaped (XSS risk)
+
+    th:href="@{/courses/{id}(id=${course.id})}"
+      → URL with path variable. Thymeleaf replaces {id} with the value.
+      → Cleaner than JSP's string concatenation: /courses/${course.id}
+
+    th:unless="${#lists.isEmpty(courses)}"
+      → Checks if collection is empty (replaces <c:choose>/<c:when>)
+
+    sec:authorize="hasRole('ADMIN')"
+      → Spring Security role check in Thymeleaf (same as JSP)
+    ============================================================
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - EduPro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="site-main">
+        <div class="container">
+
+            <!-- Page heading with "Add" button -->
+            <div class="flex-between">
+                <div>
+                    <h2 class="page-title">Courses</h2>
+                    <p class="page-subtitle mb-0">
+                        <span class="badge" th:text="${courseCount} + ' available'">0 available</span>
+                    </p>
+                </div>
+
+                <a sec:authorize="hasRole('ADMIN')"
+                   th:href="@{/courses/new}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-circle"></i> Add Course
+                </a>
+            </div>
+
+            <hr>
+
+            <!-- Flash messages -->
+            <div th:if="${successMessage}" class="msg msg-success">
+                <i class="bi bi-check-circle"></i> <span th:text="${successMessage}">Success</span>
+            </div>
+            <div th:if="${errorMessage}" class="msg msg-error">
+                <i class="bi bi-exclamation-circle"></i> <span th:text="${errorMessage}">Error</span>
+            </div>
+
+            <!-- Course table (when courses exist) -->
+            <table th:if="${not #lists.isEmpty(courses)}">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th>Fees</th>
+                        <th>Instructor</th>
+                        <th sec:authorize="hasRole('ADMIN')" class="col-actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="course : ${courses}">
+                        <td>
+                            <a th:href="@{/courses/{id}(id=${course.id})}"
+                               th:text="${course.title}"
+                               style="font-weight: 500; color: #2980b9;">
+                                Course Title
+                            </a>
+                        </td>
+                        <td class="text-muted text-small" th:text="${course.description}">Description</td>
+                        <td th:text="${course.durationInHours} + ' hrs'">0 hrs</td>
+                        <td>
+                            <span th:if="${course.fees != null}" th:text="${course.fees}">0.00</span>
+                            <span th:unless="${course.fees != null}" class="text-muted">Free</span>
+                        </td>
+                        <td th:text="${course.instructor}">Instructor</td>
+
+                        <td sec:authorize="hasRole('ADMIN')" class="col-actions">
+                            <!-- Edit link -->
+                            <a th:href="@{/courses/{id}/edit(id=${course.id})}"
+                               class="btn-inline edit" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <!-- Delete form (POST with auto CSRF) -->
+                            <form th:action="@{/courses/{id}/delete(id=${course.id})}"
+                                  method="post" style="display: inline;"
+                                  th:attr="onsubmit='return confirmDelete(\'' + ${#strings.escapeJavaScript(course.title)} + '\')'">
+                                <button type="submit" class="btn-inline delete" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Empty state -->
+            <div th:if="${#lists.isEmpty(courses)}" class="empty-state">
+                <i class="bi bi-journal-x" style="font-size: 2rem; color: #ccc;"></i>
+                <p>No courses available yet.</p>
+                <a sec:authorize="hasRole('ADMIN')"
+                   th:href="@{/courses/new}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-circle"></i> Add First Course
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

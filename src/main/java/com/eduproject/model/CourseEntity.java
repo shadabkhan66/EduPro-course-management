@@ -20,6 +20,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * JPA entity representing a course in the database.
+ *
+ * Uses @Version for optimistic locking (prevents concurrent update conflicts).
+ * Uses @CreationTimestamp / @UpdateTimestamp for automatic audit fields.
+ * Uses @SequenceGenerator for Oracle-compatible ID generation (H2 also supports sequences).
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,35 +40,37 @@ public class CourseEntity {
 	@SequenceGenerator(allocationSize = 1, initialValue = 1_00_000, name = "SEQ_COURSE", sequenceName = "SEQ_COURSE")
 	@GeneratedValue(generator = "SEQ_COURSE", strategy = GenerationType.SEQUENCE)
 	private Long id;
+
 	@Column(name = "COURSE_TITLE", unique = true, nullable = false, length = 100)
 	private String title;
+
 	@Column(name = "COURSE_DESCRIPTION", nullable = false, length = 500)
 	private String description;
+
 	@Column(name = "COURSE_DURATION_HOURS")
 	private Integer durationInHours;
+
 	@Column(name = "COURSE_INSTRUCTOR", length = 60)
 	private String instructor;
+
 	@Column(name = "COURSE_FEES")
-	private BigDecimal fees; 
-	
-	
-	
+	private BigDecimal fees;
+
 	@Version
 	@Column(name = "VERSION")
 	private Integer version;
-	
-	@Column(name= "CREATED_BY", updatable = false)
+
+	@Column(name = "CREATED_BY", updatable = false)
 	private String createdBy;
-	
+
 	@Column(name = "CREATED_DATE", updatable = false)
-	@CreationTimestamp 
+	@CreationTimestamp
 	private LocalDateTime createdDate;
-	
-	@Column(name="UPDATED_DATE", insertable = false, updatable = true)
+
+	@Column(name = "UPDATED_DATE", insertable = false)
 	@UpdateTimestamp
-	private LocalDateTime updateDate ;
-	
-	@Column(name = "UPDATED_BY", insertable = false, updatable = true)
+	private LocalDateTime updatedDate;
+
+	@Column(name = "UPDATED_BY", insertable = false)
 	private String updatedBy;
-	
 }

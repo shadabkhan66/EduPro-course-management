@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${course.title} + ' - EduPro'">Course View - EduPro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="site-main">
+        <div class="container container-narrow">
+
+            <div th:if="${course}">
+                <h2 class="page-title text-center" th:text="${course.title}">Course Title</h2>
+                <p class="page-subtitle text-center">Course Details</p>
+                <hr>
+
+                <div class="detail-card">
+                    <div class="detail-row">
+                        <span class="detail-label">Description</span>
+                        <span class="detail-value" th:text="${course.description}">Description text</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Duration</span>
+                        <span class="detail-value" th:text="${course.durationInHours} + ' Hours'">0 Hours</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Fees</span>
+                        <span class="detail-value">
+                            <span th:if="${course.fees != null}" th:text="${course.fees}">0.00</span>
+                            <span th:unless="${course.fees != null}">Free</span>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Instructor</span>
+                        <span class="detail-value" th:text="${course.instructor}">Instructor Name</span>
+                    </div>
+                </div>
+
+                <div class="actions mt-2">
+                    <a th:href="@{/courses}" class="btn btn-outline">
+                        <i class="bi bi-arrow-left"></i> Back to Courses
+                    </a>
+                    <a sec:authorize="hasRole('ADMIN')"
+                       th:href="@{/courses/{id}/edit(id=${course.id})}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                </div>
+            </div>
+
+            <div th:unless="${course}" class="empty-state">
+                <p class="text-muted">Course not found.</p>
+                <a th:href="@{/courses}" class="btn btn-outline">
+                    <i class="bi bi-arrow-left"></i> Back to Courses
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

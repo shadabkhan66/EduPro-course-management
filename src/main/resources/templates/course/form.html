@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+    ============================================================
+    course/form.html - Create / Edit course form
+    ============================================================
+    THYMELEAF FORM BINDING NOTES:
+
+    th:object="${courseDTO}"
+      → Binds the form to a model attribute (replaces <frm:form modelAttribute="...">)
+      → All th:field="*{fieldName}" references are relative to this object
+
+    th:field="*{title}"
+      → Two-way binding: populates the field with existing value AND
+        sets name="title" on the input for form submission
+      → Replaces JSP's <frm:input path="title"/>
+
+    th:errors="*{title}"
+      → Shows validation errors for the 'title' field
+      → Replaces JSP's <frm:errors path="title"/>
+      → Only renders if there ARE errors for that field
+
+    th:action
+      → Thymeleaf auto-inserts CSRF token (no manual hidden field needed!)
+      → In JSP you had to add: <input type="hidden" name="${_csrf.parameterName}" .../>
+
+    th:classappend="${#fields.hasErrors('title')} ? 'input-error'"
+      → Conditionally adds a CSS class when field has errors
+      → This was harder to do in JSP (required <c:if> or JSTL logic)
+    ============================================================
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageHeading} + ' - EduPro'">Course Form - EduPro</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main class="site-main">
+        <div class="container container-narrow">
+
+            <h2 class="page-title text-center" th:text="${pageHeading}">Course Form</h2>
+            <p class="page-subtitle text-center">
+                <span th:if="${editMode}">Update course information</span>
+                <span th:unless="${editMode}">Fill in the details to create a new course</span>
+            </p>
+            <hr>
+
+            <!-- Form: action changes based on create vs edit mode -->
+            <form th:object="${courseDTO}" method="post"
+                  th:action="${editMode} ? @{/courses/{id}(id=*{id})} : @{/courses}">
+
+                <!-- Hidden ID field for edit mode -->
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="form-group">
+                    <label for="title">Course Title</label>
+                    <input type="text" id="title" th:field="*{title}"
+                           placeholder="e.g. Java Full Stack" />
+                    <span th:if="${#fields.hasErrors('title')}"
+                          th:errors="*{title}" class="field-error">Title error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" th:field="*{description}"
+                           placeholder="e.g. Complete Java + Spring Boot" />
+                    <span th:if="${#fields.hasErrors('description')}"
+                          th:errors="*{description}" class="field-error">Description error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="durationInHours">Duration (hours)</label>
+                    <input type="number" id="durationInHours" th:field="*{durationInHours}"
+                           placeholder="e.g. 40" />
+                    <span th:if="${#fields.hasErrors('durationInHours')}"
+                          th:errors="*{durationInHours}" class="field-error">Duration error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fees">Fees</label>
+                    <input type="number" id="fees" th:field="*{fees}"
+                           placeholder="e.g. 5000 (leave empty for free)" step="0.01" />
+                    <span th:if="${#fields.hasErrors('fees')}"
+                          th:errors="*{fees}" class="field-error">Fees error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="instructor">Instructor</label>
+                    <input type="text" id="instructor" th:field="*{instructor}"
+                           placeholder="e.g. John Doe" />
+                    <span th:if="${#fields.hasErrors('instructor')}"
+                          th:errors="*{instructor}" class="field-error">Instructor error</span>
+                </div>
+
+                <div class="actions">
+                    <a th:href="@{/courses}" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i th:class="${editMode} ? 'bi bi-pencil-square' : 'bi bi-plus-circle'"></i>
+                        <span th:text="${submitLabel}">Submit</span>
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

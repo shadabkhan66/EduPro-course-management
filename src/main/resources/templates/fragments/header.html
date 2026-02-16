@@ -1,0 +1,59 @@
+<!--
+    ============================================================
+    header.html - Shared header fragment (Thymeleaf)
+    ============================================================
+    THYMELEAF NOTES:
+
+    th:replace="~{fragments/header :: header}"
+      → Replaces the host element with this fragment's content.
+
+    th:href="@{/path}"
+      → Generates context-path-aware URLs (like <c:url> in JSP).
+      → Thymeleaf automatically handles context path, no manual prefix needed.
+
+    sec:authorize="isAuthenticated()"
+      → Thymeleaf Spring Security integration (replaces JSP's <sec:authorize>).
+      → Requires thymeleaf-extras-springsecurity6 dependency.
+
+    th:action="@{/logout}"
+      → Thymeleaf auto-inserts CSRF token in forms! No manual hidden field needed.
+      → This is a major improvement over JSP where you had to manually add
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    ============================================================
+-->
+<header th:fragment="header" class="site-header"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="header-inner">
+
+        <!-- Brand / Logo -->
+        <a th:href="@{/}" class="site-brand">
+            <i class="bi bi-mortarboard-fill"></i> EduPro
+        </a>
+
+        <!-- Navigation -->
+        <nav class="site-nav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/courses}">Courses</a>
+
+            <span class="nav-divider">|</span>
+
+            <!-- Authenticated: show logout -->
+            <span sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display:inline; margin:0;">
+                    <!-- CSRF token is auto-inserted by Thymeleaf! -->
+                    <button type="submit" class="logout-btn">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </span>
+
+            <!-- Anonymous: show login + register -->
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">Login</a>
+                <a th:href="@{/users/register}" class="btn btn-primary btn-sm">Register</a>
+            </span>
+        </nav>
+
+    </div>
+</header>

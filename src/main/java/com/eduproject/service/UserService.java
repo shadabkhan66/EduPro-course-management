@@ -1,14 +1,12 @@
 package com.eduproject.service;
 
-import com.eduproject.model.User;
-
-import jakarta.validation.Valid;
+import com.eduproject.model.UserRegistrationDTO;
 
 public interface UserService {
 
-	String registerUser(@Valid User user);
+	String registerUser(UserRegistrationDTO registrationDto);
 
-	boolean doesUniqueEmailExists(String email);
+	boolean existsByEmail(String email);
 
-	boolean doesUniqueUsernameExists(String username);
+	boolean existsByUsername(String username);
 }

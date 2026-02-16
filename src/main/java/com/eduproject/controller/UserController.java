@@ -1,7 +1,6 @@
 package com.eduproject.controller;
 
-import com.eduproject.model.Role;
-import com.eduproject.model.User;
+import com.eduproject.model.UserRegistrationDTO;
 import com.eduproject.service.UserService;
 
 import jakarta.validation.Valid;
@@ -18,6 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Handles user registration.
+ *
+ * DESIGN CHANGE (v0.2.0):
+ * - Uses UserRegistrationDTO instead of User entity as form-backing bean
+ * - Role is hardcoded to STUDENT (security fix: users can't self-assign ADMIN)
+ * - Uniqueness checks run only after @Valid passes (optimization)
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -26,52 +33,39 @@ public class UserController {
 
 	private final UserService userService;
 
-	// Add common attributes to model for both GET and POST
-	@ModelAttribute
-	public void addCommonAttributes(Model model) {
-		model.addAttribute("roles", Role.values());
-		model.addAttribute("pageTitle", "User Registration");
-		model.addAttribute("isEdit", false);
-		model.addAttribute("submitButtonLabel", "Register");
-	}
-
-	// Show registration form
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
-		log.info("Displaying user registration form");
-		model.addAttribute("user", new User()); // for form binding
-		return "user/user-form";
+		log.info("Displaying registration form");
+		model.addAttribute("registrationDTO", new UserRegistrationDTO());
+		return "user/register";
 	}
 
-	// Handle registration submission
 	@PostMapping("/register")
-	public String registerUser(@Valid @ModelAttribute("user") User user,
-							   BindingResult result,
-							   RedirectAttributes redirectAttributes,
-							   Model model) {
-		log.info("Trying to register user: {}", user);
+	public String registerUser(
+			@Valid @ModelAttribute("registrationDTO") UserRegistrationDTO dto,
+			BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) {
 
+		log.info("Registration attempt for: {}", dto.getUsername());
 
-		if(this.userService.doesUniqueEmailExists(user.getEmail())) {
-			result.rejectValue("email", null, "Email already exists");
+		// Only check uniqueness if basic validation passed (avoid unnecessary DB calls)
+		if (!bindingResult.hasErrors()) {
+			if (userService.existsByEmail(dto.getEmail())) {
+				bindingResult.rejectValue("email", "duplicate", "Email already exists");
+			}
+			if (userService.existsByUsername(dto.getUsername())) {
+				bindingResult.rejectValue("username", "duplicate", "Username already exists");
+			}
 		}
 
-		if(this.userService.doesUniqueUsernameExists(user.getUsername())) {
-			result.rejectValue("username", null, "Username already exists");
-		}
-		if(result.hasErrors()) {
-			log.error("Validation failed: {}", result.getAllErrors());
-			return "user/user-form";
+		if (bindingResult.hasErrors()) {
+			log.warn("Registration validation failed: {}", bindingResult.getErrorCount());
+			return "user/register";
 		}
 
-
-		String savedUserFullName = userService.registerUser(user);
-		redirectAttributes.addFlashAttribute(
-				"message",
-				"User has been registered successfully with user name: " +  savedUserFullName
-		);
+		String fullName = userService.registerUser(dto);
+		redirectAttributes.addFlashAttribute("successMessage",
+				"Welcome, " + fullName + "! Your account has been created. Please login.");
 		return "redirect:/login";
-
-
 	}
 }
