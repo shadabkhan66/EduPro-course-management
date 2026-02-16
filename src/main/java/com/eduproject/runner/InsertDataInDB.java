@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class InsertDataInOracleDB implements CommandLineRunner {
+public class InsertDataInDB implements CommandLineRunner {
 
 	@Autowired
 	private final CourseRepository courseRepository;

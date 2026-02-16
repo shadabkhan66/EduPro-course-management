@@ -42,10 +42,9 @@ public class CourseEntity {
 	@Column(name = "COURSE_INSTRUCTOR", length = 60)
 	private String instructor;
 	@Column(name = "COURSE_FEES")
-	private BigDecimal fees;// don't know if taking BigDecimal is correct or not
+	private BigDecimal fees; 
 	
 	
-	//metadata fields can be added like createdBy, createdDate, updatedBy, updatedDate etc.
 	
 	@Version
 	@Column(name = "VERSION")
@@ -55,7 +54,6 @@ public class CourseEntity {
 	private String createdBy;
 	
 	@Column(name = "CREATED_DATE", updatable = false)
-//	@CreatedBy //should i use this or 
 	@CreationTimestamp 
 	private LocalDateTime createdDate;
 	

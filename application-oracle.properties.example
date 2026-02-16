@@ -1,0 +1,27 @@
+# ==========================================
+#  Oracle DB Profile Configuration
+# ==========================================
+#
+#  HOW TO USE:
+#  1. Copy this file:      cp application-oracle.properties.example application-oracle.properties
+#  2. Fill in your credentials below
+#  3. Switch profile:      set spring.profiles.active=oracle in application.properties
+#     OR run with:          --spring.profiles.active=oracle
+#
+#  NOTE: application-oracle.properties is gitignored (contains secrets)
+# ==========================================
+
+# ---------- Oracle Datasource ----------
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521/XEPDB1
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+# ---------- JPA / Hibernate (Oracle) ----------
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+
+# ---------- Disable H2 Console ----------
+spring.h2.console.enabled=false

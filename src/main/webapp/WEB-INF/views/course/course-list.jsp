@@ -1,95 +1,120 @@
-
 <%@ include file="../fragments/header.jsp" %>
-
 
 <div class="container">
 
-    <h2>Course List</h2>
+    <%-- Page heading with "Add" button on the right --%>
+    <div class="flex-between">
+        <div>
+            <h2 class="page-title">Courses</h2>
+            <p class="page-subtitle mb-0">
+                <span class="badge">${numberOfCourses} available</span>
+            </p>
+        </div>
+
+        <%-- Only ADMINs can add courses --%>
+        <sec:authorize access="hasRole('ADMIN')">
+            <a href="${pageContext.request.contextPath}/courses/add" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i> Add Course
+            </a>
+        </sec:authorize>
+    </div>
+
     <hr>
 
-    <p class="info">This is <b>courseList.jsp</b></p>
-
-    <br>
-
+    <%-- Flash messages from redirects (create / update / delete) --%>
     <c:if test="${not empty successMessage}">
-        <p class="info" style="color: green;">${successMessage}</p>
+        <div class="msg msg-success"><i class="bi bi-check-circle"></i> ${successMessage}</div>
     </c:if>
-    
     <c:if test="${not empty errorMessage}">
-        <p class="info" style="color: red;">${errorMessage}</p>
+        <div class="msg msg-error"><i class="bi bi-exclamation-circle"></i> ${errorMessage}</div>
     </c:if>
-    <br>
 
+    <%-- Course table or empty state --%>
     <c:choose>
         <c:when test="${not empty courses}">
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Title</th>
                     <th>Description</th>
-                    <th>Duration (Hours)</th>
+                    <th>Duration</th>
                     <th>Fees</th>
                     <th>Instructor</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <%-- Show action columns only for ADMIN --%>
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <th class="col-actions">Actions</th>
+                    </sec:authorize>
                 </tr>
                 </thead>
 
                 <tbody>
+                <%--
+                    <c:forEach> iterates over the 'courses' list from the model.
+                    var="course" creates a loop variable accessible via ${course.xxx}
+                --%>
                 <c:forEach var="course" items="${courses}">
                     <tr>
-                        <td>${course.id}</td>
-                        <td><a href="${pageContext.request.contextPath}/courses/${course.id}">${course.title}</a></td>
-                        <td>${course.description}</td>
-                        <td>${course.durationInHours}</td>
-                        <td>${course.fees}</td>
-                        <td>${course.instructor}</td>
-
                         <td>
-                            <a href="${pageContext.request.contextPath}/courses/edit/${course.id}">
-                                <i class="bi bi-pencil-square edit"></i> Edit
+                            <a href="${pageContext.request.contextPath}/courses/${course.id}"
+                               style="font-weight: 500; color: #2980b9;">
+                                ${course.title}
                             </a>
                         </td>
+                        <td class="text-muted text-small">${course.description}</td>
+                        <td>${course.durationInHours} hrs</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${course.fees != null}">
+                                    <c:out value="${course.fees}" />
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="text-muted">Free</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>${course.instructor}</td>
 
-						<td>
-						    <form action="${pageContext.request.contextPath}/courses/delete/${course.id}"
-						          method="post"
-						          style="display:inline;"
-						          onsubmit="return confirmDelete('${course.title}')">
-                                 <input type="hidden"
+                        <sec:authorize access="hasRole('ADMIN')">
+                        <td class="col-actions">
+                            <%-- Edit link --%>
+                            <a href="${pageContext.request.contextPath}/courses/edit/${course.id}"
+                               class="btn-inline edit" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <%-- Delete form (POST with CSRF) --%>
+                            <form action="${pageContext.request.contextPath}/courses/delete/${course.id}"
+                                  method="post"
+                                  style="display: inline;"
+                                  onsubmit="return confirmDelete('${course.title}')">
+                                <input type="hidden"
                                        name="${_csrf.parameterName}"
                                        value="${_csrf.token}" />
-						        <button type="submit" style="border:none; background:none; cursor:pointer;">
-						            <i class="bi bi-trash delete"></i> Delete
-						        </button>
-						
-						    </form>
-						</td>
+                                <button type="submit" class="btn-inline delete" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                        </sec:authorize>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
-            <br>
-            <p>No of courses available : ${numberOfCourses}</p>	
         </c:when>
 
         <c:otherwise>
-            <p class="info">No courses available. Please add a course.</p>
+            <div class="empty-state">
+                <i class="bi bi-journal-x" style="font-size: 2rem; color: #ccc;"></i>
+                <p>No courses available yet.</p>
+                <sec:authorize access="hasRole('ADMIN')">
+                    <a href="${pageContext.request.contextPath}/courses/add" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> Add First Course
+                    </a>
+                </sec:authorize>
+            </div>
         </c:otherwise>
     </c:choose>
 
-    <br>
-
-	<br>
-
-    <a href="${pageContext.request.contextPath}/courses/add">
-        ➕ Add New Course
-    </a>
-	
-
-	
 </div>
-
 
 <%@ include file="../fragments/footer.jsp" %>

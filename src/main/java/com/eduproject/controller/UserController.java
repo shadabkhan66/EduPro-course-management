@@ -1,7 +1,5 @@
 package com.eduproject.controller;
 
-import com.eduproject.exception.EmailAlreadyExistsException;
-import com.eduproject.exception.UserNameAlreadyExists;
 import com.eduproject.model.Role;
 import com.eduproject.model.User;
 import com.eduproject.service.UserService;
@@ -67,10 +65,10 @@ public class UserController {
 		}
 
 
-		String savedUserName = userService.registerUser(user);
+		String savedUserFullName = userService.registerUser(user);
 		redirectAttributes.addFlashAttribute(
 				"message",
-				"User has been registered successfully with username: " + savedUserName
+				"User has been registered successfully with user name: " +  savedUserFullName
 		);
 		return "redirect:/login";
 

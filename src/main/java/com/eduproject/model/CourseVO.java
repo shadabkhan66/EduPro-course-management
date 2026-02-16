@@ -33,10 +33,9 @@ public class CourseVO {
 	private String description;
 	
 	@Min(value = 1, message = "Duration must be at least 1 hour")
-	@DecimalMin(value = "0.0", message = "Fees must be non-negative")
 	private Integer durationInHours;
 	
-	@Min(value = 0, message = "Fees must be non-negative")
+	@DecimalMin(value = "0.0", message = "Fees must be non-negative")
 	private BigDecimal fees;// don't know if taking BigDecimal is correct or not
 
 	private String instructor;

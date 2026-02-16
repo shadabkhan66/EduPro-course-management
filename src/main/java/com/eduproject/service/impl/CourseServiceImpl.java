@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eduproject.exception.CourseNotFoundException;
@@ -51,7 +50,7 @@ public class CourseServiceImpl implements CourseService{
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public void deleteCourseById(Long courseId) {
 		if (!courseRepository.existsById(courseId)) {
 			throw new CourseNotFoundException("Course with ID " + courseId + " not found");

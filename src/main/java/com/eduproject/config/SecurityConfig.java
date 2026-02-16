@@ -33,6 +33,8 @@ public class SecurityConfig {
 					.requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
 					.requestMatchers("/courses/delete", "/courses/delete/**").hasRole("ADMIN")
 					.requestMatchers("/whoami").authenticated()
+					// Allow H2 console access without authentication (dev only)
+					.requestMatchers("/h2-console/**").permitAll()
 					.anyRequest().permitAll()
 					)
 				.formLogin(  formLoginConfig -> formLoginConfig
@@ -47,7 +49,15 @@ public class SecurityConfig {
 					            response.sendRedirect("/");
 					        })
 						.permitAll()
-					)	
+					)
+				// Disable CSRF for H2 console (it uses POST internally and doesn't send CSRF tokens)
+				.csrf( csrf -> csrf
+					.ignoringRequestMatchers("/h2-console/**")
+				)
+				// Allow H2 console to render in frames (it uses iframes internally)
+				.headers( headers -> headers
+					.frameOptions( frameOptions -> frameOptions.sameOrigin() )
+				)
 				.build();
 	}
 	

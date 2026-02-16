@@ -1,50 +1,63 @@
 <%@ include file="../fragments/header.jsp" %>
 
-<div class="container">
+<div class="container container-narrow">
 
-    <div class="details-card">
-        <h2>Course Details</h2>
+    <c:if test="${not empty course}">
 
-        <c:if test="${not empty course}">
+        <h2 class="page-title text-center">${course.title}</h2>
+        <p class="page-subtitle text-center">Course Details</p>
+        <hr>
 
+        <div class="detail-card">
             <div class="detail-row">
-                <span class="label">Title</span>
-                <span class="value">${course.title}</span>
+                <span class="detail-label">Description</span>
+                <span class="detail-value">${course.description}</span>
             </div>
 
             <div class="detail-row">
-                <span class="label">Description</span>
-                <span class="value">${course.description}</span>
+                <span class="detail-label">Duration</span>
+                <span class="detail-value">${course.durationInHours} Hours</span>
             </div>
 
             <div class="detail-row">
-                <span class="label">Duration</span>
-                <span class="value">${course.durationInHours} Hours</span>
+                <span class="detail-label">Fees</span>
+                <span class="detail-value">
+                    <c:choose>
+                        <c:when test="${course.fees != null}">
+                            <c:out value="${course.fees}" />
+                        </c:when>
+                        <c:otherwise>Free</c:otherwise>
+                    </c:choose>
+                </span>
             </div>
 
             <div class="detail-row">
-                <span class="label">Fees</span>
-                <span class="value">₹ ${course.fees}</span>
+                <span class="detail-label">Instructor</span>
+                <span class="detail-value">${course.instructor}</span>
             </div>
+        </div>
 
-            <div class="detail-row">
-                <span class="label">Instructor</span>
-                <span class="value">${course.instructor}</span>
-            </div>
-
-            <div class="actions">
-                <a href="${pageContext.request.contextPath}/courses">
-                    <button type="button">Back to List</button>
+        <div class="actions mt-2">
+            <a href="${pageContext.request.contextPath}/courses" class="btn btn-outline">
+                <i class="bi bi-arrow-left"></i> Back to Courses
+            </a>
+            <sec:authorize access="hasRole('ADMIN')">
+                <a href="${pageContext.request.contextPath}/courses/edit/${course.id}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-pencil-square"></i> Edit
                 </a>
-            </div>
+            </sec:authorize>
+        </div>
 
-        </c:if>
+    </c:if>
 
-        <c:if test="${empty course}">
-            <p class="error">Course not found.</p>
-        </c:if>
-
-    </div>
+    <c:if test="${empty course}">
+        <div class="empty-state">
+            <p class="text-muted">Course not found.</p>
+            <a href="${pageContext.request.contextPath}/courses" class="btn btn-outline">
+                <i class="bi bi-arrow-left"></i> Back to Courses
+            </a>
+        </div>
+    </c:if>
 
 </div>
 

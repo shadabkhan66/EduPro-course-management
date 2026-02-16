@@ -50,9 +50,12 @@ Desktop.ini
 # Environment / Secrets
 ##################################
 
-# Application configs (keep a sample instead)
-application.properties
-application.yml
+# Oracle profile config (contains real DB credentials)
+application-oracle.properties
+application-oracle.yml
+
+# Keep root-level example as template
+# Note: src/main/resources/application.properties is safe to commit (uses H2, no secrets)
 
 ##################################
 # Oracle JDBC (DO NOT COMMIT)

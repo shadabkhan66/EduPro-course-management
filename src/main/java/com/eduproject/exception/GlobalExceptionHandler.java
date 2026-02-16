@@ -23,7 +23,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleGeneralException(Exception ex, Model model) {
-
+        log.error(ex.getMessage());
+        log.info("in globalExceptionHandler");
         model.addAttribute("errorMessage", "Something went wrong.");
 
         return "error/500";

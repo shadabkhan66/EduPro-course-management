@@ -1,0 +1,51 @@
+Git Tags -- What and Why
+A tag is a permanent bookmark on a specific commit. Unlike branches (which move forward with new commits), a tag stays fixed. It's how you say "this exact commit is version 1.0.0".
+Two types of tags:
+Type	Command	What It Stores
+Lightweight	git tag v1.0.0	Just a pointer to a commit (like a sticky note)
+Annotated (recommended)	git tag -a v1.0.0 -m "message"	Full object: tagger name, date, message, and can be signed
+Always use annotated tags for releases -- they show up in git log, carry metadata, and are the industry standard.
+Semantic Versioning (SemVer)
+The standard format is vMAJOR.MINOR.PATCH:
+v1.0.0 │ │ │ │ │ └── PATCH: bug fixes (backward compatible) │ └──── MINOR: new features (backward compatible) └────── MAJOR: breaking changes
+Examples:
+Version	When
+v0.1.0	First working prototype (your project is here)
+v0.2.0	Added pagination, tests, etc.
+v0.2.1	Fixed a bug in pagination
+v1.0.0	Production-ready, stable API
+v2.0.0	Redesigned the whole architecture (breaking change)
+Why v0.x.x? -- The 0 major version signals "this is pre-release / in development." Your pom.xml already has <version>0.1.0</version> which is perfect.
+Commands You'll Run
+Step 1: Make sure everything is committed
+git status
+If you have uncommitted changes, commit them first.
+Step 2: Create an annotated tag
+git tag -a v0.1.0 -m "Initial stable version: course CRUD, Spring Security, H2/Oracle support"
+This tags your current HEAD commit as v0.1.0.
+Step 3: Verify the tag
+# List all tagsgit tag# See tag detailsgit show v0.1.0
+git show v0.1.0 will display the tagger, date, message, and the commit it points to.
+Step 4: Push the tag to GitHub
+# Push a specific taggit push origin v0.1.0# Or push ALL tags at oncegit push origin --tags
+Tags are not pushed by git push alone -- you must explicitly push them.
+After Pushing -- GitHub Release
+Once the tag is on GitHub, you can create a Release from it:
+Go to your repo on GitHub
+Click Releases (right sidebar)
+Click "Create a new release"
+Select your tag v0.1.0
+Add release title: v0.1.0 -- Initial Stable Version
+Add release notes (you can paste from your CHALLENGES.md or summarize features)
+This creates a nice release page with a download link -- looks very professional on a portfolio repo.
+Useful Tag Commands (cheat sheet)
+# List all tagsgit tag# List tags matching a patterngit tag -l "v0.*"# Tag a PAST commit (not HEAD)git tag -a v0.0.1 abc1234 -m "Retroactive tag on early commit"# Delete a local tag (if you made a mistake)git tag -d v0.1.0# Delete a remote taggit push origin --delete v0.1.0# See which commit a tag points togit rev-list -n 1 v0.1.0
+Your Next Version Roadmap
+Version	Milestone
+v0.1.0	Now -- initial stable (CRUD, auth, H2, docs)
+v0.2.0	Add pagination + unit tests
+v0.3.0	Add REST API endpoints
+v1.0.0	Production-ready with full test coverage
+So when you're ready, commit any pending changes, then run:
+git tag -a v0.1.0 -m "Initial stable version: course CRUD, Spring Security, H2/Oracle support"git push origin v0.1.0
+That's it -- your first versioned release!
