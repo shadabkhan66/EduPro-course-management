@@ -47,6 +47,7 @@ public class InsertDataInDB implements CommandLineRunner {
 				User.builder().username("student").password(passwordEncoder.encode("student123")).firstName("John").lastName("Doe").email("john@edupro.com").role(Role.STUDENT).build()
 		));
 
+
 		courses.forEach(c -> log.info("Seeded course: {}", c.getTitle()));
 		users.forEach(u -> log.info("Seeded user: {} ({})", u.getUsername(), u.getRole()));
 	}
