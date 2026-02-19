@@ -1,5 +1,7 @@
 package com.eduproject.service.impl;
 
+import com.eduproject.exception.UserNotFoundException;
+import com.eduproject.model.UserResponseDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +51,25 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public boolean existsByUsername(String username) {
 		return userRepository.existsByUsername(username);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public UserResponseDTO getUserById(Long id) {
+		log.info("Retrieving user by id: {}", id);
+		User fetchedUser = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with Id : " + id));
+
+		return UserResponseDTO.builder()
+				.id(fetchedUser.getId())
+				.username(fetchedUser.getUsername())
+				.firstName(fetchedUser.getFirstName())
+				.lastName(fetchedUser.getLastName())
+				.email(fetchedUser.getEmail())
+				.fullName(fetchedUser.getFullName())
+				.createdAt(fetchedUser.getCreatedAt().toString())
+				.lastUpdatedAt(fetchedUser.getUpdatedAt() == null ? "Never Updated" : fetchedUser.getUpdatedAt().toString())
+				.role(fetchedUser.getRole().toString())
+				.isActive(fetchedUser.isEnabled())
+				.build();
 	}
 }
