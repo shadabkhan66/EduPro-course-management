@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 /**
  * Handles user registration.
  *
@@ -31,6 +33,9 @@ public class UserController {
 
 	private final UserService userService;
 
+//    =======================
+//    register new user
+//    =============================================================
 	@GetMapping("/register")
 	public String showRegistrationForm(Model model) {
 		log.info("Displaying registration form");
@@ -66,6 +71,81 @@ public class UserController {
 				"Welcome, " + fullName + "! Your account has been created. Please login.");
 		return "redirect:/login";
 	}
+
+//    =======================
+//    fetch user
+//    =============================================================
+
+	@GetMapping("/{id}")
+	public String showUser(@PathVariable Long id, Model model) {
+		UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
+
+		//exception handling
+
+		model.addAttribute("userResponseDTO", userResponseDTO);
+		return "user/showUserProfile";
+	}
+
+    @GetMapping//this page should only be see to admin
+    public String showAllUsers(Model model) {
+        List<UserResponseDTO> users =  this.userService.getAllUsers();
+        model.addAttribute("users", users);
+
+        return "user/allUsers";
+    }
+
+//    =======================
+//    edit  user
+//    =============================================================
+	@GetMapping("/{id}/edit")
+	public String showEditUserForm(@PathVariable Long id, Model model) {
+		log.info("Displaying editing form for user: {}", id);
+		UserResponseDTO userResponseDTO = userService.getUserById(id);
+
+		model.addAttribute("userResponseDTO", userResponseDTO);
+
+		return "user/editUser";
+	}
+
+    @PostMapping("/{id}/edit")
+    public String editUser(@PathVariable Long id,
+                           @ModelAttribute("userResponseDTO") UserResponseDTO userRespDTO,
+                           BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes
+    ){
+        log.info("Edit user attempt for user: {}", id);
+
+         if( !id.equals(userRespDTO.getId()) ) {
+             //do something
+         }
+
+        if (!bindingResult.hasErrors()) {
+
+            if (userService.existsByEmailExcludingCurrentUser(userRespDTO.getEmail(), id)) {
+                bindingResult.rejectValue("email", "duplicate", "Email already exists");
+            }
+
+            if (userService.existsByUsernameExcludingCurrentUser(userRespDTO.getUsername(), id)) {
+                bindingResult.rejectValue("username", "duplicate", "Username already exists");
+            }
+        }
+
+    if(bindingResult.hasErrors()){
+        log.info("Updating validation fail {} " ,bindingResult.getErrorCount());
+        //is this line even necessery especially with this huge name
+        // isent it send automatically
+//        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRespDTO", bindingResult);
+//        redirectAttributes.addFlashAttribute("userResponseDTO", userRespDTO);
+
+        return "redirect:/users/allUsers";
+    }
+
+    String msg = this.userService.updateUser(userRespDTO);
+
+
+
+        return "redirect:/users/" + id;
+    }
 
 	@GetMapping("/{id}")
 	public String showUser(@PathVariable Long id, Model model) {

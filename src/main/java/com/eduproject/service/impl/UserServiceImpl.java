@@ -2,6 +2,7 @@ package com.eduproject.service.impl;
 
 import com.eduproject.exception.UserNotFoundException;
 import com.eduproject.model.UserResponseDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,14 @@ import com.eduproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
+
 
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
@@ -57,19 +62,53 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public UserResponseDTO getUserById(Long id) {
 		log.info("Retrieving user by id: {}", id);
-		User fetchedUser = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with Id : " + id));
+		return this.userRepository.findById(id)
+                .map(this::toUserResponseDTO)
+                .orElseThrow(() -> new UserNotFoundException("User not found with Id : " + id));
 
-		return UserResponseDTO.builder()
-				.id(fetchedUser.getId())
-				.username(fetchedUser.getUsername())
-				.firstName(fetchedUser.getFirstName())
-				.lastName(fetchedUser.getLastName())
-				.email(fetchedUser.getEmail())
-				.fullName(fetchedUser.getFullName())
-				.createdAt(fetchedUser.getCreatedAt().toString())
-				.lastUpdatedAt(fetchedUser.getUpdatedAt() == null ? "Never Updated" : fetchedUser.getUpdatedAt().toString())
-				.role(fetchedUser.getRole().toString())
-				.isActive(fetchedUser.isEnabled())
-				.build();
+
 	}
+
+    @Override
+    public List<UserResponseDTO> getAllUsers() {
+        return this.userRepository.findAll().stream().map(this::toUserResponseDTO).toList();
+    }
+
+
+    @Override
+    public String updateUser(UserResponseDTO userRespDTO) {
+
+        User user = this.userRepository.findById(userRespDTO.getId()).orElseThrow( () -> new UserNotFoundException("User not found with Id : "+ userRespDTO.getId()));
+        BeanUtils.copyProperties(userRespDTO, user, "role", "lastUpdatedAt","createdAt", "isActive");
+        this.userRepository.save(user);
+
+
+        return "User with id "+ userRespDTO.getId()+" updated successfully ";
+    }
+
+    @Override
+    public boolean existsByEmailExcludingCurrentUser(String email, Long currentUserId) {
+        return userRepository.existsByEmailAndIdNot(email, currentUserId);
+    }
+
+    @Override
+    public boolean existsByUsernameExcludingCurrentUser(String username, Long currentUserId) {
+        return userRepository.existsByUsernameAndIdNot(username, currentUserId);
+    }
+
+    private UserResponseDTO toUserResponseDTO(User user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .createdAt(user.getCreatedAt().toString())
+                .lastUpdatedAt(user.getUpdatedAt() == null ? "Never Updated" : user.getUpdatedAt().toString())
+                .role(user.getRole().toString())
+                .isActive(user.isEnabled())
+                .build();
+    }
 }
+
