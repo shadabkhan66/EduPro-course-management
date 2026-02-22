@@ -46,6 +46,7 @@ public class SecurityConfig {
 
 						// Everything else requires authentication
 						.requestMatchers("/whoami").authenticated()
+						.requestMatchers(("/users/{id}")).authenticated()
 						.anyRequest().permitAll()
 				)
 				.formLogin(form -> form

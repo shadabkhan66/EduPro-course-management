@@ -40,6 +40,11 @@
 
             <!-- Authenticated: show logout -->
             <span sec:authorize="isAuthenticated()">
+
+               <a th:href="@{/users/{id}(id=${#authentication.principal.id})}">
+                    <i class="bi bi-person-circle"></i> My Profile
+                </a>
+
                 <form th:action="@{/logout}" method="post" style="display:inline; margin:0;">
                     <!-- CSRF token is auto-inserted by Thymeleaf! -->
                     <button type="submit" class="logout-btn">

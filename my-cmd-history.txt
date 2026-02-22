@@ -1,0 +1,990 @@
+PowerShell 7.5.4
+Loading personal and system profiles took 517ms.
+PS C:\Users\Khans\LocalDoc\Spring-Workspace\Spring-First-Workspace\EduPro-course-management> bash1
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git status
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   .gitignore
+        new file:   CHALLENGES.md
+        new file:   CODE_REVIEW.md
+        new file:   CONCEPTS_LEARNED.md
+        new file:   INTERVIEW_QNA.md
+        new file:   README.md
+        new file:   REVIEW_REPORT.md
+        new file:   V2_MIGRATION.md
+        new file:   application-oracle.properties.example
+        new file:   importent_commands.txt
+        new file:   pom.xml
+        new file:   src/main/java/com/eduproject/EduProApplication.java
+        new file:   src/main/java/com/eduproject/config/SecurityConfig.java
+        new file:   src/main/java/com/eduproject/config/UserDetailService.java
+        new file:   src/main/java/com/eduproject/controller/CourseController.java
+        new file:   src/main/java/com/eduproject/controller/HomeController.java
+        new file:   src/main/java/com/eduproject/controller/UserController.java
+        new file:   src/main/java/com/eduproject/exception/CourseNotFoundException.java
+        new file:   src/main/java/com/eduproject/exception/GlobalExceptionHandler.java
+        new file:   src/main/java/com/eduproject/exception/UserNotFoundException.java
+        new file:   src/main/java/com/eduproject/model/CourseDTO.java
+        new file:   src/main/java/com/eduproject/model/CourseEntity.java
+        new file:   src/main/java/com/eduproject/model/Role.java
+        new file:   src/main/java/com/eduproject/model/User.java
+        new file:   src/main/java/com/eduproject/model/UserRegistrationDTO.java
+        new file:   src/main/java/com/eduproject/model/UserResponseDTO.java
+        new file:   src/main/java/com/eduproject/repository/CourseRepository.java
+        new file:   src/main/java/com/eduproject/repository/UserRepository.java
+        new file:   src/main/java/com/eduproject/runner/InsertDataInDB.java
+        new file:   src/main/java/com/eduproject/service/CourseService.java
+        new file:   src/main/java/com/eduproject/service/UserService.java
+        new file:   src/main/java/com/eduproject/service/impl/CourseServiceImpl.java
+        new file:   src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+        new file:   src/main/resources/application.properties
+        new file:   src/main/resources/static/css/style.css
+        new file:   src/main/resources/static/js/app.js
+        new file:   src/main/resources/templates/auth/login.html
+        new file:   src/main/resources/templates/course/form.html
+        new file:   src/main/resources/templates/course/list.html
+        new file:   src/main/resources/templates/course/view.html
+        new file:   src/main/resources/templates/error/404.html
+        new file:   src/main/resources/templates/error/500.html
+        new file:   src/main/resources/templates/fragments/footer.html
+        new file:   src/main/resources/templates/fragments/header.html
+        new file:   src/main/resources/templates/home.html
+        new file:   src/main/resources/templates/user/editUser.html
+        new file:   src/main/resources/templates/user/register.html
+        new file:   src/main/resources/templates/user/showUserProfile.html
+        new file:   src/main/webapp/WEB-INF/views/auth/login.jsp
+        new file:   src/main/webapp/WEB-INF/views/course/course-form.jsp
+        new file:   src/main/webapp/WEB-INF/views/course/course-list.jsp
+        new file:   src/main/webapp/WEB-INF/views/course/course-view.jsp
+        new file:   src/main/webapp/WEB-INF/views/error.jsp
+        new file:   src/main/webapp/WEB-INF/views/error/404.jsp
+        new file:   src/main/webapp/WEB-INF/views/error/500.jsp
+        new file:   src/main/webapp/WEB-INF/views/fragments/footer.jsp
+        new file:   src/main/webapp/WEB-INF/views/fragments/header.jsp
+        new file:   src/main/webapp/WEB-INF/views/home/home.jsp
+        new file:   src/main/webapp/WEB-INF/views/user/user-form.jsp
+        new file:   src/main/webapp/css/style.css
+        new file:   src/main/webapp/js/app.js
+        new file:   src/test/java/com/eduproject/SbMvc06SimpleCrudEduProApplicationTests.java
+        new file:   src/test/java/com/eduproject/controller/CourseControllerTest.java
+        new file:   src/test/java/com/eduproject/repository/CourseRepositoryTest.java
+        new file:   src/test/java/com/eduproject/service/CourseServiceImplTest.java
+        new file:   src/test/java/com/eduproject/service/UserServiceImplTest.java
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   src/main/java/com/eduproject/controller/UserController.java
+        modified:   src/main/java/com/eduproject/service/UserService.java
+        modified:   src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git add .
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git commit -m "made changes in service and controller for edit feature "
+fatal: cannot lock ref 'HEAD': unable to resolve reference 'refs/heads/user-profile': reference broken
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git reflog
+fatal: your current branch appears to be broken
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git fsck --full
+error: refs/heads/user-profile: badRefContent:
+Checking ref database: 100% (1/1), done.
+Checking object directories: 100% (256/256), done.
+Checking objects: 100% (213/213), done.
+error: refs/heads/user-profile: invalid sha1 pointer 0000000000000000000000000000000000000000
+error: invalid HEAD
+error: HEAD: invalid reflog entry a9d52854e1f3ab20473694e8be9866a85c29bcbe
+dangling tree b9c4c04c3bd2f2564d754591e7166afbb9cf2bcf
+dangling commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ cp -r .git .git-backup
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ rm .git/refs/heads/user-profile
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git checkout main
+error: Your local changes to the following files would be overwritten by checkout:
+        src/main/java/com/eduproject/config/SecurityConfig.java
+        src/main/java/com/eduproject/controller/UserController.java
+        src/main/java/com/eduproject/exception/GlobalExceptionHandler.java
+        src/main/java/com/eduproject/repository/UserRepository.java
+        src/main/java/com/eduproject/service/UserService.java
+        src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+        src/main/resources/templates/fragments/header.html
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ .git/HEAD
+.git/HEAD: line 1: ref:: command not found
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ explorer .git/HEAD
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ explorer .
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git checkout main
+M       src/main/java/com/eduproject/config/SecurityConfig.java
+M       src/main/java/com/eduproject/controller/UserController.java
+M       src/main/java/com/eduproject/exception/GlobalExceptionHandler.java
+A       src/main/java/com/eduproject/exception/UserNotFoundException.java
+A       src/main/java/com/eduproject/model/UserResponseDTO.java
+M       src/main/java/com/eduproject/repository/UserRepository.java
+M       src/main/java/com/eduproject/service/UserService.java
+M       src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+M       src/main/resources/templates/fragments/header.html
+A       src/main/resources/templates/user/editUser.html
+A       src/main/resources/templates/user/showUserProfile.html
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (main)
+$ dangling commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+bash: dangling: command not found
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (main)
+$ git show b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+Author: Shadab Khan <khan.shadab338@gmail.com>
+Date:   Sat Feb 21 11:02:17 2026 +0530
+
+    made changes in service and controller for edit feature
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..fe4b6ec
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,84 @@
++##################################
+...skipping...
+
+
+                   SUMMARY OF LESS COMMANDS
+
+      Commands marked with * may be preceded by a number, N.
+      Notes in parentheses indicate the behavior if N is given.
+      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
+
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
+ ---------------------------------------------------------------------------
+
+                           MOVING
+
+  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).
+  y  ^Y  k  ^K  ^P  *  Backward one line   (or N lines).
+  ESC-j             *  Forward  one file line (or N file lines).
+  ESC-k             *  Backward one file line (or N file lines).
+  f  ^F  ^V  SPACE  *  Forward  one window (or N lines).
+  b  ^B  ESC-v      *  Backward one window (or N lines).
+  z                 *  Forward  one window (and set window to N).
+  w                 *  Backward one window (and set window to N).
+  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.
+  ESC-b             *  Backward one window, but don't stop at beginning-of-file.
+  d  ^D             *  Forward  one half-window (and set half-window to N).
+  u  ^U             *  Backward one half-window (and set half-window to N).
+  ESC-)  RightArrow *  Right one half screen width (or N positions).
+  ESC-(  LeftArrow  *  Left  one half screen width (or N positions).
+  ESC-}  ^RightArrow   Right to last column displayed.
+  ESC-{  ^LeftArrow    Left  to first column.
+  F                    Forward forever; like "tail -f".
+  ESC-F                Like F but stop when search pattern is found.
+  r  ^R  ^L            Repaint screen.
+  R                    Repaint screen, discarding buffered input.
+        ---------------------------------------------------
+        Default "window" is the screen height.
+        Default "half-window" is half of the screen height.
+ ---------------------------------------------------------------------------
+
+                          SEARCHING
+
+  /pattern          *  Search forward for (N-th) matching line.
+  ?pattern          *  Search backward for (N-th) matching line.
+  n                 *  Repeat previous search (for N-th occurrence).
+  N                 *  Repeat previous search in reverse direction.
+  ESC-n             *  Repeat previous search, spanning files.
+  ESC-N             *  Repeat previous search, reverse dir. & spanning files.
+  ^O^N  ^On         *  Search forward for (N-th) OSC8 hyperlink.
+  ^O^P  ^Op         *  Search backward for (N-th) OSC8 hyperlink.
+  ^O^L  ^Ol            Jump to the currently selected OSC8 hyperlink.
+  ESC-u                Undo (toggle) search highlighting.
+  ESC-U                Clear search highlighting.
+  &pattern          *  Display only matching lines.
+        ---------------------------------------------------
+                Search is case-sensitive unless changed with -i or -I.
+        A search pattern may begin with one or more of:
+        ^N or !  Search for NON-matching lines.
+        ^E or *  Search multiple files (pass thru END OF FILE).
+        ^F or @  Start search at FIRST file (for /) or last file (for ?).
+        ^K       Highlight matches, but don't move (KEEP position).
+        ^R       Don't use REGULAR EXPRESSIONS.
+        ^S n     Search for match in n-th parenthesized subpattern.
+        ^W       WRAP search if no match found.
+        ^L       Enter next character literally into pattern.
+ ---------------------------------------------------------------------------
+
+                           JUMPING
+
+  g  <  ESC-<       *  Go to first line in file (or line N).
+  G  >  ESC->       *  Go to last line in file (or line N).
+  p  %              *  Go to beginning of file (or N percent into file).
+  t                 *  Go to the (N-th) next tag.
+  T                 *  Go to the (N-th) previous tag.
+  {  (  [           *  Find close bracket } ) ].
+  }  )  ]           *  Find open bracket { ( [.
+  ESC-^F <c1> <c2>  *  Find close bracket <c2>.
+  ESC-^B <c1> <c2>  *  Find open bracket <c1>.
+        ---------------------------------------------------
+        Each "find close bracket" command goes forward to the close bracket
+          matching the (N-th) open bracket in the top line.
+        Each "find open bracket" command goes backward to the open bracket
+          matching the (N-th) close bracket in the bottom line.
+
+  m<letter>            Mark the current top line with <letter>.
+  M<letter>            Mark the current bottom line with <letter>.
+  '<letter>            Go to a previously marked position.
+  ''                   Go to the previous position.
+  ^X^X                 Same as '.
+  ESC-m<letter>        Clear a mark.
+        ---------------------------------------------------
+        A mark is any upper-case or lower-case letter.
+        Certain marks are predefined:
+             ^  means  beginning of the file
+             $  means  end of the file
+ ---------------------------------------------------------------------------
+
+HELP -- Press RETURN for more, or q when done
+  m<letter>            Mark the current top line with <letter>.
+  M<letter>            Mark the current bottom line with <letter>.
+  '<letter>            Go to a previously marked position.
+  ''                   Go to the previous position.
+  ^X^X                 Same as '.
+  ESC-m<letter>        Clear a mark.
+        ---------------------------------------------------
+        A mark is any upper-case or lower-case letter.
+        Certain marks are predefined:
+             ^  means  beginning of the file
+             $  means  end of the file
+ ---------------------------------------------------------------------------
+
+                        CHANGING FILES
+
+  :e [file]            Examine a new file.
+  ^X^V                 Same as :e.
+  :n                *  Examine the (N-th) next file from the command line.
+  :p                *  Examine the (N-th) previous file from the command line.
+  :x                *  Examine the first (or N-th) file from the command line.
+  ^O^O                 Open the currently selected OSC8 hyperlink.
+  :d                   Delete the current file from the command line list.
+  =  ^G  :f            Print current file name.
+ ---------------------------------------------------------------------------
+
+                    MISCELLANEOUS COMMANDS
+
+  -<flag>              Toggle a command line option [see OPTIONS below].
+  --<name>             Toggle a command line option, by name.
+  _<flag>              Display the setting of a command line option.
+  __<name>             Display the setting of an option, by name.
+  +cmd                 Execute the less cmd each time a new file is examined.
+
+  !command             Execute the shell command with $SHELL.
+  #command             Execute the shell command, expanded like a prompt.
+  |Xcommand            Pipe file between current pos & mark X to shell command.
+  s file               Save input to a file.
+  v                    Edit the current file with $VISUAL or $EDITOR.
+  V                    Print version number of "less".
+ ---------------------------------------------------------------------------
+
+                           OPTIONS
+
+        Most options may be changed either on the command line,
+        or from within less by using the - or -- command.
+        Options may be given in one of two forms: either a single
+        character preceded by a -, or a name preceded by --.
+
+  -?  ........  --help
+                  Display help (from command line).
+  -a  ........  --search-skip-screen
+                  Search skips current screen.
+  -A  ........  --SEARCH-SKIP-SCREEN
+                  Search starts just after target line.
+  -b [N]  ....  --buffers=[N]
+                  Number of buffers.
+  -B  ........  --auto-buffers
+                  Don't automatically allocate buffers for pipes.
+  -c  ........  --clear-screen
+                  Repaint by clearing rather than scrolling.
+  -d  ........  --dumb
+                  Dumb terminal.
+  -D xcolor  .  --color=xcolor
+                  Set screen colors.
+  -e  -E  ....  --quit-at-eof  --QUIT-AT-EOF
+                  Quit at end of file.
+  -f  ........  --force
+                  Force open non-regular files.
+  -F  ........  --quit-if-one-screen
+                  Quit if entire file fits on first screen.
+  -g  ........  --hilite-search
+                  Highlight only last match for searches.
+  -G  ........  --HILITE-SEARCH
+                  Don't highlight any matches for searches.
+  -h [N]  ....  --max-back-scroll=[N]
+                  Backward scroll limit.
+  -i  ........  --ignore-case
+                  Ignore case in searches that do not contain uppercase.
+  -I  ........  --IGNORE-CASE
+                  Ignore case in all searches.
+  -j [N]  ....  --jump-target=[N]
+                  Screen position of target lines.
+  -J  ........  --status-column
+                  Display a status column at left edge of screen.
+  -k file  ...  --lesskey-file=file
+                  Use a compiled lesskey file.
+  -K  ........  --quit-on-intr
+                  Exit less in response to ctrl-C.
+  -L  ........  --no-lessopen
+                  Ignore the LESSOPEN environment variable.
+  -m  -M  ....  --long-prompt  --LONG-PROMPT
+                  Set prompt style.
+  -n .........  --line-numbers
+                  Suppress line numbers in prompts and messages.
+  -N .........  --LINE-NUMBERS
+                  Display line number at start of each line.
+  -o [file] ..  --log-file=[file]
+                  Copy to log file (standard input only).
+  -O [file] ..  --LOG-FILE=[file]
+                  Copy to log file (unconditionally overwrite).
+  -p pattern .  --pattern=[pattern]
+                  Start at pattern (from command line).
+  -P [prompt]   --prompt=[prompt]
+                  Define new prompt.
+  -q  -Q  ....  --quiet  --QUIET  --silent --SILENT
+                  Quiet the terminal bell.
+  -r  -R  ....  --raw-control-chars  --RAW-CONTROL-CHARS
+                  Output "raw" control characters.
+  -s  ........  --squeeze-blank-lines
+                  Squeeze multiple blank lines.
+  -S  ........  --chop-long-lines
+                  Chop (truncate) long lines rather than wrapping.
+  -t tag  ....  --tag=[tag]
+                  Find a tag.
+  -T [tagsfile] --tag-file=[tagsfile]
+                  Use an alternate tags file.
+  -u  -U  ....  --underline-special  --UNDERLINE-SPECIAL
+                  Change handling of backspaces, tabs and carriage returns.
+  -V  ........  --version
+                  Display the version number of "less".
+  -w  ........  --hilite-unread
+                  Highlight first new line after forward-screen.
+  -W  ........  --HILITE-UNREAD
+                  Highlight first new line after any forward movement.
+  -x [N[,...]]  --tabs=[N[,...]]
+                  Set tab stops.
+  -X  ........  --no-init
+                  Don't use termcap init/deinit strings.
+  -y [N]  ....  --max-forw-scroll=[N]
+                  Forward scroll limit.
+  -z [N]  ....  --window=[N]
+                  Set size of window.
+  -" [c[c]]  .  --quotes=[c[c]]
+                  Set shell quote characters.
+  -~  ........  --tilde
+                  Don't display tildes after end of file.
+  -# [N]  ....  --shift=[N]
+                  Set horizontal scroll amount (0 = one half screen width).
+
+                --exit-follow-on-close
+                  Exit F command on a pipe when writer closes pipe.
+                --file-size
+                  Automatically determine the size of the input file.
+                --follow-name
+                  The F command changes files if the input file is renamed.
+                --form-feed
+                  Stop scrolling when a form feed character is reached.
+                --header=[L[,C[,N]]]
+                  Use L lines (starting at line N) and C columns as headers.
+                --incsearch
+                  Search file as each pattern character is typed in.
+                --intr=[C]
+                  Use C instead of ^X to interrupt a read.
+                --lesskey-context=text
+                  Use lesskey source file contents.
+                --lesskey-src=file
+HELP -- Press RETURN for more, or q when done...skipping...
+commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+Author: Shadab Khan <khan.shadab338@gmail.com>
+Date:   Sat Feb 21 11:02:17 2026 +0530
+
+    made changes in service and controller for edit feature
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..fe4b6ec
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,84 @@
++##################################
+...skipping...
+
+
+                   SUMMARY OF LESS COMMANDS
+
+      Commands marked with * may be preceded by a number, N.
+      Notes in parentheses indicate the behavior if N is given.
+      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
+
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
+ ---------------------------------------------------------------------------
+
+                           MOVING
+
+  e  ^E  j  ^N  CR  *  Forward  one line   (or N lines).
+HELP -- Press RETURN for more, or q when done...skipping...
+commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+Author: Shadab Khan <khan.shadab338@gmail.com>
+Date:   Sat Feb 21 11:02:17 2026 +0530
+
+    made changes in service and controller for edit feature
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..fe4b6ec
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,84 @@
++##################################
+...skipping...
+
+
+                   SUMMARY OF LESS COMMANDS
+
+      Commands marked with * may be preceded by a number, N.
+      Notes in parentheses indicate the behavior if N is given.
+      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.
+
+  h  H                 Display this help.
+  q  :q  Q  :Q  ZZ     Exit.
+ ---------------------------------------------------------------------------
+
+                           MOVING
+
+...skipping...
+commit b4f1a7ffed423d88bf10d52e177b5b052d8eb436
+Author: Shadab Khan <khan.shadab338@gmail.com>
+Date:   Sat Feb 21 11:02:17 2026 +0530
+
+    made changes in service and controller for edit feature
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..fe4b6ec
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,84 @@
++##################################
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (main)
+$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   src/main/java/com/eduproject/config/SecurityConfig.java
+        modified:   src/main/java/com/eduproject/controller/UserController.java
+        modified:   src/main/java/com/eduproject/exception/GlobalExceptionHandler.java
+        new file:   src/main/java/com/eduproject/exception/UserNotFoundException.java
+        new file:   src/main/java/com/eduproject/model/UserResponseDTO.java
+        modified:   src/main/java/com/eduproject/repository/UserRepository.java
+        modified:   src/main/java/com/eduproject/service/UserService.java
+        modified:   src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+        modified:   src/main/resources/templates/fragments/header.html
+        new file:   src/main/resources/templates/user/editUser.html
+        new file:   src/main/resources/templates/user/showUserProfile.html
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .git-backup/
+
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (main)
+$ git branch
+* main
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (main)
+$ git checkout -b user-profile
+Switched to a new branch 'user-profile'
+Your branch is behind 'origin/user-profile' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git commit -m "made changes in service and controller for edit feature"
+[user-profile 85344a0] made changes in service and controller for edit feature
+ 11 files changed, 430 insertions(+), 4 deletions(-)
+ create mode 100644 src/main/java/com/eduproject/exception/UserNotFoundException.java
+ create mode 100644 src/main/java/com/eduproject/model/UserResponseDTO.java
+ create mode 100644 src/main/resources/templates/user/editUser.html
+ create mode 100644 src/main/resources/templates/user/showUserProfile.html
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git push -u origin user-profile
+To https://github.com/shadabkhan66/EduPro-course-management
+ ! [rejected]        user-profile -> user-profile (non-fast-forward)
+error: failed to push some refs to 'https://github.com/shadabkhan66/EduPro-course-management'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ # Make sure you're on your local branch
+git checkout user-profile
+
+# Pull remote changes and merge
+git pull origin user-profile --rebase
+Already on 'user-profile'
+Your branch and 'origin/user-profile' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+From https://github.com/shadabkhan66/EduPro-course-management
+ * branch            user-profile -> FETCH_HEAD
+Auto-merging src/main/java/com/eduproject/controller/UserController.java
+CONFLICT (content): Merge conflict in src/main/java/com/eduproject/controller/UserController.java
+Auto-merging src/main/java/com/eduproject/model/UserResponseDTO.java
+CONFLICT (add/add): Merge conflict in src/main/java/com/eduproject/model/UserResponseDTO.java
+Auto-merging src/main/java/com/eduproject/service/UserService.java
+CONFLICT (content): Merge conflict in src/main/java/com/eduproject/service/UserService.java
+Auto-merging src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+CONFLICT (content): Merge conflict in src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+Auto-merging src/main/resources/templates/user/editUser.html
+CONFLICT (add/add): Merge conflict in src/main/resources/templates/user/editUser.html
+error: could not apply 85344a0... made changes in service and controller for edit feature
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 85344a0... # made changes in service and controller for edit feature
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile|REBASE 1/1)
+$ git status
+interactive rebase in progress; onto 1621b2c
+Last command done (1 command done):
+   pick 85344a0 # made changes in service and controller for edit feature
+No commands remaining.
+You are currently rebasing branch 'user-profile' on '1621b2c'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   src/main/java/com/eduproject/repository/UserRepository.java
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+        both modified:   src/main/java/com/eduproject/controller/UserController.java
+        both added:      src/main/java/com/eduproject/model/UserResponseDTO.java
+        both modified:   src/main/java/com/eduproject/service/UserService.java
+        both modified:   src/main/java/com/eduproject/service/impl/UserServiceImpl.java
+        both added:      src/main/resources/templates/user/editUser.html
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .git-backup/
+
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile|REBASE 1/1)
+$ git add <file>
+bash: syntax error near unexpected token `newline'
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git add .
+warning: in the working copy of '.git-backup/COMMIT_EDITMSG', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/HEAD', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/ORIG_HEAD', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/config', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/description', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/applypatch-msg.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/commit-msg.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/fsmonitor-watchman.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/post-update.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/pre-applypatch.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/pre-commit.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/pre-merge-commit.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/pre-push.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/pre-rebase.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/pre-receive.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/prepare-commit-msg.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/push-to-checkout.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/sendemail-validate.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/hooks/update.sample', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/info/exclude', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/packed-refs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/heads/main', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/remotes/origi/HEAD', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/remotes/origi/excption-handling', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/remotes/origi/main', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/remotes/origin/HEAD', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/remotes/origin/main', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/remotes/origin/user-profile', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/tags/v0.1.0', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.git-backup/refs/tags/v0.2.0', LF will be replaced by CRLF the next time Git touches it
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git rebase --continue
+fatal: no rebase in progress
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git log --oneline --graph --all
+* f1e04b4 (HEAD -> user-profile) made changes in service and controller for edit feature
+* 1621b2c (origin/user-profile) WIP -> Add user profile display after log-in
+* 3f95c78 (origin/main, origin/HEAD, main) solved login problem using @Builder.Default in entity class
+* f9d76ef (tag: v0.2.0) v0.2.0: Migrate JSP to Thymeleaf, add DTOs, test suite, security fixes
+* 71a5afe (tag: v0.1.0) Improvement in view
+* 3bac929 added some notes in .md file
+* e0017fd (origi/main, origi/HEAD) done some refactoring linke follwing naming convetion , adding Transectional and using read only in places
+*   fa98b79 Merge branch 'excption-handling'
+|\
+| * 1825cc6 (origin/excption-handling, origi/excption-handling) added some of exception handlign
+* | 9f625d7 Merge pull request #2 from shadabkhan66/excption-handling
+|\|
+| * f636bdb added feature to display course details
+| * cfb747f added each course details
+| * 356d759 added each course details
+|/
+* 704179a used include tag of jps
+*   178bcf3 Merge pull request #1 from shadabkhan66/arrange-view
+|\
+| * ccd5e6a Refactor views and controllers for improved structure and consistency
+|/
+* 4add983 added user registration and logIn using spring security with databse implimentation of UserDetailsService
+* 6a64327 added my all the directory
+* 0ade0db Add professional .gitignore and config template and pom.xm;
+* 9310fcf Update .gitignore to include additional patterns
+* 4c75dcf Initial commit
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git push -u origin user-profile
+Enumerating objects: 37, done.
+Counting objects: 100% (37/37), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (17/17), done.
+Writing objects: 100% (19/19), 3.01 KiB | 279.00 KiB/s, done.
+Total 19 (delta 12), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (12/12), completed with 11 local objects.
+To https://github.com/shadabkhan66/EduPro-course-management
+   1621b2c..f1e04b4  user-profile -> user-profile
+branch 'user-profile' set up to track 'origin/user-profile'.
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git status
+On branch user-profile
+Your branch is up to date with 'origin/user-profile'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   .git-backup/COMMIT_EDITMSG
+        new file:   .git-backup/FETCH_HEAD
+        new file:   .git-backup/HEAD
+        new file:   .git-backup/ORIG_HEAD
+        new file:   .git-backup/config
+        new file:   .git-backup/description
+        new file:   .git-backup/hooks/applypatch-msg.sample
+        new file:   .git-backup/hooks/commit-msg.sample
+        new file:   .git-backup/hooks/fsmonitor-watchman.sample
+        new file:   .git-backup/hooks/post-update.sample
+        new file:   .git-backup/hooks/pre-applypatch.sample
+        new file:   .git-backup/hooks/pre-commit.sample
+        new file:   .git-backup/hooks/pre-merge-commit.sample
+        new file:   .git-backup/hooks/pre-push.sample
+        new file:   .git-backup/hooks/pre-rebase.sample
+        new file:   .git-backup/hooks/pre-receive.sample
+        new file:   .git-backup/hooks/prepare-commit-msg.sample
+        new file:   .git-backup/hooks/push-to-checkout.sample
+        new file:   .git-backup/hooks/sendemail-validate.sample
+        new file:   .git-backup/hooks/update.sample
+        new file:   .git-backup/index
+        new file:   .git-backup/info/exclude
+        new file:   .git-backup/objects/00/4cad1601b5eaab856cb45e5d0cebafbf420111
+        new file:   .git-backup/objects/03/b7ada6371e2711fbdf2a7885b4e4b5fc5a6213
+        new file:   .git-backup/objects/04/cea97fb8688bb7089aaf8c372ff0c7b01254f4
+        new file:   .git-backup/objects/04/f5d6684d7f08b7ec14ca69e960b71bf43bb76b
+        new file:   .git-backup/objects/05/1192de3bc77c63e191d705e5b3036c40ab4021
+        new file:   .git-backup/objects/07/3db5ab0ecee0c6c442502c9f71c32e095af734
+        new file:   .git-backup/objects/0a/27be84da0d0fc223c498d1895ee1bba347eb3d
+        new file:   .git-backup/objects/0d/0dec87179e34919520eabd34c724049f0398a0
+        new file:   .git-backup/objects/0d/1ef8f19ecebd4185f2e7cc7123cd6bd79d3fb2
+        new file:   .git-backup/objects/0d/3f397cb085741eaeeb9b7fbe0431251d5480a7
+        new file:   .git-backup/objects/0e/48bf8c01659c3c24a1ab08fdad74421a5278e0
+        new file:   .git-backup/objects/0e/b123117bf983ab951f055d40743bbe1e7b501d
+        new file:   .git-backup/objects/0f/50ab96f7bd792dea7dd9c4fc9998c66e84acae
+        new file:   .git-backup/objects/10/d310d48bbd57c24d790b32d5abf88871851ff4
+        new file:   .git-backup/objects/11/8c9cc5df14a5a38338c4c4410d06ccfae79cd0
+        new file:   .git-backup/objects/14/9f0be14660f6faa82d3c84a649f6d508860d6f
+        new file:   .git-backup/objects/16/21b2c951f2b4d0b9dd717a6dca4fa8e6fdb896
+        new file:   .git-backup/objects/16/ea199802146cdf17dc88758e03a06dadf25c35
+        new file:   .git-backup/objects/18/ea55e886a0dfbe35f96c6efa4177b7faaae33a
+        new file:   .git-backup/objects/19/01597f7e571584a7d1aedee170d0e4610c1f5b
+        new file:   .git-backup/objects/19/8d7226beb68f73450d7d007e1a71f20ce5e8cc
+        new file:   .git-backup/objects/1d/d3b22a852a8a98d3a8fdd7670529ff0f5a821d
+        new file:   .git-backup/objects/1e/7bea7e1bac9f98f5869596f1fc1efeaefd84a0
+        new file:   .git-backup/objects/1e/7d75407d2bf641aaa1b0b4ad8a2943dfb99360
+        new file:   .git-backup/objects/1f/570f2c095add6008cecf2d9f80bf1d36a91156
+        new file:   .git-backup/objects/21/8d7247e96c5021e9f99d3a44a39fa7d801b340
+        new file:   .git-backup/objects/21/e0913550af9420e97abe0d21cae8f5f040c9c8
+        new file:   .git-backup/objects/23/2f5b25f79f9d8d97ddfb19412f8fa7399c928a
+        new file:   .git-backup/objects/24/5d3dcf8d577d95c710d7611bafb3559fbd42d6
+        new file:   .git-backup/objects/24/bdf209569cbbbb5278bdc1df3c6d4be6c1b84b
+        new file:   .git-backup/objects/25/26e04358a6c22d912e6489a6be27a4548dbd20
+        new file:   .git-backup/objects/28/5830e848b56105e6d8db22d6cf62018a2f8e55
+        new file:   .git-backup/objects/29/1b330f6bfa565960b14cb7572d6bc42823f360
+        new file:   .git-backup/objects/2c/2c601cdac7d61be36781cce25df7a359ce0f34
+        new file:   .git-backup/objects/2d/29c11528b68f30f9b8c41051ae7b032aa86c58
+        new file:   .git-backup/objects/2e/08ef33d3eb0de92d76d4ab6d717aa555a0a729
+        new file:   .git-backup/objects/2e/4d9bd2e9ceb262ac00a6b5252b8c0bb0f2f4f3
+        new file:   .git-backup/objects/2e/4df64832a4f15225635cef15df0830f9961c22
+        new file:   .git-backup/objects/2e/e385cb6a5a239b6257713913dc056f6efdd29f
+        new file:   .git-backup/objects/2f/df32f361e0eabf07d210dd05435f45397eb000
+        new file:   .git-backup/objects/31/15795846b131707bdd097e67da96338da50474
+        new file:   .git-backup/objects/31/4de45ec3d1deaa5abba19df3fc375abf34276f
+        new file:   .git-backup/objects/31/824fd164bbff982208a407dcc0c03257f6618b
+        new file:   .git-backup/objects/32/a246aad1921e63f012db9c328d610d46895513
+        new file:   .git-backup/objects/34/afa7667b51ed1777b9911e7d93cbbc3bdb6e19
+        new file:   .git-backup/objects/38/1722ea31de038699597fb3fa76cf5a87ca6e3e
+        new file:   .git-backup/objects/38/90882203855723fef5432ce8cb91ee66e0e975
+        new file:   .git-backup/objects/3a/a241a4fb70adf0b812cafc896fdc69e26fae27
+        new file:   .git-backup/objects/3a/eeeca8e1186354e62ea10f5f78a9c73fb0dc3d
+        new file:   .git-backup/objects/3b/ac929005855bad122f01a4d09ee42446f286b7
+        new file:   .git-backup/objects/3e/acc0aa9cce1d374f76691fe305c895ae2e2ef6
+        new file:   .git-backup/objects/3f/95c78f095a5c656811e6e9d2fe8e12d50c74b6
+        new file:   .git-backup/objects/43/9949d95b2456cc60a7c856deacbc1dfa4bd3c0
+        new file:   .git-backup/objects/46/da8ebf1d028af16fa76bb56b5962e9ea0c03a4
+        new file:   .git-backup/objects/47/25a211c94e14d7a39fff24ec1efe466834512f
+        new file:   .git-backup/objects/4a/daacdfc60cefff56955db2aa0de69487d56169
+        new file:   .git-backup/objects/4c/04bf70af33b4740437d7cf6f1e63d886ed8d3c
+        new file:   .git-backup/objects/4d/8b3fcb36aeaf835671ef76ac65b4fca6720256
+        new file:   .git-backup/objects/4d/ce45f7c80d5ec02aadb9331a8f95a3ce0aecbf
+        new file:   .git-backup/objects/4e/7bad879b83282994b3e81377a4e3aaf4c67399
+        new file:   .git-backup/objects/4e/92838a49b57142c708ccc64d57bebcedb89de1
+        new file:   .git-backup/objects/51/30fcd13e48e361554b2860ff192d7de3272e76
+        new file:   .git-backup/objects/54/57ce3df36e69f41c9d753f16c74ff8b2e3cddf
+        new file:   .git-backup/objects/55/db599856727177dc2ef39673cc181808c8e8a7
+        new file:   .git-backup/objects/57/6972a31a1da2b0a3f9fffa9090ca2f64dbb7cf
+        new file:   .git-backup/objects/5b/a682db9f0273257dda1f377e2451b0d18306c3
+        new file:   .git-backup/objects/5b/fcb805ee5489f90e3a6b0845b4baea8fc03f9d
+        new file:   .git-backup/objects/60/d738e3d07b1b2765795ee8f7e5f937efcb50ed
+        new file:   .git-backup/objects/61/ed3d069835c5403d360da39ce71735c300b8ed
+        new file:   .git-backup/objects/62/a5bfdb51196ed66de5f2f53a09daf5140af00f
+        new file:   .git-backup/objects/63/8a455665d288ebd6d61d04f7f9c62e17d3beca
+        new file:   .git-backup/objects/64/6d3aafce9390354f2d9f643fa11a13c821b262
+        new file:   .git-backup/objects/66/912af562c3ddd99c654e18697d17b0d10ba85d
+        new file:   .git-backup/objects/68/f77b2e7d44e024062b03e2eebab93f2b179265
+        new file:   .git-backup/objects/6a/63914530076042eb8028be1205098120d5861f
+        new file:   .git-backup/objects/6c/4a2be48b6fc54f05826123cc23bfd8c344b945
+        new file:   .git-backup/objects/6d/a9680a232f6de161912030ded30afa9b2b5209
+        new file:   .git-backup/objects/6e/2911029ff9cad23dc5a653b8e9019b3e6a2e8d
+        new file:   .git-backup/objects/6f/47de3158b57c971032612e78c21ea4033a9176
+        new file:   .git-backup/objects/70/5cc449925385734f484b730e930270314af8ad
+        new file:   .git-backup/objects/71/2dd0c9f3e62a3e6484fc16ea7e5ccfd07773be
+        new file:   .git-backup/objects/71/a5afe485f1ffe7de8efe8d0d00cfe414dfef40
+        new file:   .git-backup/objects/72/d38d73e7989d4be548a5758c432b1b86830a29
+        new file:   .git-backup/objects/73/3206d755dd10676c91ba3c82fafb71f90d8b12
+        new file:   .git-backup/objects/75/69d8ff0bbcde8d292c19f7a7a3025c810f3a73
+        new file:   .git-backup/objects/75/81ea333ad06ec2820dececb40f8b777b648d63
+        new file:   .git-backup/objects/77/e95a8d579a73f3e59150f5fefb3980529bbb8d
+        new file:   .git-backup/objects/78/63692a896cc96f9f515df97c3ad9e8931e9fa5
+        new file:   .git-backup/objects/7a/6bc461e72377623ac397977f269fc4bf31c6b2
+        new file:   .git-backup/objects/7a/949372f2da1c3d0437961af4884604a5c20e27
+        new file:   .git-backup/objects/7b/067f6b2bc5dc706f1f40c14eb7ad0dfcf0ed09
+        new file:   .git-backup/objects/7c/595b8dc129180a87e50e1f7bf4bdfb495111ef
+        new file:   .git-backup/objects/7d/65d9d02020821569dc836483198698111da77a
+        new file:   .git-backup/objects/7e/06c13645562a778ce85c6d90095de8282ad65e
+        new file:   .git-backup/objects/7e/bd16ebbbd052f477b28a6a91a34339ed240146
+        new file:   .git-backup/objects/7e/fe88c52af8e53bc10725d8cd8551aae1fc464d
+        new file:   .git-backup/objects/7f/78c9512b864034e2660528062a487346be5eaf
+        new file:   .git-backup/objects/7f/807a9ddb38efa11012605fe9db328d75abd3df
+        new file:   .git-backup/objects/7f/b636eca64ad8b90daa5a6c3b96004f68c7c094
+        new file:   .git-backup/objects/7f/c53324380a63214f825113a0858dc2efa8cb79
+        new file:   .git-backup/objects/7f/c8e22856dd899810b1ce9907e8862adbb315f0
+        new file:   .git-backup/objects/86/c1103bb8357afb066775ba710c460f2f68846a
+        new file:   .git-backup/objects/88/98292a0a78af1c274170444b71c97b04f5f529
+        new file:   .git-backup/objects/8c/c8f59b022e75b6242114405ee26ab97b7f2d00
+        new file:   .git-backup/objects/8e/09eca7d53c39ff7101e41b960e692d884a7f50
+        new file:   .git-backup/objects/90/d4e347ae5fed69fb10dd01f3fc7cdd0e2b6864
+        new file:   .git-backup/objects/91/0821157fe6aa11a028dc727cfb71bbe3f3f0fe
+        new file:   .git-backup/objects/91/bf23b5fdc6985273e472a549ffcde7e56afc2c
+        new file:   .git-backup/objects/92/00957ea8e965ca3331d5f0e996fe3205d6209b
+        new file:   .git-backup/objects/93/7e3765093566327b8232de979603f72eedd4c2
+        new file:   .git-backup/objects/97/55bc6008e25447e29ee1e5475d85cdec292e26
+        new file:   .git-backup/objects/98/ab4c9d008db4c67cdd116a1d7b18b1164f381e
+        new file:   .git-backup/objects/99/fa83c685554c25c4fc78bfdd94ca3b88997f65
+        new file:   .git-backup/objects/9a/0531fd586098d7f00d7f7566bc684e02c3dcba
+        new file:   .git-backup/objects/9a/13f41808a0116edba4e21b1f0cd06b5be831a0
+        new file:   .git-backup/objects/9a/1dca41502dc07050ba3a4082c1cea3af9a1254
+        new file:   .git-backup/objects/9a/50932bc0c7c541a170d0a54990d8a448980d14
+        new file:   .git-backup/objects/9c/239fac2949904d81e44731fedc80293c78fe40
+        new file:   .git-backup/objects/9e/487b545354e6b3e618f7b3159a2036010e0458
+        new file:   .git-backup/objects/a2/1e55c8023c9866f68e2ce707dc3d666805b2c1
+        new file:   .git-backup/objects/a2/fb22d8f9bae95852a4ff93cb394d18c6ac6ef9
+        new file:   .git-backup/objects/a3/56682b81638b232ca2e7e9dbdad98bd8c49d65
+        new file:   .git-backup/objects/a3/c02ed210c963a3327a2822d5f086224254cec2
+        new file:   .git-backup/objects/a7/9254511b9e96cad5d396a68f99fec3ce299f97
+        new file:   .git-backup/objects/a8/cf2f8f9768eab121afff524f869dc763d03177
+        new file:   .git-backup/objects/a9/199d6d42e528b2e33c01f918c6eaffd0434caf
+        new file:   .git-backup/objects/aa/4c412474ca8b18123fcb8c54b13c1927e02b3b
+        new file:   .git-backup/objects/ac/b59999610b74cea023c7903e0d3544c018b91d
+        new file:   .git-backup/objects/ae/dd218f52fe303884c82531931b0115b3e36e12
+        new file:   .git-backup/objects/ae/f73125d7ba22046c733340e8ef7f5dbd5bffe1
+        new file:   .git-backup/objects/ae/fbf17b57a93665d447b578ba911f64403f8fb3
+        new file:   .git-backup/objects/b0/46114b000e82bd7dffc68f4bb37f3b7ec5d062
+        new file:   .git-backup/objects/b2/859ebf88e302bf9bbda1e791d9d7aba4af1640
+        new file:   .git-backup/objects/b2/e2acf1ae6598cf733da573a1cac0304c8bacd8
+        new file:   .git-backup/objects/b3/36319bf30b1bd13da92cf6106e16eb89f0a907
+        new file:   .git-backup/objects/b3/dcfad3f68b1f2b48f87003ecd6801bd5a7cea0
+        new file:   .git-backup/objects/b4/7425aae237cb5ada25b4cd23c975bedcfbdec0
+        new file:   .git-backup/objects/b4/f1a7ffed423d88bf10d52e177b5b052d8eb436
+        new file:   .git-backup/objects/b7/22d153d6c3758b494d166401fb63dd23d1b575
+        new file:   .git-backup/objects/b7/325bd2fdff8ec6a333e0612fc114e6172f106c
+        new file:   .git-backup/objects/b7/98f79f5d38c5ce603e45949aa3d84fa8667560
+        new file:   .git-backup/objects/b8/36ef25f735e99c4f8e3f3f83f94fe0f683e441
+        new file:   .git-backup/objects/b9/c4c04c3bd2f2564d754591e7166afbb9cf2bcf
+        new file:   .git-backup/objects/b9/e78c81d9712ea2ab10aa94d4093b8c3d824c91
+        new file:   .git-backup/objects/bc/6bac9b18fdf275e3a836a3e236e53d76880e05
+        new file:   .git-backup/objects/bc/ded5efd6464962a1db9350eb234cfbf8854e4c
+        new file:   .git-backup/objects/be/7057577356bf12f4a3111e23b3b34288dcb541
+        new file:   .git-backup/objects/bf/3ebdb0d3a03eb4d82e6e0886cf124a008b9357
+        new file:   .git-backup/objects/bf/587a359e11160241174bbd6ae7332778ad22ad
+        new file:   .git-backup/objects/c4/707f1731e891cf62daa78112187c8250d17800
+        new file:   .git-backup/objects/c5/18e1745700968b68dc6d2dd37bb9cc538cdc5f
+        new file:   .git-backup/objects/c6/1bcd7e15a21fa2f38cc4139f40b46f7a1d63a8
+        new file:   .git-backup/objects/c6/f738635710e9b3bbc71997aea47e46b8dadf59
+        new file:   .git-backup/objects/c7/d3254ec3d2b5aa351fb6c1bd9dc3b8509ad02c
+        new file:   .git-backup/objects/c8/3b1dec07af175fe2f0f4c969e7b9469eed8783
+        new file:   .git-backup/objects/c9/dd0c77d25bb5caf37204172096066e42b6d69f
+        new file:   .git-backup/objects/cb/fe2749e8276188ff459a93c601c2e241e07f9e
+        new file:   .git-backup/objects/cd/0075620b8eedf58f6df9788f32f97eac2b6065
+        new file:   .git-backup/objects/cd/4bf03e82509228061e10557eea8ad0bd2eb8fd
+        new file:   .git-backup/objects/cd/75347f479fcd8f8d4af5b6fc03a7cd910dd356
+        new file:   .git-backup/objects/cd/8d8e4a4757523a93cfc09a7aaf53d4c2151bcc
+        new file:   .git-backup/objects/ce/c070b7fe7aa35e19397b94f97b695e344d252b
+        new file:   .git-backup/objects/cf/14dc1e7c20ec72b38f87ccdb52c3ac96b3d22f
+        new file:   .git-backup/objects/cf/bac9df390b362de8df3c8129ca90f4b16c1fa6
+        new file:   .git-backup/objects/d1/434add699e3f52151d69831d58484ce4b1b4b5
+        new file:   .git-backup/objects/d1/f58a134164bdbf13a481254cc5072f38632c0a
+        new file:   .git-backup/objects/d3/4ac03e8c595b944a80a2fa13eefbca1bca13b0
+        new file:   .git-backup/objects/d4/8c2b4f921c27960f1762c01268380d561de572
+        new file:   .git-backup/objects/d5/b43e63ec5a5f579010d2b9bb0bd983884488e0
+        new file:   .git-backup/objects/d6/37a2c4b6ad97d2f28d93b220e4a3d575279052
+        new file:   .git-backup/objects/d7/0ffefe5d2a20f6fbffe9cdc84a5b6fd864fe43
+        new file:   .git-backup/objects/d7/2cc9914f18839ae741ac6869501bb1266be03b
+        new file:   .git-backup/objects/d8/bf2382cff2a97f57e74ec6e8265495c9e95606
+        new file:   .git-backup/objects/d8/d0cfc7149e9d168f86f57458a405af4f20d377
+        new file:   .git-backup/objects/d9/06ba8c8d7c35c5d8fddc70d4014e9143372f5d
+        new file:   .git-backup/objects/da/7bba07b596a23faac8f1ff499b54634d3cf2a1
+        new file:   .git-backup/objects/db/0ab3f6938a9cae9532bb03fc05b72f5e0bee58
+        new file:   .git-backup/objects/dd/473723fb675ac905a93a9a2bade90208b95458
+        new file:   .git-backup/objects/de/1b7892b97185f332c995055031f3fb3518aa35
+        new file:   .git-backup/objects/df/9bdc1f3cae5c14b73e0c1c0ef1d7b630074c6a
+        new file:   .git-backup/objects/e1/0b6a5b31617a743dcb6115b3acdfa97cfed08b
+        new file:   .git-backup/objects/e4/8c4f22a430077fc83d23d6549481bdb9adcc12
+        new file:   .git-backup/objects/e5/49911bc259f315734183226f1d787a0866a6ea
+        new file:   .git-backup/objects/e6/ca6ee07f9df29f629e9e9917c907079703238c
+        new file:   .git-backup/objects/e7/a961232e9fb4fcb85ed99f36c37197d358b1ff
+        new file:   .git-backup/objects/ea/40c9257b4b6fc83e258c3014dd1a5ed48154ee
+        new file:   .git-backup/objects/ea/9964cb434c92977cdcdaf717c64cd00fddccdf
+        new file:   .git-backup/objects/eb/ff7d40d588c7a0d772a43ca6aba611f23f460e
+        new file:   .git-backup/objects/ed/6b75dd871af9ddcd60d712e5a1ec6d03da26f0
+        new file:   .git-backup/objects/ef/1b645729030f87745114e7bbe07687d9b97235
+        new file:   .git-backup/objects/ef/4e0530a331e0ede8f4b3f1cc50e55a3fa7e2d2
+        new file:   .git-backup/objects/f1/3ef239de0b8337bdda3db51fd5b679f34ab4b0
+        new file:   .git-backup/objects/f2/85f3d1dcbe84c9c021e2fa5c40c7ff797cd8d9
+        new file:   .git-backup/objects/f2/d514ca4e16106c47a46a518de2b1c8a1972d90
+        new file:   .git-backup/objects/f3/6df7354f978fc3fc1054ee3fb62b6b4c63dfff
+        new file:   .git-backup/objects/f4/d4be46465644ddc84430b5f6c8de4163297eb4
+        new file:   .git-backup/objects/f5/ace7b295c5c581de2d5c0d7cc2fbbd376a532a
+        new file:   .git-backup/objects/f5/aec99d511840c945f62753ac285a0abe54de23
+        new file:   .git-backup/objects/f7/805c8b2842c8b01c082d3e95d6d44453cf633c
+        new file:   .git-backup/objects/f8/f28ffb56fd5ba4963523d49436e48744e2ad0f
+        new file:   .git-backup/objects/f9/c64110f1bdc54993af491cd70898fc0dfe9061
+        new file:   .git-backup/objects/f9/d76ef944aeb5827e2f7fe1b3780d1bfbfac1df
+        new file:   .git-backup/objects/fe/4b6ec9d7561b67c1ea12ce502dce804ad02a2c
+        new file:   .git-backup/objects/pack/pack-72e1ee141dd9946198c451ef84771be65193892a.idx
+        new file:   .git-backup/objects/pack/pack-72e1ee141dd9946198c451ef84771be65193892a.pack
+        new file:   .git-backup/objects/pack/pack-72e1ee141dd9946198c451ef84771be65193892a.rev
+        new file:   .git-backup/packed-refs
+        new file:   .git-backup/refs/heads/main
+        new file:   .git-backup/refs/heads/user-profile
+        new file:   .git-backup/refs/remotes/origi/HEAD
+        new file:   .git-backup/refs/remotes/origi/excption-handling
+        new file:   .git-backup/refs/remotes/origi/main
+        new file:   .git-backup/refs/remotes/origin/HEAD
+        new file:   .git-backup/refs/remotes/origin/main
+        new file:   .git-backup/refs/remotes/origin/user-profile
+        new file:   .git-backup/refs/tags/v0.1.0
+        new file:   .git-backup/refs/tags/v0.2.0
+
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git restore --staged .git-backup
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git status
+On branch user-profile
+Your branch is up to date with 'origin/user-profile'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .gitignore
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git commit -m "Recovered edits for user-profile branch"
+On branch user-profile
+Your branch is up to date with 'origin/user-profile'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .gitignore
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git add .
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git push -u origin user-profile
+branch 'user-profile' set up to track 'origin/user-profile'.
+Everything up-to-date
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$ git push -u origin user-profile
+branch 'user-profile' set up to track 'origin/user-profile'.
+Everything up-to-date
+
+Khans@Shadab MINGW64 ~/LocalDoc/Spring-Workspace/Spring-First-Workspace/EduPro-course-management (user-profile)
+$

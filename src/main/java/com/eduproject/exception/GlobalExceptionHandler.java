@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * Global exception handler using @ControllerAdvice.
@@ -23,6 +24,14 @@ public class GlobalExceptionHandler {
 	public String handleCourseNotFound(CourseNotFoundException ex, Model model) {
 		log.error("Course not found: {}", ex.getMessage());
 		model.addAttribute("errorMessage", ex.getMessage());
+		return "error/404";
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String handleNotFound(NoResourceFoundException ex, Model model) {
+		log.error("Resource not found: {}", ex.getMessage());
+		model.addAttribute("errorMessage", "Page not found.");
 		return "error/404";
 	}
 
