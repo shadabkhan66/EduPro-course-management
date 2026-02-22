@@ -31,81 +31,82 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-	private final UserService userService;
+    private final UserService userService;
 
 //    =======================
 //    register new user
 //    =============================================================
-	@GetMapping("/register")
-	public String showRegistrationForm(Model model) {
-		log.info("Displaying registration form");
-		model.addAttribute("registrationDTO", new UserRegistrationDTO());
-		return "user/register";
-	}
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        log.info("Displaying registration form");
+        model.addAttribute("registrationDTO", new UserRegistrationDTO());
+        return "user/register";
+    }
 
-	@PostMapping("/register")
-	public String registerUser(
-			@Valid @ModelAttribute("registrationDTO") UserRegistrationDTO dto,
-			BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
+    @PostMapping("/register")
+    public String registerUser(
+            @Valid @ModelAttribute("registrationDTO") UserRegistrationDTO dto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
 
-		log.info("Registration attempt for: {}", dto.getUsername());
+        log.info("Registration attempt for: {}", dto.getUsername());
 
-		// Only check uniqueness if basic validation passed (avoid unnecessary DB calls)
-		if (!bindingResult.hasErrors()) {
-			if (userService.existsByEmail(dto.getEmail())) {
-				bindingResult.rejectValue("email", "duplicate", "Email already exists");
-			}
-			if (userService.existsByUsername(dto.getUsername())) {
-				bindingResult.rejectValue("username", "duplicate", "Username already exists");
-			}
-		}
+        // Only check uniqueness if basic validation passed (avoid unnecessary DB calls)
+        if (!bindingResult.hasErrors()) {
+            if (userService.existsByEmail(dto.getEmail())) {
+                bindingResult.rejectValue("email", "duplicate", "Email already exists");
+            }
+            if (userService.existsByUsername(dto.getUsername())) {
+                bindingResult.rejectValue("username", "duplicate", "Username already exists");
+            }
+        }
 
-		if (bindingResult.hasErrors()) {
-			log.warn("Registration validation failed: {}", bindingResult.getErrorCount());
-			return "user/register";
-		}
+        if (bindingResult.hasErrors()) {
+            log.warn("Registration validation failed: {}", bindingResult.getErrorCount());
+            return "user/register";
+        }
 
-		String fullName = userService.registerUser(dto);
-		redirectAttributes.addFlashAttribute("successMessage",
-				"Welcome, " + fullName + "! Your account has been created. Please login.");
-		return "redirect:/login";
-	}
+        String fullName = userService.registerUser(dto);
+        redirectAttributes.addFlashAttribute("successMessage",
+                "Welcome, " + fullName + "! Your account has been created. Please login.");
+        return "redirect:/login";
+    }
 
 //    =======================
 //    fetch user
 //    =============================================================
 
-	@GetMapping("/{id}")
-	public String showUser(@PathVariable Long id, Model model) {
-		UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
+    @GetMapping("/{id}")
+    public String showUser(@PathVariable Long id, Model model) {
+        UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
 
-		//exception handling
+        //exception handling
 
-		model.addAttribute("userResponseDTO", userResponseDTO);
-		return "user/showUserProfile";
-	}
+        model.addAttribute("userResponseDTO", userResponseDTO);
+        log.info("Displaying user profile {}", userResponseDTO);
+        return "user/showUserProfile";
+    }
 
     @GetMapping//this page should only be see to admin
     public String showAllUsers(Model model) {
         List<UserResponseDTO> users =  this.userService.getAllUsers();
         model.addAttribute("users", users);
-
+        log.info("Displaying all users");
         return "user/allUsers";
     }
 
 //    =======================
 //    edit  user
 //    =============================================================
-	@GetMapping("/{id}/edit")
-	public String showEditUserForm(@PathVariable Long id, Model model) {
-		log.info("Displaying editing form for user: {}", id);
-		UserResponseDTO userResponseDTO = userService.getUserById(id);
+    @GetMapping("/{id}/edit")
+    public String showEditUserForm(@PathVariable Long id, Model model) {
+        log.info("Displaying editing form for user: {}", id);
+        UserResponseDTO userResponseDTO = userService.getUserById(id);
 
-		model.addAttribute("userResponseDTO", userResponseDTO);
-
-		return "user/editUser";
-	}
+        model.addAttribute("userResponseDTO", userResponseDTO);
+        log.info("sending to  view editUser.html for editing with User: {}", userResponseDTO);
+        return "user/editUser";
+    }
 
     @PostMapping("/{id}/edit")
     public String editUser(@PathVariable Long id,
@@ -115,9 +116,9 @@ public class UserController {
     ){
         log.info("Edit user attempt for user: {}", id);
 
-         if( !id.equals(userRespDTO.getId()) ) {
-             //do something
-         }
+        if( !id.equals(userRespDTO.getId()) ) {
+            //do something
+        }
 
         if (!bindingResult.hasErrors()) {
 
@@ -130,41 +131,36 @@ public class UserController {
             }
         }
 
-    if(bindingResult.hasErrors()){
-        log.info("Updating validation fail {} " ,bindingResult.getErrorCount());
-        //is this line even necessery especially with this huge name
-        // isent it send automatically
+        if(bindingResult.hasErrors()){
+            log.info("Updating validation fail {} " ,bindingResult.getErrorCount());
+            //is this line even necessery especially with this huge name
+            // isent it send automatically
 //        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRespDTO", bindingResult);
 //        redirectAttributes.addFlashAttribute("userResponseDTO", userRespDTO);
 
-        return "redirect:/users/allUsers";
-    }
+            return "redirect:/users/allUsers";
+        }
 
-    String msg = this.userService.updateUser(userRespDTO);
+        String msg = this.userService.updateUser(userRespDTO);
 
 
 
         return "redirect:/users/" + id;
     }
 
-	@GetMapping("/{id}")
-	public String showUser(@PathVariable Long id, Model model) {
-		UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
+//    =======================
+//    delete  user
+//    =============================================================
+//    currently i am suing to delete my own account
+    @PostMapping("/{id}/delete")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        log.info("Delete user attempt for user: {}", id);
 
-		//exception handling
+        this.userService.deleteUserById(id);
 
-		model.addAttribute("userResponseDTO", userResponseDTO);
-		return "user/showUserProfile";
-	}
+        redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully");
 
-	@GetMapping("/{id}/edit")
-	public String showEditUserForm(@PathVariable Long id, Model model) {
-		log.info("Displaying editing form for user: {}", id);
-		UserResponseDTO userResponseDTO = userService.getUserById(id);
-
-		model.addAttribute("userResponseDTO", userResponseDTO);
-
-		return "user/editUser";
-	}
-
+        return "redirect:/login";
+    }
 }
+

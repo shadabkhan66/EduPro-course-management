@@ -90,12 +90,16 @@
                 Edit Profile
             </a>
 
-            <a th:href="@{/users/{id}/delete(id=${userResponseDTO.id})}"
-               class="btn btn-outline">
-                Delete(Later I will do soft deletion)
-            </a>
-            <a th:href="@{/users/all}"
-               class="btn btn-primary">
+            <form th:action="@{/users/{id}/delete(id=${userResponseDTO.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <button type="submit" class="btn btn-outline">
+                    Delete(Later I will do soft deletion)
+                </button>
+            </form>
+
+            <a th:href="@{/users/{id}( id=${userResponseDTO.id})}"
+               class="btn btn-primary" >
                 Back
             </a>
         </div>

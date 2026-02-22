@@ -7,7 +7,7 @@
 
     ============================================================
 -->
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,9 @@
             <div class="form-group">
                  <input type="hidden" th:field="*{id}" />
             </div>
-
+            <div class="form-group">
+                <input type="hidden" th:field="*{username}" />
+            </div>
             <div class="form-group">
                 <label>First Name</label>
                 <input type="text" th:field="*{firstName}" />
@@ -47,6 +49,13 @@
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" th:field="*{email}" />
+            </div>
+
+            <!--i want this to be seen and modified only by admin-->
+            <div class="form-group" sec:authorize="hasRole('ROLE_ADMIN')" >
+                <label>Role</label>
+                <!--select and options for roles only for admin-->
+                <!--obviously admin will remain as admin why would he change role with lower authority-->
             </div>
 
             <div class="actions">

@@ -22,4 +22,6 @@ public interface UserService {
     boolean existsByEmailExcludingCurrentUser(String email, Long id);
 
     boolean existsByUsernameExcludingCurrentUser(String username, Long id);
+
+    void deleteUserById(Long id);
 }

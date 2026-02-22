@@ -74,18 +74,34 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findAll().stream().map(this::toUserResponseDTO).toList();
     }
 
-
+    @Transactional
     @Override
     public String updateUser(UserResponseDTO userRespDTO) {
 
-        User user = this.userRepository.findById(userRespDTO.getId()).orElseThrow( () -> new UserNotFoundException("User not found with Id : "+ userRespDTO.getId()));
-        BeanUtils.copyProperties(userRespDTO, user, "role", "lastUpdatedAt","createdAt", "isActive");
-        this.userRepository.save(user);
+        if (userRespDTO.getId() == null) {
+            throw new IllegalArgumentException("User ID must not be null");
+        }
 
+        User user = userRepository.findById(userRespDTO.getId())
+                .orElseThrow(() ->
+                        new UserNotFoundException("User not found with Id : " + userRespDTO.getId())
+                );
 
-        return "User with id "+ userRespDTO.getId()+" updated successfully ";
+        // Manual mapping (safer)
+        if (userRespDTO.getFirstName() != null) {
+            user.setFirstName(userRespDTO.getFirstName());
+        }
+
+        if (userRespDTO.getLastName() != null) {
+            user.setLastName(userRespDTO.getLastName());
+        }
+
+        if (userRespDTO.getEmail() != null) {
+            user.setEmail(userRespDTO.getEmail());
+        }
+
+        return "User with id " + userRespDTO.getId() + " updated successfully";
     }
-
     @Override
     public boolean existsByEmailExcludingCurrentUser(String email, Long currentUserId) {
         return userRepository.existsByEmailAndIdNot(email, currentUserId);
@@ -95,6 +111,19 @@ public class UserServiceImpl implements UserService {
     public boolean existsByUsernameExcludingCurrentUser(String username, Long currentUserId) {
         return userRepository.existsByUsernameAndIdNot(username, currentUserId);
     }
+
+    @Override
+    @Transactional
+    public void deleteUserById(Long id) {
+
+        if (!this.userRepository.existsById(id))
+        {
+            throw new UserNotFoundException("User not found with Id : " + id);
+        }
+        this.userRepository.deleteById(id);
+        log.info("User with id {} has been deleted successfully", id);
+    }
+
 
     private UserResponseDTO toUserResponseDTO(User user) {
         return UserResponseDTO.builder()
