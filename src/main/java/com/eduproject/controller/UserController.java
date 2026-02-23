@@ -20,6 +20,17 @@ import java.util.List;
 /**
  * Handles user registration.
  *
+ *  * URL Design (RESTful naming):
+ *  *   GET  /users              → list all users
+ *  *   GET  /users/{id}         → view single user
+ *
+ *  *   GET  /users/new          → show create form
+ *  *   POST /users              → handle create
+ *
+ *  *   GET  /users/{id}/edit    → show edit form
+ *  *   POST /users/{id}         → handle update
+ *  *   POST /users/{id}/delete  → handle delete
+ *
  * DESIGN CHANGE (v0.2.0):
  * - Uses UserRegistrationDTO instead of User entity as form-backing bean
  * - Role is hardcoded to STUDENT (security fix: users can't self-assign ADMIN)
@@ -34,16 +45,40 @@ public class UserController {
     private final UserService userService;
 
 //    =======================
+//    fetch user
+//    =============================================================
+
+    @GetMapping("/{id}")
+    public String showUser(@PathVariable Long id, Model model) {
+        log.info("Showing user with id {}", id);
+        UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
+
+        model.addAttribute("userResponseDTO", userResponseDTO);
+        log.info("Displaying user profile {}", userResponseDTO);
+        return "user/showUserProfile";
+    }
+
+    @GetMapping//this page should only be see to admin
+
+    public String showAllUsers(Model model) {
+        List<UserResponseDTO> users =  this.userService.getAllUsers();
+        model.addAttribute("users", users);
+        log.info("Displaying all users");
+        return "user/allUsers";
+    }
+
+
+//    =======================
 //    register new user
 //    =============================================================
-    @GetMapping("/register")
+    @GetMapping("/new")
     public String showRegistrationForm(Model model) {
         log.info("Displaying registration form");
         model.addAttribute("registrationDTO", new UserRegistrationDTO());
         return "user/register";
     }
 
-    @PostMapping("/register")
+    @PostMapping
     public String registerUser(
             @Valid @ModelAttribute("registrationDTO") UserRegistrationDTO dto,
             BindingResult bindingResult,
@@ -72,28 +107,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-//    =======================
-//    fetch user
-//    =============================================================
-
-    @GetMapping("/{id}")
-    public String showUser(@PathVariable Long id, Model model) {
-        UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
-
-        //exception handling
-
-        model.addAttribute("userResponseDTO", userResponseDTO);
-        log.info("Displaying user profile {}", userResponseDTO);
-        return "user/showUserProfile";
-    }
-
-    @GetMapping//this page should only be see to admin
-    public String showAllUsers(Model model) {
-        List<UserResponseDTO> users =  this.userService.getAllUsers();
-        model.addAttribute("users", users);
-        log.info("Displaying all users");
-        return "user/allUsers";
-    }
 
 //    =======================
 //    edit  user
