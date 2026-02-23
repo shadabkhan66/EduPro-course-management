@@ -32,7 +32,7 @@ public class SecurityConfig {
 						.requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
 						.requestMatchers("/courses").permitAll()
 						.requestMatchers("/courses/{id}").permitAll()
-						.requestMatchers("/users/register").permitAll()
+						.requestMatchers("/users/new").permitAll()
 
 						// Admin-only course management
 						.requestMatchers("/courses/new").hasRole("ADMIN")

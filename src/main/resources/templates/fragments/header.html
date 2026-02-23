@@ -56,7 +56,7 @@
             <!-- Anonymous: show login + register -->
             <span sec:authorize="isAnonymous()">
                 <a th:href="@{/login}">Login</a>
-                <a th:href="@{/users/register}" class="btn btn-primary btn-sm">Register</a>
+                <a th:href="@{/users/new}" class="btn btn-primary btn-sm">Register</a>
             </span>
         </nav>
 
