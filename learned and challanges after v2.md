@@ -375,7 +375,14 @@ Problem after after deleting user his/her self
 How to hangle after deletions 
 And add javascript to confirm before deleting 
 
+and very serious problem is even after deleting an user lets say admin i was able to update delete courses etc...
+this indicate problem i way i am handling after user deletion.
 
+looks like i am not invalidating session or clearing cookies etc.. (just guissing)
+
+so i return "forward:/logout"; forwarded to HOme controller
+and added and end point for /logout with POST method and invalidated the session
+tell me if i did correct of is there other batter methods
 =====
 
 Learned 
@@ -526,7 +533,7 @@ View-layer integration for Spring Security:
 ===============
 
 Difficulty in changing end point name eg register -> new 
-I have to refactore in many place manually I wish my app was more scalabe and can be modified in only editing in one place 
+I have to refactor in many place manually I wish my app was more scalable and can be modified in only editing in one place 
 
 
 ========

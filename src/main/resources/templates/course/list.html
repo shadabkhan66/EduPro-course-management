@@ -104,7 +104,7 @@
                             <!-- Delete form (POST with auto CSRF) -->
                             <form th:action="@{/courses/{id}/delete(id=${course.id})}"
                                   method="post" style="display: inline;"
-                                  th:attr="onsubmit='return confirmDelete(\'' + ${#strings.escapeJavaScript(course.title)} + '\')'">
+                                  th:attr="onsubmit='return confirmDeleteCourse(\'' + ${#strings.escapeJavaScript(course.title)} + '\')'">
                                 <button type="submit" class="btn-inline delete" title="Delete">
                                     <i class="bi bi-trash"></i>
                                 </button>

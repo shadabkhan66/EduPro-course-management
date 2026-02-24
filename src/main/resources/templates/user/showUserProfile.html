@@ -90,7 +90,11 @@
                 Edit Profile
             </a>
 
-            <form th:action="@{/users/{id}/delete(id=${userResponseDTO.id})}" method="post">
+            <form th:action="@{/users/{id}/delete(id=${userResponseDTO.id})}"
+                    th:attr="onsubmit='return confirmDeleteUser(\'' + ${userResponseDTO.username} +'\')'"
+                  method="post"
+            >
+
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
                 <button type="submit" class="btn btn-outline">

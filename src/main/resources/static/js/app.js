@@ -32,7 +32,7 @@
    - onclick on button only fires on click (misses keyboard submit)
    ================================================================ */
 
-function confirmDelete(itemName) {
+function confirmDeleteCourse(itemName) {
     return confirm('Are you sure you want to delete "' + itemName + '"?\n\nThis action cannot be undone.');
 }
 
@@ -73,3 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 5000); /* 5000ms = 5 seconds before fade starts */
     });
 });
+
+function confirmDeleteUser(UserName){
+    return confirm('Are you sure you want to delete your profile with user Name :"' + UserName + '"?\n\nThis action cannot be undone.');
+}

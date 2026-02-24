@@ -173,7 +173,7 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully");
 
-        return "redirect:/login";
+        return "forward:/logout";
     }
 }
 

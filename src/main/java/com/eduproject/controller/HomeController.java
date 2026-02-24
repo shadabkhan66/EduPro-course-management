@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,14 @@ public class HomeController {
 		log.info("Accessing login page");
 		return "auth/login";
 	}
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        log.info("Accessing logout page");
+        request.getSession().removeAttribute("logoutMessage");
+        request.getSession().invalidate();
+        return "redirect:/login";
+    }
 
 	@GetMapping("/whoami")
 	@ResponseBody
