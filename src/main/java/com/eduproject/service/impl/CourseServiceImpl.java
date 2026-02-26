@@ -3,6 +3,7 @@ package com.eduproject.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.eduproject.exception.UserNotFoundException;
 import com.eduproject.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -88,13 +89,19 @@ public class CourseServiceImpl implements CourseService {
 	}
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isCourseAlreadyEnrolled(Long courseId, String username) {
-//        this.courseRepository.enro
-        return false;
+        CourseEntity courseEntity = this.courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
+        return courseEntity.getEnrolledUsers().contains(userRepository.findByUsername(username).orElseThrow(()-> new UserNotFoundException("User with username  " + username + " not found")));
     }
 
     @Override
+    @Transactional
     public void enrollUser(Long courseId, String username) {
+        this.courseRepository.findById(courseId)
+                .get()
+                .setEnrolledUsers(List.of(userRepository.findByUsername(username).get()));
+
 
     }
 

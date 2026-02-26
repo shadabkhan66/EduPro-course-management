@@ -52,7 +52,7 @@ public class CourseController {
 
 	// ==================== VIEW ====================
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id:\\d+}")
 	public String viewCourse(@PathVariable Long id, Model model) {
 		log.info("Viewing course with ID: {}", id);
 		model.addAttribute("course", courseService.getCourseById(id));
@@ -166,12 +166,18 @@ public class CourseController {
 
     // ================== Enroll ====================
 
-    @PostMapping("/courses/enroll")
-    public String enroll(@RequestParam Long courseId,
+    @PostMapping("/enroll")
+    public String enroll(@RequestParam("courseId") Long courseId,
                          Principal principal,
                          RedirectAttributes redirectAttributes
     ) {
 
+        //checking if user is logId in or not if not redirect to log in page and moment after log in redirect to seme page
+        //but i think my savedreqeust is not working so i get redirected back to same page
+        if(principal == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Please login! First Before Enrolling!");
+            return "redirect:/login?enroll";
+        }
         String username = principal.getName();
         log.info("Enrolling course ID: {} for user {}", courseId, username);
 
@@ -188,5 +194,4 @@ public class CourseController {
 
         return "redirect:/courses/" + courseId;
     }
-
 }

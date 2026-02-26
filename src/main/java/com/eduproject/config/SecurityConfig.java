@@ -52,6 +52,14 @@ public class SecurityConfig {
 				)
 				.formLogin(form -> form
 						.loginPage("/login")
+//                        earliar i had this but this was wrong
+//                        .successHandler((request, response, authentication) -> {
+//                            if(request.getQueryString().equals("enroll")){
+//                                response.sendRedirect("/courses/enroll");
+//                            }
+//                        })
+
+                        .defaultSuccessUrl("/courses",false)
 						.permitAll()
 				)
 				.logout(logout -> logout
