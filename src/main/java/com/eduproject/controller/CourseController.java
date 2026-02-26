@@ -1,13 +1,12 @@
 package com.eduproject.controller;
 
+import com.eduproject.repository.CourseRepository;
+import com.eduproject.service.impl.CourseServiceImpl;
+import com.eduproject.service.impl.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eduproject.exception.CourseNotFoundException;
@@ -17,6 +16,8 @@ import com.eduproject.service.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.security.Principal;
 
 /**
  * Handles all course-related web requests.
@@ -36,7 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/courses")
 public class CourseController {
 
-	private final CourseService courseService;
+//	private final UserServiceImpl userService;
+    private final CourseServiceImpl  courseService;
 
 	// ==================== LIST ====================
 
@@ -147,7 +149,8 @@ public class CourseController {
 	// ==================== DELETE ====================
 
 	@PostMapping("/{id}/delete")
-	public String deleteCourse(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+	public String deleteCourse(@PathVariable Long id,
+                               RedirectAttributes redirectAttributes) {
 		log.info("Deleting course ID: {}", id);
 		try {
 			CourseDTO course = courseService.getCourseById(id);
@@ -160,4 +163,30 @@ public class CourseController {
 		}
 		return "redirect:/courses";
 	}
+
+    // ================== Enroll ====================
+
+    @PostMapping("/courses/enroll")
+    public String enroll(@RequestParam Long courseId,
+                         Principal principal,
+                         RedirectAttributes redirectAttributes
+    ) {
+
+        String username = principal.getName();
+        log.info("Enrolling course ID: {} for user {}", courseId, username);
+
+        if (courseService.isCourseAlreadyEnrolled(courseId, username)) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "You are already enrolled in this course.");
+            return "redirect:/courses/" + courseId;
+        }
+
+        courseService.enrollUser(courseId, username);
+
+        redirectAttributes.addFlashAttribute("successMessage",
+                "Successfully enrolled in the course.");
+
+        return "redirect:/courses/" + courseId;
+    }
+
 }

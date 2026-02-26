@@ -39,6 +39,7 @@ public class SecurityConfig {
 						.requestMatchers("/courses/*/edit").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/courses/*/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/courses/enroll").authenticated()
 						.requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
 
 						// Dev tools

@@ -2,18 +2,12 @@ package com.eduproject.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,11 +50,14 @@ public class CourseEntity {
 	@Column(name = "COURSE_FEES")
 	private BigDecimal fees;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<User> enrolledUsers;
+
 	@Version
 	@Column(name = "VERSION")
 	private Integer version;
 
-	@Column(name = "CREATED_BY", updatable = false)
+	@Column(name = "CREATED_BY",length =40 , updatable = false)
 	private String createdBy;
 
 	@Column(name = "CREATED_DATE", updatable = false)

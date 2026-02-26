@@ -50,7 +50,34 @@
                        th:href="@{/courses/{id}/edit(id=${course.id})}" class="btn btn-primary btn-sm">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
+                    <form th:action="@{/courses/{id}/delete(id=${course.id})}"
+                          th:method="post" sec:authorize="hasRole('ADMIN')"
+                          th:attr="onsubmit='return confirmDeleteCourse(\'' + ${#strings.escapeJavaScript(course.title)} + '\')'">
+                        <input type="hidden"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}" />
+                        <button type="submit" class="btn-inline delete" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                    <form th:action="@{/courses/enroll}"
+                          th:method="post" >
+                        <input type="hidden"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}" />
+                        <input type="hidden" name="courseId" th:value="${course.id}" />
+                        <button type="submit" class="btn btn-primary" title="Register">
+                            <i class="bi bi-register"></i>Register
+                        </button>
+                    </form>
                 </div>
+            </div>
+            <!-- Flash messages -->
+            <div th:if="${successMessage}" class="msg msg-success">
+                <i class="bi bi-check-circle"></i> <span th:text="${successMessage}">Success</span>
+            </div>
+            <div th:if="${errorMessage}" class="msg msg-error">
+                <i class="bi bi-exclamation-circle"></i> <span th:text="${errorMessage}">Error</span>
             </div>
 
             <div th:unless="${course}" class="empty-state">
@@ -61,6 +88,7 @@
             </div>
 
         </div>
+
     </main>
 
     <footer th:replace="~{fragments/footer :: footer}"></footer>

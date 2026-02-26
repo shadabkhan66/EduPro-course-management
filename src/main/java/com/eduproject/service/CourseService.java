@@ -21,4 +21,8 @@ public interface CourseService {
 	boolean existsByTitle(String title);
 
 	boolean existsByTitleExcludingId(String title, Long id);
+
+    boolean isCourseAlreadyEnrolled(Long courseId, String username);
+
+    void enrollUser(Long courseId, String username);
 }

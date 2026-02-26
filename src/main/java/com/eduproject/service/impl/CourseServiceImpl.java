@@ -3,6 +3,7 @@ package com.eduproject.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.eduproject.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class CourseServiceImpl implements CourseService {
 
 	private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -85,7 +87,18 @@ public class CourseServiceImpl implements CourseService {
 		return existing.isPresent() && !existing.get().getId().equals(id);
 	}
 
-	// --- Mapping methods ---
+    @Override
+    public boolean isCourseAlreadyEnrolled(Long courseId, String username) {
+//        this.courseRepository.enro
+        return false;
+    }
+
+    @Override
+    public void enrollUser(Long courseId, String username) {
+
+    }
+
+    // --- Mapping methods ---
 
 	private CourseDTO toDTO(CourseEntity entity) {
 		CourseDTO dto = new CourseDTO();
