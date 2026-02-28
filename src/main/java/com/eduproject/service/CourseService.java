@@ -25,4 +25,6 @@ public interface CourseService {
     boolean isCourseAlreadyEnrolled(Long courseId, String username);
 
     void enrollUser(Long courseId, String username);
+
+    Long getUserId(String username);
 }

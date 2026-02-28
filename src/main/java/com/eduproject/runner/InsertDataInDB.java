@@ -16,6 +16,7 @@ import com.eduproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Seeds the database with sample data on application startup.
@@ -33,14 +34,10 @@ public class InsertDataInDB implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+
     public void run(String... args) {
         log.info("Seeding database with sample data...");
 
-        User u2 =      User.builder().username("student").password(passwordEncoder.encode("student123")).firstName("John").lastName("Doe").email("john@edupro.com").role(Role.STUDENT).build();
-        List<User> users = userRepository.saveAll(List.of(
-                User.builder().username("admin").password(passwordEncoder.encode("admin123")).firstName("Admin").lastName("User").email("admin@edupro.com").role(Role.ADMIN).build(),
-                u2
-        ));
 
         List<CourseEntity> courses = courseRepository.saveAll(List.of(
                 CourseEntity.builder().title("Java Programming").description("Learn Java from scratch").durationInHours(40).instructor("John Doe").fees(null).build(),
@@ -50,7 +47,10 @@ public class InsertDataInDB implements CommandLineRunner {
                 CourseEntity.builder().title("Python").description("Learn Python for AI").enrolledUsers(Arrays.asList(User.builder().username("king").password(passwordEncoder.encode("king123")).firstName("King").lastName("Khan").email("king@edupro.com").role(Role.STUDENT).build())).build()
         ));
 
-
+        List<User> users = userRepository.saveAll(List.of(
+                User.builder().username("admin").password(passwordEncoder.encode("admin123")).firstName("Admin").lastName("User").email("admin@edupro.com").role(Role.ADMIN).build(),
+                User.builder().username("student").password(passwordEncoder.encode("student123")).firstName("John").lastName("Doe").email("john@edupro.com").role(Role.STUDENT).course(this.courseRepository.findByTitle("Java Programming").get()).build()
+        ));
 
 
         courses.forEach(c -> log.info("Seeded course: {}", c.getTitle()));

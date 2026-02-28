@@ -188,10 +188,10 @@ public class CourseController {
         }
 
         courseService.enrollUser(courseId, username);
-
+        Long userId = this.courseService.getUserId(username);
         redirectAttributes.addFlashAttribute("successMessage",
                 "Successfully enrolled in the course.");
 
-        return "redirect:/courses/" + courseId;
+        return "redirect:/users/" + userId;
     }
 }

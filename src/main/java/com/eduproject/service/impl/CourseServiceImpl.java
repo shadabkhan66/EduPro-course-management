@@ -105,6 +105,11 @@ public class CourseServiceImpl implements CourseService {
 
     }
 
+    @Override
+    public Long getUserId(String username) {
+        return this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User Not found the given username : " + username)).getId();
+    }
+
     // --- Mapping methods ---
 
 	private CourseDTO toDTO(CourseEntity entity) {
