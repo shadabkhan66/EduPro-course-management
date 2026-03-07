@@ -1,13 +1,17 @@
 package com.eduproject.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
  * Spring Security configuration.
@@ -30,11 +34,9 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						// Public pages
 						.requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
-						.requestMatchers("/courses").permitAll()
-						.requestMatchers("/courses/{id}").permitAll()
 						.requestMatchers("/users/new").permitAll()
 
-						// Admin-only course management
+						// Admin-only course management (order matters: more specific first)
 						.requestMatchers("/courses/new").hasRole("ADMIN")
 						.requestMatchers("/courses/*/edit").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
@@ -42,24 +44,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/courses/enroll").authenticated()
 						.requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
 
+						// Public: course list and course view (permitAll)
+						.requestMatchers("/courses").permitAll()
+						.requestMatchers("/courses/*").permitAll()
+
 						// Dev tools
 						.requestMatchers("/h2-console/**").permitAll()
 
 						// Everything else requires authentication
 						.requestMatchers("/whoami").authenticated()
-						.requestMatchers(("/users/{id}")).authenticated()
+						.requestMatchers("/users/me").authenticated()
+						.requestMatchers("/users/{id}").authenticated()
 						.anyRequest().permitAll()
 				)
 				.formLogin(form -> form
 						.loginPage("/login")
-//                        earliar i had this but this was wrong
-//                        .successHandler((request, response, authentication) -> {
-//                            if(request.getQueryString().equals("enroll")){
-//                                response.sendRedirect("/courses/enroll");
-//                            }
-//                        })
-
-                        .defaultSuccessUrl("/courses",false)
+						.successHandler(loginSuccessHandler())
+						.defaultSuccessUrl("/courses", false)
 						.permitAll()
 				)
 				.logout(logout -> logout
@@ -85,5 +86,23 @@ public class SecurityConfig {
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	/**
+	 * After login: redirect to the "redirect" param if present (e.g. from "Login to enroll").
+	 * Otherwise use defaultSuccessUrl from formLogin config.
+	 */
+	@Bean
+	AuthenticationSuccessHandler loginSuccessHandler() {
+		return (HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
+			String redirectUrl = request.getParameter("redirect");
+			// Only allow internal paths (prevent open redirect)
+			if (redirectUrl != null && !redirectUrl.isBlank()
+					&& redirectUrl.startsWith("/") && !redirectUrl.startsWith("//")) {
+				response.sendRedirect(request.getContextPath() + redirectUrl);
+			} else {
+				response.sendRedirect(request.getContextPath() + "/courses");
+			}
+		};
 	}
 }

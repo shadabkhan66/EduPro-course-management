@@ -7,7 +7,7 @@
 
     ============================================================
 -->
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +29,7 @@
               th:object="${userResponseDTO}"
               method="post">
 
-            <!--crating and hidden id field-->
+            <!-- Hidden fields for id and username (not editable) -->
             <div class="form-group">
                  <input type="hidden" th:field="*{id}" />
             </div>
@@ -39,20 +39,23 @@
             <div class="form-group">
                 <label>First Name</label>
                 <input type="text" th:field="*{firstName}" />
+                <span th:errors="*{firstName}" class="error"></span>
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
                 <input type="text" th:field="*{lastName}" />
+                <span th:errors="*{lastName}" class="error"></span>
             </div>
 
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" th:field="*{email}" />
+                <span th:errors="*{email}" class="error"></span>
             </div>
 
             <!--i want this to be seen and modified only by admin-->
-            <div class="form-group" sec:authorize="hasRole('ROLE_ADMIN')" >
+            <div class="form-group" sec:authorize="hasRole('ADMIN')">
                 <label>Role</label>
                 <!--select and options for roles only for admin-->
                 <!--obviously admin will remain as admin why would he change role with lower authority-->

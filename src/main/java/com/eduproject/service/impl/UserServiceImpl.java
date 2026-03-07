@@ -65,13 +65,18 @@ public class UserServiceImpl implements UserService {
 		return this.userRepository.findById(id)
                 .map(this::toUserResponseDTO)
                 .orElseThrow(() -> new UserNotFoundException("User not found with Id : " + id));
+	}
 
-
+	@Override
+	@Transactional(readOnly = true)
+	public Long getUserIdByUsername(String username) {
+		return userRepository.findByUsername(username).map(User::getId).orElse(null);
 	}
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponseDTO> getAllUsers() {
-        return this.userRepository.findAll().stream().map(this::toUserResponseDTO).toList();
+        return userRepository.findAll().stream().map(this::toUserResponseDTO).toList();
     }
 
     @Transactional
@@ -100,14 +105,17 @@ public class UserServiceImpl implements UserService {
             user.setEmail(userRespDTO.getEmail());
         }
 
+        userRepository.save(user);
         return "User with id " + userRespDTO.getId() + " updated successfully";
     }
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByEmailExcludingCurrentUser(String email, Long currentUserId) {
         return userRepository.existsByEmailAndIdNot(email, currentUserId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByUsernameExcludingCurrentUser(String username, Long currentUserId) {
         return userRepository.existsByUsernameAndIdNot(username, currentUserId);
     }

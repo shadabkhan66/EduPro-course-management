@@ -523,6 +523,11 @@ tbody tr:hover {
     color: #2980b9;
 }
 
+.badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
 
 /* ================================================================
    13. FOOTER

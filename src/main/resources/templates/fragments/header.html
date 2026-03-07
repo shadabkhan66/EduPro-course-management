@@ -41,7 +41,7 @@
             <!-- Authenticated: show logout -->
             <span sec:authorize="isAuthenticated()">
 
-               <a th:href="@{/users/{id}(id=${#authentication.principal.id})}">
+               <a th:href="@{/users/me}">
                     <i class="bi bi-person-circle"></i> My Profile
                 </a>
 

@@ -50,7 +50,7 @@ public class CourseEntity {
 	@Column(name = "COURSE_FEES")
 	private BigDecimal fees;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<User> enrolledUsers;
 
 	@Version

@@ -64,6 +64,7 @@
                 th:action auto-adds CSRF token.
             -->
             <form th:action="@{/login}" method="post">
+                <input type="hidden" name="redirect" th:value="${param.redirect != null ? param.redirect[0] : ''}" />
 
                 <div class="form-group">
                     <label for="username">Username</label>

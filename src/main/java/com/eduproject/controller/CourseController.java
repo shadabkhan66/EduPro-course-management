@@ -1,8 +1,6 @@
 package com.eduproject.controller;
 
-import com.eduproject.repository.CourseRepository;
-import com.eduproject.service.impl.CourseServiceImpl;
-import com.eduproject.service.impl.UserServiceImpl;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,8 +35,7 @@ import java.security.Principal;
 @RequestMapping("/courses")
 public class CourseController {
 
-//	private final UserServiceImpl userService;
-    private final CourseServiceImpl  courseService;
+    private final CourseService courseService;
 
 	// ==================== LIST ====================
 
@@ -53,9 +50,11 @@ public class CourseController {
 	// ==================== VIEW ====================
 
 	@GetMapping("/{id:\\d+}")
-	public String viewCourse(@PathVariable Long id, Model model) {
+	public String viewCourse(@PathVariable Long id, Principal principal, Model model) {
 		log.info("Viewing course with ID: {}", id);
 		model.addAttribute("course", courseService.getCourseById(id));
+		boolean isEnrolled = principal != null && courseService.isCourseAlreadyEnrolled(id, principal.getName());
+		model.addAttribute("isEnrolled", isEnrolled);
 		return "course/view";
 	}
 
@@ -172,10 +171,8 @@ public class CourseController {
                          RedirectAttributes redirectAttributes
     ) {
 
-        //checking if user is logId in or not if not redirect to log in page and moment after log in redirect to seme page
-        //but i think my savedreqeust is not working so i get redirected back to same page
-        if(principal == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Please login! First Before Enrolling!");
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Please log in first before enrolling.");
             return "redirect:/login?enroll";
         }
         String username = principal.getName();

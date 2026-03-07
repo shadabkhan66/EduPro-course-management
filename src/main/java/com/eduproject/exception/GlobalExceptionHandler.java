@@ -27,6 +27,14 @@ public class GlobalExceptionHandler {
 		return "error/404";
 	}
 
+	@ExceptionHandler(UserNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String handleUserNotFound(UserNotFoundException ex, Model model) {
+		log.error("User not found: {}", ex.getMessage());
+		model.addAttribute("errorMessage", ex.getMessage());
+		return "error/404";
+	}
+
 	@ExceptionHandler(NoResourceFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String handleNotFound(NoResourceFoundException ex, Model model) {

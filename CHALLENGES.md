@@ -25,6 +25,8 @@
 16. [Audit Column Configuration: `insertable` and `updatable`](#16-audit-column-configuration-insertable-and-updatable)
 17. [H2 Console 403 Forbidden -- Spring Security Blocking Dev Tools](#17-h2-console-403-forbidden----spring-security-blocking-dev-tools)
 18. [Delete Not Working -- `@Transactional(readOnly = true)` on Write Operation](#18-delete-not-working----transactionalreadonly--true-on-write-operation)
+19. [DataSeeder: Detached Entity Passed to Persist](#19-dataseeder-detached-entity-passed-to-persist)
+20. [Enroll Flow: Login Redirect Loses User Intent](#20-enroll-flow-login-redirect-loses-user-intent)
 
 ---
 
@@ -888,6 +890,105 @@ readOnly = true
 
 ---
 
+## 19. DataSeeder: Detached Entity Passed to Persist
+
+### The Error
+
+```
+org.springframework.dao.InvalidDataAccessApiUsageException: detached entity passed to persist: com.eduproject.model.User
+Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.eduproject.model.User
+```
+
+### What Happened
+
+In `DataSeeder`, I created users first with `userRepository.saveAll()`, then built a course with one of those users in `enrolledUsers`:
+
+```java
+List<User> users = userRepository.saveAll(List.of(admin, student, king));
+User king = users.stream().filter(u -> "king".equals(u.getUsername())).findFirst().orElseThrow();
+courseRepository.saveAll(List.of(
+    // ...
+    CourseEntity.builder().title("Python").enrolledUsers(List.of(king)).build()
+));
+```
+
+The app crashed when saving the Python course.
+
+### Why It Happened
+
+`CourseEntity` had `@OneToMany(cascade = CascadeType.ALL)` on `enrolledUsers`. When saving a course, Hibernate cascades **PERSIST** to every `User` in the list. But those users were **already persisted** (we saved them earlier). An entity with an ID that was saved in a previous operation is **detached**. Hibernate's `persist()` expects a **transient** (new) entity. Passing a detached entity to persist throws this exception.
+
+### The Fix
+
+Remove `CascadeType.ALL` from the relationship. Enrolled users are already in the database; we only need to link them in the join table. No cascade is needed:
+
+```java
+// BEFORE: Cascade tried to persist already-persisted users
+@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+private List<User> enrolledUsers;
+
+// AFTER: No cascade — we only manage the join table
+@OneToMany(fetch = FetchType.LAZY)
+private List<User> enrolledUsers;
+```
+
+### Key Takeaway
+
+| Cascade | Use When |
+|---------|----------|
+| `CascadeType.ALL` | Parent **owns** children — you create them together (e.g. Order + OrderItems) |
+| No cascade | Parent **references** existing entities — they're saved elsewhere (e.g. Course + enrolled Users) |
+
+### Interview-Ready Answer
+
+> "When seeding data, I got 'detached entity passed to persist'. I was saving users first, then adding one to a course's enrolledUsers list. CourseEntity had CascadeType.ALL on that relationship, so when saving the course, Hibernate tried to persist the User again. But the User was already persisted — detached. The fix was removing the cascade, since we're only associating existing users, not creating new ones."
+
+---
+
+## 20. Enroll Flow: Login Redirect Loses User Intent
+
+### The Problem
+
+Anonymous user views a course and clicks "Enroll". Spring Security intercepts the POST (requires auth) and redirects to `/login`. User logs in. They land on `/courses` (defaultSuccessUrl) — **not** the course page. They have to find the course again and click Enroll. Poor UX.
+
+### Why It Happens
+
+1. **SavedRequest for POST doesn't work well** — Spring Security saves the original request (POST /courses/enroll). After login, redirecting back would re-issue it as GET, losing the POST body (courseId).
+2. **defaultSuccessUrl** — When no saved request applies, users always go to `/courses`.
+
+### The Fix
+
+**Step 1:** For anonymous users, show "Login to Enroll" **link** (not form) that goes to `/login?redirect=/courses/{id}`.
+
+**Step 2:** Add hidden field to login form to preserve the redirect param (use `param.redirect[0]` when param may be array):
+```html
+<input type="hidden" name="redirect" th:value="${param.redirect != null ? param.redirect[0] : ''}" />
+```
+
+**Step 3:** Custom `AuthenticationSuccessHandler` that reads `redirect` from the POST and redirects there:
+```java
+String redirectUrl = request.getParameter("redirect");
+if (redirectUrl != null && redirectUrl.startsWith("/") && !redirectUrl.startsWith("//")) {
+    response.sendRedirect(request.getContextPath() + redirectUrl);
+} else {
+    response.sendRedirect(request.getContextPath() + "/courses");
+}
+```
+
+### Security: Open Redirect Prevention (IMPORTANT)
+
+**Never** redirect to user-supplied URLs without validation. An attacker could craft:
+```
+/login?redirect=//evil.com/phishing
+```
+After login, user would be sent to `evil.com`. The fix: only allow paths starting with `/` (our app) and reject `//` (protocol-relative URLs).
+
+### Interview-Ready Answer
+
+> "For the enroll flow, anonymous users needed to log in first. The challenge was preserving their intent — returning them to the course page after login. Spring Security's saved request doesn't work well for POST. I used a redirect query param: 'Login to Enroll' links to /login?redirect=/courses/5. The login form has a hidden field to preserve it. A custom success handler reads it and redirects there. I also added open redirect protection — only allow paths starting with / and reject // to prevent redirecting users to malicious sites."
+
+---
+
 ## Quick Reference: Common 403/404/500 Causes in Spring MVC
 
 | Error | Common Cause | Fix |
@@ -901,3 +1002,5 @@ readOnly = true
 | **500** | Missing `BindingResult` after `@Valid` | Add `BindingResult` immediately after the validated parameter |
 | **500** | `<form:form>` without model attribute | Use plain HTML form for Spring Security login |
 | **500** | Message code not in `messages.properties` | Pass `null` as error code in `rejectValue()` |
+| **InvalidDataAccessApiUsage** | Detached entity passed to persist | Remove cascade when associating already-persisted entities |
+| **Open redirect** | User-supplied redirect URL | Validate: `startsWith("/")` and `!startsWith("//")` |

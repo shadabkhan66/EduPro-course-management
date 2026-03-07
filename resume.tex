@@ -1,0 +1,124 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages (all available in Overleaf)
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{parskip}
+
+% Page layout - compact for one page
+\geometry{
+    top=0.6in,
+    bottom=0.6in,
+    left=0.65in,
+    right=0.65in
+}
+
+% Hyperlink styling
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue!70!black,
+    linkcolor=black,
+    pdfauthor={Shadab Khan},
+    pdftitle={Shadab Khan - Resume}
+}
+
+% Section formatting
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{0.5em}{0.3em}
+
+% Reduce spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlist{nosep, leftmargin=*, itemsep=1.5pt}
+
+\begin{document}
+
+% ========== HEADER ==========
+\begin{center}
+    {\LARGE\bfseries Shadab Khan}\\[4pt]
+    \small
+    India \quad$|$\quad \href{mailto:xyz@gmail.com}{xyz@gmail.com} \quad$|$\quad +91-1234567890 \quad$|$\quad
+    \href{https://linkedin.com/in/xyz}{LinkedIn} \quad$|$\quad \href{https://github.com/xyz}{GitHub}
+\end{center}
+\vspace{2pt}
+
+% ========== SUMMARY ==========
+\section*{Summary}
+\textbf{Java Backend Developer (Fresher)} with hands-on experience building RESTful applications using \textbf{Spring Boot}, \textbf{JPA/Hibernate}, and \textbf{Oracle DB}. Proficient in OOP, multithreading, database design, and enterprise patterns (MVC, DAO). Built end-to-end backend systems with authentication, layered architecture, and production-style workflows. Seeking an entry-level backend role to contribute and grow in a collaborative engineering environment.
+
+% ========== TECHNICAL SKILLS ==========
+\section*{Technical Skills}
+\begin{itemize}
+    \item \textbf{Languages:} Java, SQL
+    \item \textbf{Backend:} Spring Boot, Spring MVC, Spring Security, Spring Data JPA, JWT
+    \item \textbf{Architecture:} RESTful APIs, Microservices, MVC, DAO, Layered Architecture
+    \item \textbf{Databases:} Oracle DB, MySQL, MongoDB, H2
+    \item \textbf{Tools:} Git, Maven, Docker, Postman, JUnit 5, Mockito
+\end{itemize}
+
+% ========== PROJECTS ==========
+\section*{Projects}
+
+\textbf{EduPro --- Course Management System} \textit{(Primary Project --- Interview Ready)}\\
+\small\textit{Spring Boot 3.5, Spring Security 6, Spring Data JPA, Thymeleaf, H2/Oracle, Bean Validation}
+\begin{itemize}
+    \item \textbf{Layered architecture:} Controller $\rightarrow$ Service $\rightarrow$ Repository with Entity--DTO separation for clean boundaries
+    \item \textbf{Spring Security:} Form-based auth, BCrypt passwords, role-based access (ADMIN/STUDENT/TEACHER), CSRF protection, custom \texttt{UserDetailsService} for DB-backed authentication
+    \item \textbf{Optimistic locking:} \texttt{@Version} on entities to prevent concurrent update conflicts; solved ``Detached entity with null version'' bug
+    \item \textbf{Design patterns:} PRG (Post-Redirect-Get) for flash messages, \texttt{@ControllerAdvice} for global exception handling, service interfaces for testability
+    \item \textbf{Audit \& validation:} \texttt{@CreationTimestamp}/\texttt{@UpdateTimestamp}, Bean Validation with \texttt{BindingResult.rejectValue()} for multi-field error display
+    \item \textbf{Testing:} Unit tests (Mockito), controller tests (\texttt{@WebMvcTest}), repository tests (\texttt{@DataJpaTest})
+\end{itemize}
+\small \href{https://github.com/xyz}{GitHub} $|$ 25 STAR-format interview answers documented for this project
+
+\vspace{4pt}
+\textbf{Microservices E-Commerce Platform}\\
+\small\textit{Spring Boot, Spring Cloud Gateway, JWT, Docker, Docker Compose}
+\begin{itemize}
+    \item Built microservices system with API Gateway, Auth, User, Product, Order services
+    \item JWT-based authentication enforced at Gateway; service discovery for inter-service communication
+    \item Containerized with Docker; orchestrated via Docker Compose
+\end{itemize}
+
+\vspace{2pt}
+\textbf{Product Management System (Full Stack)}\\
+\small\textit{Spring Boot, JPA/Hibernate, MySQL, Bootstrap}
+\begin{itemize}
+    \item CRUD platform with RESTful APIs, layered architecture (Controller--Service--DAO), DTOs, global exception handling
+    \item Stock management and sales workflow with validation
+\end{itemize}
+
+\vspace{2pt}
+\textbf{Task Management System}\\
+\small\textit{Spring Boot, MongoDB, React}
+\begin{itemize}
+    \item JWT authentication and role-based authorization with Spring Security
+    \item REST APIs with Service--Repository pattern, pagination, filtering; React frontend integration
+\end{itemize}
+
+\vspace{2pt}
+\textbf{EduTrack --- Student Information System}\\
+\small\textit{Java EE (Servlets, JSP), Oracle Database}
+\begin{itemize}
+    \item Layered MVC + Front Controller pattern; user registration, login, student-course CRUD with DAO layer
+\end{itemize}
+
+% ========== EDUCATION ==========
+\section*{Education}
+\textbf{B.Tech in Chemical Engineering} --- Institute of Engineering and Technology, Lucknow \hfill \textit{Sept 2017 -- May 2021}\\
+CGPA: 6.91/10.0
+
+% ========== TRAINING ==========
+\section*{Training \& Certification}
+\textbf{Full Stack Java Development Program} \hfill \textit{Nov 2024 -- Ongoing}\\
+Core Java, JDBC/Servlets/JSP, Spring Boot, Spring Security, JWT, Microservices, JUnit 5, Agile exposure
+
+\vspace{4pt}
+\raggedleft \small \textit{Last updated: March 2025}
+
+\end{document}

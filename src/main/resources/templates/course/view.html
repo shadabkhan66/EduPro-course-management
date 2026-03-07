@@ -60,16 +60,25 @@
                             <i class="bi bi-trash"></i>
                         </button>
                     </form>
-                    <form th:action="@{/courses/enroll}"
-                          th:method="post" >
-                        <input type="hidden"
-                               th:name="${_csrf.parameterName}"
-                               th:value="${_csrf.token}" />
-                        <input type="hidden" th:name= "courseId" th:value="${course.id}" />
-                        <button type="submit" class="btn btn-primary" title="Register">
-                            <i class="bi bi-register"></i>Register
-                        </button>
-                    </form>
+                    <!-- Enroll: show different UI based on auth + enrollment status -->
+                    <span sec:authorize="isAnonymous()">
+                        <a th:href="@{/login(redirect=${'/courses/' + course.id})}"
+                           class="btn btn-primary" title="Login to enroll">
+                            <i class="bi bi-box-arrow-in-right"></i> Login to Enroll
+                        </a>
+                    </span>
+                    <span sec:authorize="isAuthenticated()" th:if="${!isEnrolled}">
+                        <form th:action="@{/courses/enroll}" th:method="post" style="display:inline;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" th:name="courseId" th:value="${course.id}" />
+                            <button type="submit" class="btn btn-primary" title="Enroll">
+                                <i class="bi bi-plus-circle"></i> Enroll
+                            </button>
+                        </form>
+                    </span>
+                    <span sec:authorize="isAuthenticated()" th:if="${isEnrolled}" class="badge badge-success">
+                        <i class="bi bi-check-circle"></i> Enrolled
+                    </span>
                 </div>
             </div>
             <!-- Flash messages -->

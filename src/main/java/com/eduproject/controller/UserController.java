@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -47,6 +48,18 @@ public class UserController {
 //    =======================
 //    fetch user
 //    =============================================================
+
+    /**
+     * Redirects authenticated user to their own profile.
+     * Avoids needing principal.id in templates (works with any UserDetails impl).
+     */
+    @GetMapping("/me")
+    public String showCurrentUser(Principal principal) {
+        if (principal == null) return "redirect:/login";
+        Long userId = userService.getUserIdByUsername(principal.getName());
+        if (userId == null) return "redirect:/login";
+        return "redirect:/users/" + userId;
+    }
 
     @GetMapping("/{id}")
     public String showUser(@PathVariable Long id, Model model) {
@@ -123,41 +136,32 @@ public class UserController {
 
     @PostMapping("/{id}/edit")
     public String editUser(@PathVariable Long id,
-                           @ModelAttribute("userResponseDTO") UserResponseDTO userRespDTO,
+                           @Valid @ModelAttribute("userResponseDTO") UserResponseDTO userRespDTO,
                            BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes
-    ){
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
         log.info("Edit user attempt for user: {}", id);
 
-        if( !id.equals(userRespDTO.getId()) ) {
-            //do something
-        }
+        // Security: trust the URL path ID, not the form's hidden field
+        userRespDTO.setId(id);
 
         if (!bindingResult.hasErrors()) {
-
             if (userService.existsByEmailExcludingCurrentUser(userRespDTO.getEmail(), id)) {
                 bindingResult.rejectValue("email", "duplicate", "Email already exists");
             }
-
             if (userService.existsByUsernameExcludingCurrentUser(userRespDTO.getUsername(), id)) {
                 bindingResult.rejectValue("username", "duplicate", "Username already exists");
             }
         }
 
-        if(bindingResult.hasErrors()){
-            log.info("Updating validation fail {} " ,bindingResult.getErrorCount());
-            //is this line even necessery especially with this huge name
-            // isent it send automatically
-//        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRespDTO", bindingResult);
-//        redirectAttributes.addFlashAttribute("userResponseDTO", userRespDTO);
-
-            return "redirect:/users/allUsers";
+        if (bindingResult.hasErrors()) {
+            log.warn("Edit validation failed: {} errors", bindingResult.getErrorCount());
+            model.addAttribute("userResponseDTO", userRespDTO);
+            return "user/editUser";
         }
 
-        String msg = this.userService.updateUser(userRespDTO);
-
-
-
+        userService.updateUser(userRespDTO);
+        redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully.");
         return "redirect:/users/" + id;
     }
 

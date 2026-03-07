@@ -44,7 +44,7 @@ src/main/java/com/eduproject/
 ├── EduProApplication.java              # Application entry point
 ├── config/
 │   ├── SecurityConfig.java             # Security filter chain, CSRF, role rules
-│   └── UserDetailService.java          # Custom UserDetailsService (DB-backed)
+│   └── CustomUserDetailsService.java   # Custom UserDetailsService (DB-backed)
 ├── controller/
 │   ├── HomeController.java             # Home page + login + logout handling
 │   ├── CourseController.java           # CRUD endpoints for courses
@@ -68,7 +68,7 @@ src/main/java/com/eduproject/
 │   ├── CourseNotFoundException.java    # Custom runtime exception
 │   └── GlobalExceptionHandler.java    # @ControllerAdvice error handling
 └── runner/
-    └── InsertDataInDB.java            # Seed data on startup
+    └── DataSeeder.java                # Seed data on startup (idempotent)
 
 src/main/resources/
 ├── templates/                          # Thymeleaf templates
@@ -152,11 +152,13 @@ Navigate to **http://localhost:8080/h2-console** with:
 
 | File | Description |
 |------|-------------|
+| **[PROJECT_REVIEW_AND_IMPROVEMENT_PLAN.md](PROJECT_REVIEW_AND_IMPROVEMENT_PLAN.md)** | **Consolidated review: conventions, scalability, improvement roadmap** |
 | [V2_MIGRATION.md](V2_MIGRATION.md) | v0.2.0 changes: JSP→Thymeleaf, testing, model redesign, FAQ |
 | [CHALLENGES.md](CHALLENGES.md) | 18 real problems faced with root cause analysis and fixes |
 | [CONCEPTS_LEARNED.md](CONCEPTS_LEARNED.md) | Key concepts and patterns learned |
 | [INTERVIEW_QNA.md](INTERVIEW_QNA.md) | Interview Q&A based on this project |
 | [CODE_REVIEW.md](CODE_REVIEW.md) | Self-review: design decisions, limitations, improvements |
+| [IMPROVEMENTS_APPLIED.md](IMPROVEMENTS_APPLIED.md) | Recent improvements: bug fixes, conventions, refactoring |
 
 ---
 

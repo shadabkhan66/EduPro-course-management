@@ -15,6 +15,12 @@ public interface UserService {
 
     UserResponseDTO getUserById(Long id);
 
+    /**
+     * Returns the user ID for the given username, or null if not found.
+     * Used for "My Profile" redirect without requiring principal.id in templates.
+     */
+    Long getUserIdByUsername(String username);
+
     List<UserResponseDTO> getAllUsers();
 
     String updateUser(UserResponseDTO userRespDTO);
