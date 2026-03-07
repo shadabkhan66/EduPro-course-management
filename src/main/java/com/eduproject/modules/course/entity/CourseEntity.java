@@ -1,0 +1,74 @@
+package com.eduproject.modules.course.entity;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.eduproject.modules.users.entity.UserEntity;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * JPA entity representing a course in the database.
+ *
+ * Uses @Version for optimistic locking (prevents concurrent update conflicts).
+ * Uses @CreationTimestamp / @UpdateTimestamp for automatic audit fields.
+ * Uses @SequenceGenerator for Oracle-compatible ID generation (H2 also supports sequences).
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "COURSES")
+@Builder
+public class CourseEntity {
+
+	@Id
+	@SequenceGenerator(allocationSize = 1, initialValue = 1_00_000, name = "SEQ_COURSE", sequenceName = "SEQ_COURSE")
+	@GeneratedValue(generator = "SEQ_COURSE", strategy = GenerationType.SEQUENCE)
+	private Long id;
+
+	@Column(name = "COURSE_TITLE", unique = true, nullable = false, length = 100)
+	private String title;
+
+	@Column(name = "COURSE_DESCRIPTION", nullable = false, length = 500)
+	private String description;
+
+	@Column(name = "COURSE_DURATION_HOURS")
+	private Integer durationInHours;
+
+	@Column(name = "COURSE_INSTRUCTOR", length = 60)
+	private String instructor;
+
+	@Column(name = "COURSE_FEES")
+	private BigDecimal fees;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserEntity> enrolledUsers;
+
+	@Version
+	@Column(name = "VERSION")
+	private Integer version;
+
+	@Column(name = "CREATED_BY",length =40 , updatable = false)
+	private String createdBy;
+
+	@Column(name = "CREATED_DATE", updatable = false)
+	@CreationTimestamp
+	private LocalDateTime createdDate;
+
+	@Column(name = "UPDATED_DATE", insertable = false)
+	@UpdateTimestamp
+	private LocalDateTime updatedDate;
+
+	@Column(name = "UPDATED_BY", insertable = false)
+	private String updatedBy;
+}

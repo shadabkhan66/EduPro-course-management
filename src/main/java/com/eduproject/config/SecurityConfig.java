@@ -40,31 +40,31 @@ public class SecurityConfig {
                         .requestMatchers("/users/new").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
 
-                        // Admin-only course management
-                        .requestMatchers("/courses/new").hasRole("ADMIN")
-                        .requestMatchers("/courses/*/edit").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/courses/*/delete").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
-
-                        // Enrollment requires authentication
-                        .requestMatchers(HttpMethod.POST, "/courses/enroll").authenticated()
-
-                        // User management
-                        .requestMatchers("/users").hasRole("ADMIN")
-                        .requestMatchers("/users/{id}").authenticated()
-                        .requestMatchers("/users/{id}/edit").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/users/{id}").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/users/{id}/delete").authenticated()
-
-                        // Dev tools
-                        .requestMatchers("/h2-console/**").permitAll()
-
-                        // Misc
-                        .requestMatchers("/whoami").authenticated()
+//                        // Admin-only course management
+//                        .requestMatchers("/courses/new").hasRole("ADMIN")
+//                        .requestMatchers("/courses/*/edit").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/courses/*/delete").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/courses/*").hasRole("ADMIN")
+//
+//                        // Enrollment requires authentication
+//                        .requestMatchers(HttpMethod.POST, "/courses/enroll").authenticated()
+//
+//                        // User management
+//                        .requestMatchers("/users").hasRole("ADMIN")
+//                        .requestMatchers("/users/{id}").authenticated()
+//                        .requestMatchers("/users/{id}/edit").authenticated()
+//                        .requestMatchers(HttpMethod.POST, "/users/{id}").authenticated()
+//                        .requestMatchers(HttpMethod.POST, "/users/{id}/delete").authenticated()
+//
+//                        // Dev tools
+//                        .requestMatchers("/h2-console/**").permitAll()
+//
+//                        // Misc
+//                        .requestMatchers("/whoami").authenticated()
 
                         // Everything else
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
 
                 // ========================
@@ -95,7 +95,8 @@ public class SecurityConfig {
                 // H2 Console Config (Dev Only)
                 // ========================
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
+//                        .ignoringRequestMatchers("/h2-console/**")
+                                .disable()
                 )
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
