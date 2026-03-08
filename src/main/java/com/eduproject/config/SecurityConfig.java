@@ -50,6 +50,7 @@ public class SecurityConfig {
 
 						// Dev tools
 						.requestMatchers("/h2-console/**").permitAll()
+						.requestMatchers("/actuator/**").permitAll()
 
 						// Everything else requires authentication
 						.requestMatchers("/whoami").authenticated()
