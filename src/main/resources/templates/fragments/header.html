@@ -41,16 +41,17 @@
             <!-- Authenticated: show logout -->
             <span sec:authorize="isAuthenticated()">
 
-               <a th:href="@{/users/me}">
-                    <i class="bi bi-person-circle"></i> My Profile
+                <a th:href="@{/users/me}">
+                    <i class="bi bi-person-circle"></i>
+                    <span sec:authentication="name"></span>
                 </a>
 
                 <form th:action="@{/logout}" method="post" style="display:inline; margin:0;">
-                    <!-- CSRF token is auto-inserted by Thymeleaf! -->
                     <button type="submit" class="logout-btn">
                         <i class="bi bi-box-arrow-right"></i> Logout
                     </button>
                 </form>
+
             </span>
 
             <!-- Anonymous: show login + register -->
