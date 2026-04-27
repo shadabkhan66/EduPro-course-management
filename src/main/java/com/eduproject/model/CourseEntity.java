@@ -51,7 +51,7 @@ public class CourseEntity {
 	private BigDecimal fees;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private List<User> enrolledUsers;
+    private List<UserEntity> enrolledUsers;
 
 	@Version
 	@Column(name = "VERSION")

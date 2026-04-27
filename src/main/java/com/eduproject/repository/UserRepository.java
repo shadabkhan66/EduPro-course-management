@@ -4,18 +4,18 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.eduproject.model.User;
+import com.eduproject.model.UserEntity;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	
-	Optional<User> findByUsername(String username);
+	Optional<UserEntity> findByUsername(String username);
 
 
     boolean existsByEmail(String email);
 
     boolean existsByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
     boolean existsByEmailAndIdNot(String email, Long currentUserId);
 

@@ -45,7 +45,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "users")
 @ToString(exclude = "password")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

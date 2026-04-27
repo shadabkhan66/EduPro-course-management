@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.eduproject.model.CourseEntity;
 import com.eduproject.model.Role;
-import com.eduproject.model.User;
+import com.eduproject.model.UserEntity;
 import com.eduproject.repository.CourseRepository;
 import com.eduproject.repository.UserRepository;
 
@@ -41,16 +41,16 @@ public class DataSeeder implements CommandLineRunner {
 
         log.info("Seeding database with sample data...");
 
-        List<User> users = userRepository.saveAll(List.of(
-                User.builder().username("admin").password(passwordEncoder.encode("admin123"))
+        List<UserEntity> users = userRepository.saveAll(List.of(
+                UserEntity.builder().username("admin").password(passwordEncoder.encode("admin123"))
                         .firstName("Admin").lastName("User").email("admin@edupro.com").role(Role.ADMIN).build(),
-                User.builder().username("student").password(passwordEncoder.encode("student123"))
+                UserEntity.builder().username("student").password(passwordEncoder.encode("student123"))
                         .firstName("John").lastName("Doe").email("john@edupro.com").role(Role.STUDENT).build(),
-                User.builder().username("king").password(passwordEncoder.encode("king123"))
+                UserEntity.builder().username("king").password(passwordEncoder.encode("king123"))
                         .firstName("King").lastName("Khan").email("king@edupro.com").role(Role.STUDENT).build()
         ));
 
-        User king = users.stream().filter(u -> "king".equals(u.getUsername())).findFirst().orElseThrow();
+        UserEntity king = users.stream().filter(u -> "king".equals(u.getUsername())).findFirst().orElseThrow();
 
         List<CourseEntity> courses = courseRepository.saveAll(List.of(
                 CourseEntity.builder().title("Java Programming").description("Learn Java from scratch")

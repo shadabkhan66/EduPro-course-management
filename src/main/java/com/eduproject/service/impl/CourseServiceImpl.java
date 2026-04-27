@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.eduproject.exception.UserNotFoundException;
-import com.eduproject.model.User;
+import com.eduproject.model.UserEntity;
 import com.eduproject.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -94,9 +94,9 @@ public class CourseServiceImpl implements CourseService {
     public boolean isCourseAlreadyEnrolled(Long courseId, String username) {
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
-        User user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
-        List<User> enrolled = course.getEnrolledUsers();
+        List<UserEntity> enrolled = course.getEnrolledUsers();
         return enrolled != null && enrolled.stream()
                 .anyMatch(u -> u.getId().equals(user.getId()));
     }
@@ -106,10 +106,10 @@ public class CourseServiceImpl implements CourseService {
     public void enrollUser(Long courseId, String username) {
         CourseEntity course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
-        User user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
 
-        List<User> enrolled = course.getEnrolledUsers() != null
+        List<UserEntity> enrolled = course.getEnrolledUsers() != null
                 ? new java.util.ArrayList<>(course.getEnrolledUsers())
                 : new java.util.ArrayList<>();
         enrolled.add(user);

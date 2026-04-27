@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eduproject.model.Role;
-import com.eduproject.model.User;
+import com.eduproject.model.UserEntity;
 import com.eduproject.model.UserRegistrationDTO;
 import com.eduproject.repository.UserRepository;
 import com.eduproject.service.UserService;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	public String registerUser(UserRegistrationDTO dto) {
 		log.info("Registering user: {}", dto.getUsername());
 
-		User user = User.builder()
+		UserEntity user = UserEntity.builder()
 				.username(dto.getUsername())
 				.password(passwordEncoder.encode(dto.getPassword()))
 				.firstName(dto.getFirstName())
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 				.role(Role.STUDENT)  // Security: always default to STUDENT
 				.build();
 
-		User saved = userRepository.save(user);
+		UserEntity saved = userRepository.save(user);
 		return saved.getFullName();
 	}
 
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Long getUserIdByUsername(String username) {
-		return userRepository.findByUsername(username).map(User::getId).orElse(null);
+		return userRepository.findByUsername(username).map(UserEntity::getId).orElse(null);
 	}
 
     @Override
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User ID must not be null");
         }
 
-        User user = userRepository.findById(userRespDTO.getId())
+        UserEntity user = userRepository.findById(userRespDTO.getId())
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found with Id : " + userRespDTO.getId())
                 );
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private UserResponseDTO toUserResponseDTO(User user) {
+    private UserResponseDTO toUserResponseDTO(UserEntity user) {
         return UserResponseDTO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
