@@ -64,7 +64,7 @@ public class CourseController {
 	@GetMapping("/new")
 	public String showCreateForm(Model model) {
 		log.info("Showing create course form");
-		model.addAttribute("courseDTO", new CreateCourseRequest());
+		model.addAttribute("createCourseRequest", new CreateCourseRequest());
 		model.addAttribute("pageHeading", "Create New Course");
 		model.addAttribute("submitLabel", "Create Course");
 		model.addAttribute("editMode", false);
@@ -102,7 +102,7 @@ public class CourseController {
 	@GetMapping("/{id}/edit")
 	public String showEditForm(@PathVariable Long id, Model model) {
 		log.info("Showing edit form for course ID: {}", id);
-		model.addAttribute("courseDTO", courseService.getCourseById(id));
+		model.addAttribute("createCourseRequest", courseService.getCourseById(id));
 		model.addAttribute("pageHeading", "Edit Course");
 		model.addAttribute("submitLabel", "Update Course");
 		model.addAttribute("editMode", true);
