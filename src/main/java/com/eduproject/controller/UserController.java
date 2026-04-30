@@ -1,7 +1,7 @@
 package com.eduproject.controller;
 
-import com.eduproject.model.UserRegistrationDTO;
-import com.eduproject.model.UserResponseDTO;
+import com.eduproject.model.UserRequest;
+import com.eduproject.model.UserResponse;
 import com.eduproject.service.UserService;
 
 import jakarta.validation.Valid;
@@ -64,17 +64,17 @@ public class UserController {
     @GetMapping("/{id}")
     public String showUser(@PathVariable Long id, Model model) {
         log.info("Showing user with id {}", id);
-        UserResponseDTO userResponseDTO =  this.userService.getUserById(id);
+        UserResponse userResponse =  this.userService.getUserById(id);
 
-        model.addAttribute("userResponseDTO", userResponseDTO);
-        log.info("Displaying user profile {}", userResponseDTO);
+        model.addAttribute("userResponseDTO", userResponse);
+        log.info("Displaying user profile {}", userResponse);
         return "user/showUserProfile";
     }
 
     @GetMapping//this page should only be see to admin
 
     public String showAllUsers(Model model) {
-        List<UserResponseDTO> users =  this.userService.getAllUsers();
+        List<UserResponse> users =  this.userService.getAllUsers();
         model.addAttribute("users", users);
         log.info("Displaying all users");
         return "user/allUsers";
@@ -87,13 +87,13 @@ public class UserController {
     @GetMapping("/new")
     public String showRegistrationForm(Model model) {
         log.info("Displaying registration form");
-        model.addAttribute("registrationDTO", new UserRegistrationDTO());
+        model.addAttribute("registrationDTO", new UserRequest());
         return "user/register";
     }
 
     @PostMapping
     public String registerUser(
-            @Valid @ModelAttribute("registrationDTO") UserRegistrationDTO dto,
+            @Valid @ModelAttribute("registrationDTO") UserRequest dto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
@@ -127,16 +127,16 @@ public class UserController {
     @GetMapping("/{id}/edit")
     public String showEditUserForm(@PathVariable Long id, Model model) {
         log.info("Displaying editing form for user: {}", id);
-        UserResponseDTO userResponseDTO = userService.getUserById(id);
+        UserResponse userResponse = userService.getUserById(id);
 
-        model.addAttribute("userResponseDTO", userResponseDTO);
-        log.info("sending to  view editUser.html for editing with User: {}", userResponseDTO);
+        model.addAttribute("userResponseDTO", userResponse);
+        log.info("sending to  view editUser.html for editing with User: {}", userResponse);
         return "user/editUser";
     }
 
     @PostMapping("/{id}/edit")
     public String editUser(@PathVariable Long id,
-                           @Valid @ModelAttribute("userResponseDTO") UserResponseDTO userRespDTO,
+                           @Valid @ModelAttribute("userResponseDTO") UserResponse userRespDTO,
                            BindingResult bindingResult,
                            Model model,
                            RedirectAttributes redirectAttributes) {

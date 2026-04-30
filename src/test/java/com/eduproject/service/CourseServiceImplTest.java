@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import com.eduproject.model.CreateCourseRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.eduproject.exception.CourseNotFoundException;
-import com.eduproject.model.CourseDTO;
 import com.eduproject.model.CourseEntity;
 import com.eduproject.repository.CourseRepository;
 import com.eduproject.service.impl.CourseServiceImpl;
@@ -71,8 +71,8 @@ class CourseServiceImplTest {
 				.build();
 	}
 
-	private CourseDTO sampleDTO() {
-		return new CourseDTO(null, "Spring Boot", "Learn Spring Boot", 30, BigDecimal.valueOf(5000), "John Doe");
+	private CreateCourseRequest sampleDTO() {
+		return new CreateCourseRequest(null, "Spring Boot", "Learn Spring Boot", 30, BigDecimal.valueOf(5000), "John Doe");
 	}
 
 	// ==================== getAllCourses ====================
@@ -88,7 +88,7 @@ class CourseServiceImplTest {
 			when(courseRepository.findAll()).thenReturn(List.of(sampleEntity()));
 
 			// Act
-			List<CourseDTO> result = courseService.getAllCourses();
+			List<CreateCourseRequest> result = courseService.getAllCourses();
 
 			// Assert
 			assertThat(result).hasSize(1);
@@ -101,7 +101,7 @@ class CourseServiceImplTest {
 		void shouldReturnEmptyList() {
 			when(courseRepository.findAll()).thenReturn(List.of());
 
-			List<CourseDTO> result = courseService.getAllCourses();
+			List<CreateCourseRequest> result = courseService.getAllCourses();
 
 			assertThat(result).isEmpty();
 		}
@@ -118,7 +118,7 @@ class CourseServiceImplTest {
 		void shouldReturnCourse() {
 			when(courseRepository.findById(1L)).thenReturn(Optional.of(sampleEntity()));
 
-			CourseDTO result = courseService.getCourseById(1L);
+			CreateCourseRequest result = courseService.getCourseById(1L);
 
 			assertThat(result.getTitle()).isEqualTo("Spring Boot");
 			assertThat(result.getInstructor()).isEqualTo("John Doe");
@@ -167,7 +167,7 @@ class CourseServiceImplTest {
 			when(courseRepository.findById(1L)).thenReturn(Optional.of(existing));
 			when(courseRepository.save(any())).thenReturn(existing);
 
-			CourseDTO dto = new CourseDTO(1L, "Updated Title", "Updated Desc", 40, BigDecimal.valueOf(6000), "Jane");
+			CreateCourseRequest dto = new CreateCourseRequest(1L, "Updated Title", "Updated Desc", 40, BigDecimal.valueOf(6000), "Jane");
 			courseService.updateCourse(dto);
 
 			// Verify the entity was loaded first (not a new one created)
@@ -181,7 +181,7 @@ class CourseServiceImplTest {
 		void shouldThrowOnUpdateNotFound() {
 			when(courseRepository.findById(99L)).thenReturn(Optional.empty());
 
-			CourseDTO dto = new CourseDTO(99L, "Title", "Desc", 10, null, "X");
+			CreateCourseRequest dto = new CreateCourseRequest(99L, "Title", "Desc", 10, null, "X");
 
 			assertThatThrownBy(() -> courseService.updateCourse(dto))
 					.isInstanceOf(CourseNotFoundException.class);

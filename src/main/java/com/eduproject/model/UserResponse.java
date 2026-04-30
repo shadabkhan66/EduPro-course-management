@@ -24,7 +24,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-public class UserResponseDTO {
+public class UserResponse {
 
 	private Long id;
 

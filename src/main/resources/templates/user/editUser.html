@@ -25,8 +25,8 @@
         <h2 class="page-title text-center">Edit Profile</h2>
         <hr>
 
-        <form th:action="@{/users/{id}/edit(id=${userResponseDTO.id})}"
-              th:object="${userResponseDTO}"
+        <form th:action="@{/users/{id}/edit(id=${userResponse.id})}"
+              th:object="${userResponse}"
               method="post">
 
             <!-- Hidden fields for id and username (not editable) -->
@@ -66,7 +66,7 @@
                     Save Profile
                 </button>
 
-                <a th:href="@{/users/{id} (id=${userResponseDTO.id})}" class="btn btn-outline">
+                <a th:href="@{/users/{id} (id=${userResponse.id})}" class="btn btn-outline">
                     Cancel
                 </a>
             </div>

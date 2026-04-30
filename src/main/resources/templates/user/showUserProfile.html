@@ -27,7 +27,7 @@
             <div class="detail-row">
                 <span class="detail-label">Full Name</span>
                 <span class="detail-value"
-                      th:text="${userResponseDTO.fullName}">
+                      th:text="${userResponse.fullName}">
                 John Doe
             </span>
             </div>
@@ -35,7 +35,7 @@
             <div class="detail-row">
                 <span class="detail-label">Username</span>
                 <span class="detail-value"
-                      th:text="${userResponseDTO.username}">
+                      th:text="${userResponse.username}">
                 johndoe
             </span>
             </div>
@@ -43,7 +43,7 @@
             <div class="detail-row">
                 <span class="detail-label">Email</span>
                 <span class="detail-value"
-                      th:text="${userResponseDTO.email}">
+                      th:text="${userResponse.email}">
                 john@email.com
             </span>
             </div>
@@ -52,7 +52,7 @@
                 <span class="detail-label">Role</span>
                 <span class="detail-value">
                 <span class="badge"
-                      th:text="${userResponseDTO.role}">
+                      th:text="${userResponse.role}">
                     USER
                 </span>
             </span>
@@ -61,7 +61,7 @@
             <div class="detail-row">
                 <span class="detail-label">Account Status</span>
                 <span class="detail-value"
-                      th:text="${userResponseDTO.active} ? 'Active' : 'Inactive'">
+                      th:text="${userResponse.active} ? 'Active' : 'Inactive'">
                 Active
             </span>
             </div>
@@ -69,7 +69,7 @@
             <div class="detail-row">
                 <span class="detail-label">Created At</span>
                 <span class="detail-value"
-                      th:text="${userResponseDTO.createdAt}">
+                      th:text="${userResponse.createdAt}">
                 2025-01-01
             </span>
             </div>
@@ -77,7 +77,7 @@
             <div class="detail-row">
                 <span class="detail-label">Last Updated</span>
                 <span class="detail-value"
-                      th:text="${userResponseDTO.lastUpdatedAt}">
+                      th:text="${userResponse.lastUpdatedAt}">
                 2025-01-05
                 </span>
             </div>
@@ -85,13 +85,13 @@
     </div>
 
         <div class="actions">
-            <a th:href="@{/users/{id}/edit(id=${userResponseDTO.id})}"
+            <a th:href="@{/users/{id}/edit(id=${userResponse.id})}"
                class="btn btn-primary">
                 Edit Profile
             </a>
 
-            <form th:action="@{/users/{id}/delete(id=${userResponseDTO.id})}"
-                    th:attr="onsubmit='return confirmDeleteUser(\'' + ${userResponseDTO.username} +'\')'"
+            <form th:action="@{/users/{id}/delete(id=${userResponse.id})}"
+                    th:attr="onsubmit='return confirmDeleteUser(\'' + ${userResponse.username} +'\')'"
                   method="post"
             >
 
@@ -102,7 +102,7 @@
                 </button>
             </form>
 
-            <a th:href="@{/users/{id}( id=${userResponseDTO.id})}"
+            <a th:href="@{/users/{id}( id=${userResponse.id})}"
                class="btn btn-primary" >
                 Back
             </a>

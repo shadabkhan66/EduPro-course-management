@@ -24,11 +24,11 @@ Now, even if enabled is not explicitly set during User.builder(), it defaults to
 ❌ 1️⃣ Wrong Thymeleaf URL Syntax (Edit link)
 You wrote:
 
-th:href="@{/users/{id}/edit}(id=${userResponseDTO.id})"
+th:href="@{/users/{id}/edit}(id=${userResponse.id})"
 The (id=...) must be inside the @{} expression.
 ✅ Correct:
 
-th:href="@{/users/{id}/edit(id=${userResponseDTO.id})}"
+th:href="@{/users/{id}/edit(id=${userResponse.id})}"
 
 ======/////=============
 

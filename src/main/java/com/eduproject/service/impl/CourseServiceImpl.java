@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.eduproject.exception.UserNotFoundException;
+import com.eduproject.model.CourseResponse;
+import com.eduproject.model.CreateCourseRequest;
 import com.eduproject.model.UserEntity;
 import com.eduproject.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eduproject.exception.CourseNotFoundException;
-import com.eduproject.model.CourseDTO;
 import com.eduproject.model.CourseEntity;
 import com.eduproject.repository.CourseRepository;
 import com.eduproject.service.CourseService;
@@ -27,37 +28,37 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<CourseDTO> getAllCourses() {
+	public List<CourseResponse> getAllCourses() {
 		return courseRepository.findAll()
 				.stream()
-				.map(this::toDTO)
+				.map(this::entityToResponse)
 				.toList();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public CourseDTO getCourseById(Long courseId) {
+	public CourseResponse getCourseById(Long courseId) {
 		return courseRepository.findById(courseId)
-				.map(this::toDTO)
+				.map(this::entityToResponse)
 				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
 	}
 
 	@Override
 	@Transactional
-	public String createCourse(CourseDTO courseDto) {
-		CourseEntity entity = toEntity(courseDto);
+	public String createCourse(CreateCourseRequest createCourseRequest) {
+		CourseEntity entity = toEntity(createCourseRequest);
 		return courseRepository.save(entity).getTitle();
 	}
 
 	@Override
 	@Transactional
-	public void updateCourse(CourseDTO courseDto) {
+	public void updateCourse(CreateCourseRequest createCourseRequest) {
 		// Load the managed entity first to preserve version, audit fields
-		CourseEntity entity = courseRepository.findById(courseDto.getId())
-				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseDto.getId() + " not found"));
+		CourseEntity entity = courseRepository.findById(createCourseRequest.getId())
+				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + createCourseRequest.getId() + " not found"));
 
 		// Copy only user-editable fields; exclude id, version, and audit columns
-		BeanUtils.copyProperties(courseDto, entity, "id", "version", "createdBy", "createdDate");
+		BeanUtils.copyProperties(createCourseRequest, entity, "id", "version", "createdBy", "createdDate");
 		courseRepository.save(entity);
 	}
 
@@ -118,14 +119,20 @@ public class CourseServiceImpl implements CourseService {
     }
 
     // --- Mapping methods ---
-
-	private CourseDTO toDTO(CourseEntity entity) {
-		CourseDTO dto = new CourseDTO();
+    // - to be replaced with entityToResponse() when compelted
+	private CreateCourseRequest toDTO(CourseEntity entity) {
+		CreateCourseRequest dto = new CreateCourseRequest();
 		BeanUtils.copyProperties(entity, dto);
 		return dto;
 	}
 
-	private CourseEntity toEntity(CourseDTO dto) {
+    private CourseResponse entityToResponse(CourseEntity entity) {
+        CourseResponse courseResponse = new CourseResponse();
+        BeanUtils.copyProperties(entity, courseResponse);
+        return courseResponse;
+    }
+
+	private CourseEntity toEntity(CreateCourseRequest dto) {
 		CourseEntity entity = new CourseEntity();
 		BeanUtils.copyProperties(dto, entity);
 		return entity;

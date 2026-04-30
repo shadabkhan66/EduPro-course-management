@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.eduproject.model.Role;
 import com.eduproject.model.UserEntity;
-import com.eduproject.model.UserRegistrationDTO;
+import com.eduproject.model.UserRequest;
 import com.eduproject.repository.UserRepository;
 import com.eduproject.service.impl.UserServiceImpl;
 
@@ -40,8 +40,8 @@ class UserServiceImplTest {
 	@InjectMocks
 	private UserServiceImpl userService;
 
-	private UserRegistrationDTO sampleDTO() {
-		UserRegistrationDTO dto = new UserRegistrationDTO();
+	private UserRequest sampleDTO() {
+		UserRequest dto = new UserRequest();
 		dto.setUsername("testuser");
 		dto.setPassword("password123");
 		dto.setFirstName("John");

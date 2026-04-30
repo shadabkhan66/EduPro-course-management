@@ -30,7 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CourseDTO {
+public class CreateCourseRequest {
 
 	private Long id;
 

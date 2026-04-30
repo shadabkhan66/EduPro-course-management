@@ -5,7 +5,7 @@
     ============================================================
     THYMELEAF FORM BINDING NOTES:
 
-    th:object="${courseDTO}"
+    th:object="${createCourseRequest}"
       → Binds the form to a model attribute (replaces <frm:form modelAttribute="...">)
       → All th:field="*{fieldName}" references are relative to this object
 
@@ -51,7 +51,7 @@
             <hr>
 
             <!-- Form: action changes based on create vs edit mode -->
-            <form th:object="${courseDTO}" method="post"
+            <form th:object="${createCourseRequest}" method="post"
                   th:action="${editMode} ? @{/courses/{id}(id=*{id})} : @{/courses}">
 
                 <!-- Hidden ID field for edit mode -->

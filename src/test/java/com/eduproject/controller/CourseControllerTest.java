@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.eduproject.model.CreateCourseRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.eduproject.config.SecurityConfig;
-import com.eduproject.model.CourseDTO;
 import com.eduproject.service.CourseService;
 
 /**
@@ -72,7 +72,7 @@ class CourseControllerTest {
 		@Test
 		@DisplayName("should return course list view with model data")
 		void shouldReturnListView() throws Exception {
-			CourseDTO course = new CourseDTO(1L, "Java", "Learn Java", 40, null, "John");
+			CreateCourseRequest course = new CreateCourseRequest(1L, "Java", "Learn Java", 40, null, "John");
 			when(courseService.getAllCourses()).thenReturn(List.of(course));
 			when(courseService.getCourseCount()).thenReturn(1L);
 
@@ -93,7 +93,7 @@ class CourseControllerTest {
 		@Test
 		@DisplayName("should return course view with course data")
 		void shouldReturnViewPage() throws Exception {
-			CourseDTO course = new CourseDTO(1L, "Java", "Learn Java", 40, BigDecimal.valueOf(5000), "John");
+			CreateCourseRequest course = new CreateCourseRequest(1L, "Java", "Learn Java", 40, BigDecimal.valueOf(5000), "John");
 			when(courseService.getCourseById(1L)).thenReturn(course);
 
 			mockMvc.perform(get("/courses/1"))
@@ -191,7 +191,7 @@ class CourseControllerTest {
 		@WithMockUser(roles = "ADMIN")
 		@DisplayName("should delete and redirect")
 		void shouldDeleteAndRedirect() throws Exception {
-			CourseDTO course = new CourseDTO(1L, "Java", "Learn Java", 40, null, "John");
+			CreateCourseRequest course = new CreateCourseRequest(1L, "Java", "Learn Java", 40, null, "John");
 			when(courseService.getCourseById(1L)).thenReturn(course);
 
 			mockMvc.perform(post("/courses/1/delete").with(csrf()))

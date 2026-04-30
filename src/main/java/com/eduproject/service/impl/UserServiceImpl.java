@@ -1,15 +1,14 @@
 package com.eduproject.service.impl;
 
 import com.eduproject.exception.UserNotFoundException;
-import com.eduproject.model.UserResponseDTO;
-import org.springframework.beans.BeanUtils;
+import com.eduproject.model.UserResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eduproject.model.Role;
 import com.eduproject.model.UserEntity;
-import com.eduproject.model.UserRegistrationDTO;
+import com.eduproject.model.UserRequest;
 import com.eduproject.repository.UserRepository;
 import com.eduproject.service.UserService;
 
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public String registerUser(UserRegistrationDTO dto) {
+	public String registerUser(UserRequest dto) {
 		log.info("Registering user: {}", dto.getUsername());
 
 		UserEntity user = UserEntity.builder()
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public UserResponseDTO getUserById(Long id) {
+	public UserResponse getUserById(Long id) {
 		log.info("Retrieving user by id: {}", id);
 		return this.userRepository.findById(id)
                 .map(this::toUserResponseDTO)
@@ -75,13 +73,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponseDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream().map(this::toUserResponseDTO).toList();
     }
 
     @Transactional
     @Override
-    public String updateUser(UserResponseDTO userRespDTO) {
+    public String updateUser(UserResponse userRespDTO) {
 
         if (userRespDTO.getId() == null) {
             throw new IllegalArgumentException("User ID must not be null");
@@ -133,8 +131,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private UserResponseDTO toUserResponseDTO(UserEntity user) {
-        return UserResponseDTO.builder()
+    private UserResponse toUserResponseDTO(UserEntity user) {
+        return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())

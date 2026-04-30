@@ -152,7 +152,7 @@ The service layer maps DTO → Entity and hardcodes `Role.STUDENT`.
 courseVo.getId()
 
 // v0.2.0: Trust the URL path variable
-courseDTO.setId(id); // Override form ID with URL ID
+createCourseRequest.setId(id); // Override form ID with URL ID
 ```
 
 ---
@@ -164,7 +164,7 @@ courseDTO.setId(id); // Override form ID with URL ID
 | Role escalation | Users could register as ADMIN via dropdown | Role hardcoded to `STUDENT` in service |
 | XSS in course title | `${course.title}` unescaped in JSP | `th:text` auto-escapes in Thymeleaf |
 | CSRF manual tokens | Required manual hidden field in every form | Thymeleaf `th:action` auto-inserts token |
-| Form ID tampering | No validation between URL and form ID | `courseDTO.setId(id)` trusts URL |
+| Form ID tampering | No validation between URL and form ID | `createCourseRequest.setId(id)` trusts URL |
 | Password logging | User entity with password in toString() | `@ToString(exclude="password")` on DTO too |
 | Redirect hardcoded | `response.sendRedirect("/")` | `response.sendRedirect(request.getContextPath() + "/")` |
 
@@ -271,13 +271,13 @@ void adminShouldSeeForm() { ... }
 
 **Thymeleaf:**
 ```html
-<form th:object="${courseDTO}">
+<form th:object="${createCourseRequest}">
     <input th:field="*{title}"/>
     <span th:errors="*{title}"></span>
 </form>
 ```
 
-**Challenge:** The model attribute name changed from `"course"` to `"courseDTO"`. Every controller method and template reference needed updating. Missed references cause runtime errors (no compile-time checking).
+**Challenge:** The model attribute name changed from `"course"` to `"createCourseRequest"`. Every controller method and template reference needed updating. Missed references cause runtime errors (no compile-time checking).
 
 ### Challenge 3: CSRF Token Handling
 

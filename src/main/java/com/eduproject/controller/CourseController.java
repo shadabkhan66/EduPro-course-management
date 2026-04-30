@@ -1,6 +1,8 @@
 package com.eduproject.controller;
 
 
+import com.eduproject.model.CourseResponse;
+import com.eduproject.model.CreateCourseRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eduproject.exception.CourseNotFoundException;
-import com.eduproject.model.CourseDTO;
 import com.eduproject.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -63,7 +64,7 @@ public class CourseController {
 	@GetMapping("/new")
 	public String showCreateForm(Model model) {
 		log.info("Showing create course form");
-		model.addAttribute("courseDTO", new CourseDTO());
+		model.addAttribute("courseDTO", new CreateCourseRequest());
 		model.addAttribute("pageHeading", "Create New Course");
 		model.addAttribute("submitLabel", "Create Course");
 		model.addAttribute("editMode", false);
@@ -72,14 +73,14 @@ public class CourseController {
 
 	@PostMapping
 	public String createCourse(
-			@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO,
+			@Valid @ModelAttribute("courseDTO") CreateCourseRequest createCourseRequest,
 			BindingResult bindingResult,
 			Model model,
 			RedirectAttributes redirectAttributes) {
 
-		log.info("Creating course: {}", courseDTO.getTitle());
+		log.info("Creating course: {}", createCourseRequest.getTitle());
 
-		if (courseService.existsByTitle(courseDTO.getTitle())) {
+		if (courseService.existsByTitle(createCourseRequest.getTitle())) {
 			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
 		}
 
@@ -91,7 +92,7 @@ public class CourseController {
 			return "course/form";
 		}
 
-		String savedTitle = courseService.createCourse(courseDTO);
+		String savedTitle = courseService.createCourse(createCourseRequest);
 		redirectAttributes.addFlashAttribute("successMessage", "Course '" + savedTitle + "' created successfully!");
 		return "redirect:/courses";
 	}
@@ -111,7 +112,7 @@ public class CourseController {
 	@PostMapping("/{id}")
 	public String updateCourse(
 			@PathVariable Long id,
-			@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO,
+			@Valid @ModelAttribute("courseDTO") CreateCourseRequest createCourseRequest,
 			BindingResult bindingResult,
 			Model model,
 			RedirectAttributes redirectAttributes) {
@@ -119,9 +120,9 @@ public class CourseController {
 		log.info("Updating course ID: {}", id);
 
 		// Security: trust the URL path ID, not the form's hidden field
-		courseDTO.setId(id);
+		createCourseRequest.setId(id);
 
-		if (courseService.existsByTitleExcludingId(courseDTO.getTitle(), id)) {
+		if (courseService.existsByTitleExcludingId(createCourseRequest.getTitle(), id)) {
 			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
 		}
 
@@ -134,9 +135,9 @@ public class CourseController {
 		}
 
 		try {
-			courseService.updateCourse(courseDTO);
+			courseService.updateCourse(createCourseRequest);
 			redirectAttributes.addFlashAttribute("successMessage",
-					"Course '" + courseDTO.getTitle() + "' updated successfully!");
+					"Course '" + createCourseRequest.getTitle() + "' updated successfully!");
 		} catch (CourseNotFoundException e) {
 			log.error("Course not found during update: {}", e.getMessage());
 			redirectAttributes.addFlashAttribute("errorMessage", "Course not found. Update failed.");
@@ -152,7 +153,7 @@ public class CourseController {
                                RedirectAttributes redirectAttributes) {
 		log.info("Deleting course ID: {}", id);
 		try {
-			CourseDTO course = courseService.getCourseById(id);
+            CourseResponse course = courseService.getCourseById(id);
 			courseService.deleteCourseById(id);
 			redirectAttributes.addFlashAttribute("successMessage",
 					"Course '" + course.getTitle() + "' deleted successfully!");

@@ -1,19 +1,19 @@
 package com.eduproject.service;
 
-import com.eduproject.model.UserRegistrationDTO;
-import com.eduproject.model.UserResponseDTO;
+import com.eduproject.model.UserRequest;
+import com.eduproject.model.UserResponse;
 
 import java.util.List;
 
 public interface UserService {
 
-	String registerUser(UserRegistrationDTO registrationDto);
+	String registerUser(UserRequest registrationDto);
 
 	boolean existsByEmail(String email);
 
 	boolean existsByUsername(String username);
 
-    UserResponseDTO getUserById(Long id);
+    UserResponse getUserById(Long id);
 
     /**
      * Returns the user ID for the given username, or null if not found.
@@ -21,9 +21,9 @@ public interface UserService {
      */
     Long getUserIdByUsername(String username);
 
-    List<UserResponseDTO> getAllUsers();
+    List<UserResponse> getAllUsers();
 
-    String updateUser(UserResponseDTO userRespDTO);
+    String updateUser(UserResponse userRespDTO);
 
     boolean existsByEmailExcludingCurrentUser(String email, Long id);
 

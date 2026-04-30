@@ -2,17 +2,18 @@ package com.eduproject.service;
 
 import java.util.List;
 
-import com.eduproject.model.CourseDTO;
+import com.eduproject.model.CourseResponse;
+import com.eduproject.model.CreateCourseRequest;
 
 public interface CourseService {
 
-	List<CourseDTO> getAllCourses();
+	List<CourseResponse> getAllCourses();
 
-	CourseDTO getCourseById(Long courseId);
+	CourseResponse getCourseById(Long courseId);
 
-	String createCourse(CourseDTO courseDto);
+	String createCourse(CreateCourseRequest createCourseRequest);
 
-	void updateCourse(CourseDTO courseDto);
+	void updateCourse(CreateCourseRequest createCourseRequest);
 
 	void deleteCourseById(Long courseId);
 
