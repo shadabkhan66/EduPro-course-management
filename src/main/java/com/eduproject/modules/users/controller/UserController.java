@@ -39,7 +39,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -48,6 +48,7 @@ public class UserController {
 //    fetch user
 //    =============================================================
 
+    /*
     @GetMapping("/{id}")
     public String showUser(@PathVariable Long id, Model model) {
         log.info("Showing user with id {}", id);
@@ -175,5 +176,7 @@ public class UserController {
 
         return "forward:/logout";
     }
+
+     */
 }
 

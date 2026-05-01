@@ -5,13 +5,13 @@ import java.util.Optional;
 
 import com.eduproject.common.exception.UserNotFoundException;
 import com.eduproject.modules.course.dto.CourseResponse;
+import com.eduproject.modules.course.mapper.CourseMapper;
 import com.eduproject.modules.users.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.eduproject.common.exception.CourseNotFoundException;
-import com.eduproject.modules.course.dto.CourseDTO;
 import com.eduproject.modules.course.entity.CourseEntity;
 import com.eduproject.modules.course.repository.CourseRepository;
 
@@ -28,15 +28,17 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseResponse> getAllCourses() {
 		return courseRepository.findAll()
 				.stream()
-				.map( c ->{ CourseResponse cr = new CourseResponse();
-                                        cr.setCourseName(c.getTitle());
-                                        cr.setCourseFee(c.getFees() == null ? 0.0 : c.getFees().doubleValue());
-                                        return cr;
-                                    }
+				.map(
+//                        c ->{ CourseResponse cr = new CourseResponse();
+//                                        cr.setCourseName(c.getTitle());
+//                                        cr.setCourseFee(c.getFees() == null ? 0.0 : c.getFees().doubleValue());
+//                                        return cr;
+//                                    }
+                        CourseMapper::toResponse
                 )
 				.toList();
 	}
-
+/*
 	@Override
 	@Transactional(readOnly = true)
 	public CourseResponse getCourseById(Long courseId) {
@@ -128,4 +130,5 @@ public class CourseServiceImpl implements CourseService {
 		BeanUtils.copyProperties(dto, entity);
 		return entity;
 	}
+    */
 }

@@ -3,6 +3,7 @@ package com.eduproject.runner;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.eduproject.modules.users.entity.UserEntity;
 import org.springframework.boot.CommandLineRunner;
@@ -48,7 +49,7 @@ public class DataSeeder implements CommandLineRunner {
 
         List<UserEntity> users = userRepository.saveAll(List.of(
                 UserEntity.builder().username("admin").password(passwordEncoder.encode("admin123")).firstName("Admin").lastName("User").email("admin@edupro.com").role(Role.ADMIN).build(),
-                UserEntity.builder().username("student").password(passwordEncoder.encode("student123")).firstName("John").lastName("Doe").email("john@edupro.com").role(Role.STUDENT).course(this.courseRepository.findByTitle("Java Programming").get()).build()
+                UserEntity.builder().username("student").password(passwordEncoder.encode("student123")).firstName("John").lastName("Doe").email("john@edupro.com").role(Role.STUDENT).course(Set.of(this.courseRepository.findByTitle("Java Programming").get())).build()
         ));
 
 

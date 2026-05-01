@@ -3,6 +3,7 @@ package com.eduproject.modules.users.entity;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import com.eduproject.model.Role;
 import com.eduproject.modules.course.entity.CourseEntity;
@@ -39,7 +40,9 @@ import lombok.ToString;
 @Entity
 @Table(name = "users")
 @ToString(exclude = "password")
-public class UserEntity implements UserDetails {
+public class UserEntity
+//        implements UserDetails
+{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,8 +68,12 @@ public class UserEntity implements UserDetails {
 	@Column(nullable = false, length = 10)
 	private Role role;
 
-    @ManyToOne //currently i am assuming one student can enroll only one course.
-    private CourseEntity course;
+    @ManyToMany()
+    @JoinTable(name = "i_am_king",
+                joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
+                inverseJoinColumns = @JoinColumn(name = "COURSE_ID", referencedColumnName = "id")//intensely writing wrong referance Id to varify
+    )
+    private Set<CourseEntity> course;
 
 
 	@Builder.Default
@@ -87,6 +94,7 @@ public class UserEntity implements UserDetails {
 		return lastName != null ? firstName + " " + lastName : firstName;
 	}
 
+    /*
 	@Override
 	public String getUsername() {
 		return this.username;
@@ -116,4 +124,6 @@ public class UserEntity implements UserDetails {
 	public boolean isEnabled() {
 		return this.enabled;
 	}
+
+     */
 }

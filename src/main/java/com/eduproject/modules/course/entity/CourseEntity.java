@@ -51,7 +51,7 @@ public class CourseEntity {
 	@Column(name = "COURSE_FEES")
 	private BigDecimal fees;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "course")
     private List<UserEntity> enrolledUsers;
 
 	@Version

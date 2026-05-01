@@ -21,18 +21,18 @@ public class CourseResponse {
 
     private Long id;
 
-    @NotBlank(message = "Course title is required")
-    @Size(max = 100, message = "Title must not exceed 100 characters")
+//    @NotBlank(message = "Course title is required")
+//    @Size(max = 100, message = "Title must not exceed 100 characters")
     private String title;
 
-    @NotBlank(message = "Course description is required")
-    @Size(max = 500, message = "Description must not exceed 500 characters")
+//    @NotBlank(message = "Course description is required")
+//    @Size(max = 500, message = "Description must not exceed 500 characters")
     private String description;
 
-    @Min(value = 1, message = "Duration must be at least 1 hour")
+//    @Min(value = 1, message = "Duration must be at least 1 hour")
     private Integer durationInHours;
 
-    @DecimalMin(value = "0.0", message = "Fees must be non-negative")
+//    @DecimalMin(value = "0.0", message = "Fees must be non-negative")
     private BigDecimal fees;
 
     private String instructor;

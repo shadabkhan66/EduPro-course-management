@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eduproject.common.exception.CourseNotFoundException;
-import com.eduproject.modules.course.dto.CourseDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +51,7 @@ public class CourseController {
 
         return ResponseEntity.ok(ApiResponse.success(courses,"All Courses fetched")); // Returns 200 + Data
     }
-
+/*
 	// ==================== VIEW ====================
 
 	@GetMapping("/{id:\\d+}")
@@ -198,4 +197,6 @@ public class CourseController {
 
         return "redirect:/users/" + userId;
     }
+
+ */
 }
