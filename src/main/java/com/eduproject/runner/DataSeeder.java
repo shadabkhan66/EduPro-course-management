@@ -26,7 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class InsertDataInDB implements CommandLineRunner {
+public class DataSeeder implements CommandLineRunner {
 
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
