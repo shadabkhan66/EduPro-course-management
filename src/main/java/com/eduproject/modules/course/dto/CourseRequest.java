@@ -36,4 +36,7 @@ public class CourseRequest {
     private BigDecimal fees;
 
     private String instructor;
+
+//    @NotNull(message = "Department is required") maybe some day, but now
+//    private Long departmentId;
 }

@@ -1,6 +1,7 @@
 package com.eduproject.modules.course.controller;
 
 import com.eduproject.common.response.ApiResponse;
+import com.eduproject.modules.course.dto.CourseRequest;
 import com.eduproject.modules.course.dto.CourseResponse;
 import com.eduproject.modules.course.service.CourseServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +31,16 @@ import java.util.List;
  *   POST /courses/{id}         → handle update
  *   POST /courses/{id}/delete  → handle delete
  */
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/v1/courses")
+@RequestMapping(path = "/v1/courses", produces = "application/json")
 public class CourseController {
 
     private final CourseServiceImpl  courseService;
 
-	// ==================== LIST ====================
+	// ==================== LIST ALL COURSES ====================
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<CourseResponse>>> listAllCourses() {
@@ -46,14 +48,27 @@ public class CourseController {
         List<CourseResponse> courses = this.courseService.getAllCourses();
 
         if (courses.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Returns 204
+            return ResponseEntity.noContent().build(); // Returns 204 or should we return any other status code
         }
 
         return ResponseEntity.ok(ApiResponse.success(courses,"All Courses fetched")); // Returns 200 + Data
     }
-/*
-	// ==================== VIEW ====================
 
+	// ==================== GET COURSE BY ID ====================
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CourseResponse>> getCourseById(@PathVariable Long id) { // problem what if we encounter String how to handle it
+        log.info("Request received to get course by id {}", id);
+        CourseResponse course = this.courseService.getCourseById(id);
+
+        if(course == null) {  // i don't really course will ever come null because if course not found it will throw exception , do don't know if this line was necessary
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(ApiResponse.success(course,"Course found"));
+    }
+
+    /*
 	@GetMapping("/{id:\\d+}")
 	public ResponseEntity<CourseResponse> getCourseById(@PathVariable Long id) {
 		log.info("Viewing course with ID: {}", id);
@@ -61,39 +76,22 @@ public class CourseController {
 
 		return ResponseEntity.ok(course);
 	}
-
+*/
 	// ==================== CREATE ====================
 
-	@GetMapping("/new")
-	public String showCreateForm(Model model) {
-		log.info("Showing create course form");
-		model.addAttribute("courseDTO", new CourseDTO());
-		model.addAttribute("pageHeading", "Create New Course");
-		model.addAttribute("submitLabel", "Create Course");
-		model.addAttribute("editMode", false);
-		return "course/form";
-	}
+
 
 	@PostMapping
 	public String createCourse(
-			@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO,
-			BindingResult bindingResult,
-			Model model,
-			RedirectAttributes redirectAttributes) {
+			@Valid @RequestBody CourseRequest courseRequest,
+//			BindingResult bindingResult,
+			) {
 
-		log.info("Creating course: {}", courseDTO.getTitle());
+		log.info("Creating course: {}", courseRequest.getTitle());
 
-		if (courseService.existsByTitle(courseDTO.getTitle())) {
-			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
-		}
-
-		if (bindingResult.hasErrors()) {
-			log.warn("Validation errors: {}", bindingResult.getAllErrors());
-			model.addAttribute("pageHeading", "Create New Course");
-			model.addAttribute("submitLabel", "Create Course");
-			model.addAttribute("editMode", false);
-			return "course/form";
-		}
+//		if (courseService.existsByTitle(courseDTO.getTitle())) {
+//			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
+//		}
 
 		String savedTitle = courseService.createCourse(courseDTO);
 		redirectAttributes.addFlashAttribute("successMessage", "Course '" + savedTitle + "' created successfully!");

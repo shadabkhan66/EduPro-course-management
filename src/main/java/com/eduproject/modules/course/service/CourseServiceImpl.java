@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.eduproject.common.exception.UserNotFoundException;
+import com.eduproject.modules.course.dto.CourseRequest;
 import com.eduproject.modules.course.dto.CourseResponse;
 import com.eduproject.modules.course.mapper.CourseMapper;
 import com.eduproject.modules.users.repository.UserRepository;
@@ -34,27 +35,27 @@ public class CourseServiceImpl implements CourseService {
 //                                        cr.setCourseFee(c.getFees() == null ? 0.0 : c.getFees().doubleValue());
 //                                        return cr;
 //                                    }
-                        CourseMapper::toResponse
+                        CourseMapper::toResponse  //so should i return some filds like fee as null or convert it into 0.0
                 )
 				.toList();
 	}
-/*
+
 	@Override
 	@Transactional(readOnly = true)
-	public CourseResponse getCourseById(Long courseId) {
-		return courseRepository.findById(courseId);
-//				.map(this::toDTO)
-//				.orElseThrow
-//                        (() -> new CourseNotFoundException("Course with ID " + courseId + " not found"));
+	public CourseResponse getCourseById(Long id) {
+		return courseRepository.findById(id)
+				.map(CourseMapper::toResponse)
+				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + id + " not found"));
 	}
 
 	@Override
 	@Transactional
-	public String createCourse(CourseDTO courseDto) {
+	public String createCourse(CourseRequest courseRequest){
 		CourseEntity entity = toEntity(courseDto);
 		return courseRepository.save(entity).getTitle();
 	}
 
+    /*
 	@Override
 	@Transactional
 	public void updateCourse(CourseDTO courseDto) {
