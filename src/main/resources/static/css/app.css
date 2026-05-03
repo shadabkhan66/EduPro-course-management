@@ -1,0 +1,47 @@
+:root {
+  font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.45;
+  color: #1a1a1a;
+  background: #f4f5f7;
+}
+body {
+  margin: 0;
+  padding: 1rem 1.25rem 2rem;
+  max-width: 52rem;
+}
+header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #ccd;
+}
+h1 {
+  font-size: 1.35rem;
+  margin: 0 0 0.25rem;
+}
+nav a {
+  margin-right: 1rem;
+  color: #0b57d0;
+}
+section {
+  background: #fff;
+  border: 1px solid #dce;
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+section h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.6rem;
+}
+.error {
+  color: #b00020;
+}
+ul.plain {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.hint {
+  color: #555;
+  font-size: 0.88rem;
+  margin: 0 0 0.5rem;
+}

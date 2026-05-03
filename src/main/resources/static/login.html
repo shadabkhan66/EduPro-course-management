@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login — EduPro</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header>
+  <h1>Login</h1>
+  <nav><a href="/">← Home</a></nav>
+</header>
+
+<section>
+  <form method="post" action="/login" autocomplete="on">
+    <p>
+      <label for="username">Username</label><br>
+      <input id="username" name="username" type="text" required>
+    </p>
+    <p>
+      <label for="password">Password</label><br>
+      <input id="password" name="password" type="password" required>
+    </p>
+    <p>
+      <button type="submit">Sign in</button>
+    </p>
+  </form>
+</section>
+</body>
+</html>

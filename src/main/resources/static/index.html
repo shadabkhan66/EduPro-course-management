@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EduPro</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header>
+  <h1>EduPro</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/login">Login</a>
+    <a href="/swagger-ui/index.html" target="_blank" rel="noopener">API docs</a>
+  </nav>
+</header>
+
+<section>
+  <h2>Courses</h2>
+  <p class="hint">Loaded from <code>GET /v1/courses</code></p>
+  <div id="courses-status">Loading…</div>
+  <ul id="courses-list" class="plain" hidden></ul>
+</section>
+
+<section>
+  <h2>Notes</h2>
+  <p>Use seeded logins from <code>DataSeeder</code> (e.g. <code>student</code> / <code>student123</code>).</p>
+</section>
+
+<script>
+  (function () {
+    var statusEl = document.getElementById('courses-status');
+    var listEl = document.getElementById('courses-list');
+
+    fetch('/v1/courses')
+      .then(function (res) {
+        if (res.status === 204) {
+          statusEl.textContent = 'No courses in the database.';
+          return null;
+        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function (body) {
+        if (!body) return;
+        if (!body.success) {
+          statusEl.innerHTML = '<span class="error">' + (body.message || 'Request failed') + '</span>';
+          return;
+        }
+        var data = body.data;
+        if (!data || !data.length) {
+          statusEl.textContent = 'No courses.';
+          return;
+        }
+        statusEl.hidden = true;
+        listEl.hidden = false;
+        data.forEach(function (c) {
+          var li = document.createElement('li');
+          var title = c.title != null ? c.title : '(no title)';
+          var id = c.id != null ? c.id : '?';
+          li.textContent = '#' + id + ' — ' + title;
+          listEl.appendChild(li);
+        });
+      })
+      .catch(function (e) {
+        statusEl.innerHTML = '<span class="error">Could not load courses: ' + e.message + '</span>';
+      });
+  })();
+</script>
+</body>
+</html>
