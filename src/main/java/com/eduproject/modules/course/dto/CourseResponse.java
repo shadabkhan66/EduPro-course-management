@@ -1,5 +1,8 @@
 package com.eduproject.modules.course.dto;
 
+import com.eduproject.modules.department.dto.DepartmentResponse;
+import com.eduproject.modules.department.entity.DepartmentEntity;
+import com.eduproject.modules.users.entity.UserEntity;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,23 +20,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CourseResponse {
 
-//    Is it necessary or recommended to use validation annotations on outgoing response DTOs (CourseResponse)?"
-
     private Long id;
-
-//    @NotBlank(message = "Course title is required")
-//    @Size(max = 100, message = "Title must not exceed 100 characters")
     private String title;
-
-//    @NotBlank(message = "Course description is required")
-//    @Size(max = 500, message = "Description must not exceed 500 characters")
     private String description;
-
-//    @Min(value = 1, message = "Duration must be at least 1 hour")
     private Integer durationInHours;
-
-//    @DecimalMin(value = "0.0", message = "Fees must be non-negative")
     private BigDecimal fees;
-
-    private String instructor;
+    private Integer capacity;
+    private Integer enrolledCount;
+    private Boolean isActive;
+    private DepartmentResponse department;
+    private UserEntity instructor;
 }

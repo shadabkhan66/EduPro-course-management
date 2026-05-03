@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.eduproject.modules.department.entity.DepartmentEntity;
+import com.eduproject.modules.instructors.entity.InstructorEntity;
 import com.eduproject.modules.users.entity.UserEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,8 +47,6 @@ public class CourseEntity {
 	@Column(name = "COURSE_DURATION_HOURS")
 	private Integer durationInHours;
 
-	@Column(name = "COURSE_INSTRUCTOR", length = 60)
-	private String instructor;
 
 	@Column(name = "COURSE_FEES")
 	private BigDecimal fees;
@@ -55,23 +55,19 @@ public class CourseEntity {
     private Integer capacity;
 
     @Column(name = "COURSE_ENROLLED_COUNT")
-    private Integer enrolledCount;  // i have written logic for enrolled Count in the end
+    private Integer enrolledCount = 0;  //need proper logic for enrollment count and given and default value 0
 
     @Column(name = "IS_COURSE_ACTIVE")
     @Builder.Default
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
-    @ManyToMany(mappedBy = "courses")
-    private List<UserEntity> enrolledUsers; //later i will introduce Enrollments entity
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private DepartmentEntity department;
 
-//    i will implement this later
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "department_id")
-//    private DepartmentEntity department;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "instructor_id")
-//    private InstructorEntity instructor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INSTRUCTOR_ID") //user with roel instructor
+    private UserEntity instructor;
 
 //    ================= META-DATA ==============================
 

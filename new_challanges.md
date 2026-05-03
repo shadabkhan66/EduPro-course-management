@@ -42,3 +42,34 @@
    private List<UserEntity> enrolledUsers;
     here  mappedBy = "course" looks wrong (should likely be "courses" in UserEntity)
 7. Avoid primitive for nullable DB fields
+
+8. @Column is used for basic fields (like String, int, etc.)
+   @JoinColumn is used for relationships (@ManyToOne, @OneToOne, etc.)
+
+    👉 When you use @ManyToOne, the column is defined by @JoinColumn only
+    So adding @Column here will either:
+    
+    be ignored, or
+    cause mapping exceptions depending on the JPA provider
+
+9.  @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COURSE_INSTRUCTOR")
+    private UserEntity instructor;
+    ✅ This is technically valid, but:
+    The column name COURSE_INSTRUCTOR is misleading
+    It actually stores a foreign key (likely a numeric ID), not a name
+    👉 Better:
+    @JoinColumn(name = "INSTRUCTOR_ID")
+
+10. decision making 
+    like 
+    1. Should I use unidirectional or bidirectional mapping?
+    2. If I use mapping, which side should be the owning side?
+       Should User own it or Role?
+       Who controls updates to the relationship?
+    3. Should I use @ManyToMany or a join table / join entity?
+       When is @ManyToMany okay?
+       When should I create a separate USER_ROLE table?
+       When should that table become a full entity (UserRole)?
+    4. 
+    
