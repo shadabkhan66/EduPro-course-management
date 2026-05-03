@@ -2,6 +2,8 @@ package com.eduproject.modules.department.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -16,7 +18,8 @@ import lombok.Setter;
 public class DepartmentEntity {
 
     @Id
-    private  Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(length = 60 , name = "DEPARTMENT_NAME", unique = true)
     private String name;

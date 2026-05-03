@@ -1,15 +1,16 @@
 package com.eduproject.modules.course.dto;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -17,26 +18,29 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CourseRequest {
 
-//    Is it necessary or recommended to use validation annotations on outgoing response DTOs (CourseResponse)?"
+	@NotBlank(message = "Course title is required")
+	@Size(max = 100, message = "Title must not exceed 100 characters")
+	private String title;
 
-//    private Long id;
+	@NotBlank(message = "Course description is required")
+	@Size(max = 500, message = "Description must not exceed 500 characters")
+	private String description;
 
-    @NotBlank(message = "Course title is required")
-    @Size(max = 100, message = "Title must not exceed 100 characters")
-    private String title;
+	@NotNull(message = "Duration is required")
+	@Min(value = 1, message = "Duration must be at least 1 hour")
+	private Integer durationInHours;
 
-    @NotBlank(message = "Course description is required")
-    @Size(max = 500, message = "Description must not exceed 500 characters")
-    private String description;
+	@NotNull(message = "Fees are required")
+	@DecimalMin(value = "0.0", inclusive = true, message = "Fees must be non-negative")
+	private BigDecimal fees;
 
-    @Min(value = 1, message = "Duration must be at least 1 hour")
-    private Integer durationInHours;
+	@NotNull(message = "Capacity is required")
+	@Min(value = 1, message = "Capacity must be at least 1")
+	private Integer capacity;
 
-    @DecimalMin(value = "0.0", message = "Fees must be non-negative")
-    private BigDecimal fees;
+	@NotNull(message = "Department is required")
+	private Long departmentId;
 
-    private String instructor;
-
-//    @NotNull(message = "Department is required") maybe some day, but now
-//    private Long departmentId;
+	@NotNull(message = "Instructor is required")
+	private Long instructorUserId;
 }

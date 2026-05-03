@@ -2,10 +2,8 @@ package com.eduproject.modules.course.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.eduproject.modules.department.entity.DepartmentEntity;
-import com.eduproject.modules.instructors.entity.InstructorEntity;
 import com.eduproject.modules.users.entity.UserEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,7 +20,7 @@ import lombok.Setter;
  *
  * Uses @Version for optimistic locking (prevents concurrent update conflicts).
  * Uses @CreationTimestamp / @UpdateTimestamp for automatic audit fields.
- * Uses @SequenceGenerator for Oracle-compatible ID generation (H2 also supports sequences).
+ * ID: {@link jakarta.persistence.GenerationType#IDENTITY} — same as other domain entities (H2 + Oracle 12c+).
  */
 @Getter
 @Setter
@@ -34,8 +32,7 @@ import lombok.Setter;
 public class CourseEntity {
 
 	@Id
-	@SequenceGenerator(allocationSize = 1, initialValue = 1_00_000, name = "SEQ_COURSE", sequenceName = "SEQ_COURSE")
-	@GeneratedValue(generator = "SEQ_COURSE", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "COURSE_TITLE", unique = true, nullable = false, length = 100)

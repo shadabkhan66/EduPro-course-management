@@ -1,23 +1,14 @@
 package com.eduproject.modules.users.entity;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
-import com.eduproject.model.Role;
-import com.eduproject.modules.course.entity.CourseEntity;
-import com.eduproject.modules.enrollment.entity.EnrollmentEntity;
 import com.eduproject.modules.roles.entity.RoleEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,10 +37,12 @@ public class UserEntity
 //        implements UserDetails
 {
 
+	/**
+	 * Surrogate key: {@link GenerationType#IDENTITY} for consistency across H2 (dev) and Oracle 12c+ (identity columns).
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@Column(unique = true, nullable = false, length = 50)
 	private String username;
 
@@ -70,20 +63,18 @@ public class UserEntity
 //	@Column(nullable = false, length = 10)
 //	private Role role;
 
-    @ManyToMany // this is owning side (only uni-directional)
-    @JoinTable(name = "USER_ROLE",
-        joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "id")
-    )
-    private Set<RoleEntity> role;
+	@ManyToMany
+	@JoinTable(
+			name = "USER_ROLE",
+			joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "id"))
+	private Set<RoleEntity> roles;
 
-//    @ManyToMany()
-//    @JoinTable(name = "i_am_king",
-//                joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
-//                inverseJoinColumns = @JoinColumn(name = "COURSE_ID", referencedColumnName = "id")//intensely writing wrong referance Id to varify
-//    )
-//    private Set<CourseEntity> courses;
-
+	/**
+	 * Student/instructor-specific data lives in {@link com.eduproject.modules.students.entity.StudentProfile} /
+	 * {@link com.eduproject.modules.instructors.entity.InstructorProfile} with {@code @JoinColumn(user_id)} —
+	 * not every user has a profile (e.g. admins). Navigation is profile → user, to keep this entity generic.
+	 */
 	@Builder.Default
 	private boolean enabled = true;
 

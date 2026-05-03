@@ -73,3 +73,18 @@
        When should that table become a full entity (UserRole)?
     4. 
     
+11. Naming: Set<RoleEntity> role reads like a single value; roles is clearer.
+
+@Version Long updateCounter is fine; elsewhere you use version on CourseEntity — consider one naming style project-wide.
+
+12. StudentEntity / InstructorEntity vs UserEntity
+    If students and instructors are users with roles, separate empty StudentEntity / InstructorEntity risk duplicating UserEntity. Common patterns: no extra entity, or StudentProfile / InstructorProfile with @OneToOne to UserEntity. Worth deciding before you implement both.
+
+13.StudentSummeryDTO is awesome 
+
+14. Why StudentProfile was on UserEntity — and what we did
+    @OneToOne(mappedBy = "user") on UserEntity did not mean “every user is a student.” Those fields were nullable: admins would have studentProfile == null and instructorProfile == null. It was only a reverse navigation (user.getStudentProfile()).
+
+    That still clutters the model mentally (“why does a generic user carry student/instructor slots?”), so it’s reasonable to drop it.
+
+    Change made: those inverse fields are removed. The owning side stays StudentProfile.user / InstructorProfile.user. You load profile by user_id when you need student/instructor data; UserEntity stays identity + roles only.

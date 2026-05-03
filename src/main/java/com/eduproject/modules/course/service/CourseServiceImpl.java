@@ -2,15 +2,14 @@ package com.eduproject.modules.course.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import com.eduproject.common.exception.DuplicateResourceException;
-import com.eduproject.common.exception.UserNotFoundException;
+import com.eduproject.common.exception.ResourceNotFoundException;
 import com.eduproject.modules.course.dto.CourseRequest;
 import com.eduproject.modules.course.dto.CourseResponse;
 import com.eduproject.modules.course.mapper.CourseMapper;
+import com.eduproject.modules.department.repository.DepartmentRepository;
 import com.eduproject.modules.users.repository.UserRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class CourseServiceImpl implements CourseService {
 
 	private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final DepartmentRepository departmentRepository;
 
 	@Transactional(readOnly = true)
 	public List<CourseResponse> getAllCourses() {
@@ -58,7 +58,12 @@ public class CourseServiceImpl implements CourseService {
         if(courseRepository.existsByTitle(courseRequest.getTitle())){
             throw new DuplicateResourceException( "Course with title " + courseRequest.getTitle() + " already exists!");
         }
-        CourseEntity course = this.courseRepository.save(CourseMapper.toEntity(courseRequest));
+        CourseEntity course = CourseMapper.toNewEntity(courseRequest);
+		course.setDepartment(departmentRepository.findById(courseRequest.getDepartmentId())
+				.orElseThrow(() -> new ResourceNotFoundException("Department not found: " + courseRequest.getDepartmentId())));
+		course.setInstructor(userRepository.findById(courseRequest.getInstructorUserId())
+				.orElseThrow(() -> new ResourceNotFoundException("Instructor user not found: " + courseRequest.getInstructorUserId())));
+        course = this.courseRepository.save(course);
         return CourseMapper.toResponse(course);
 	}
 
@@ -73,7 +78,11 @@ public class CourseServiceImpl implements CourseService {
         // doubt not the best method to handle update, I guess there are a better way to handle validation problem
 
         // 2. Update entity from request (does NOT create new object)
-        CourseMapper.updateEntityFromRequest(request, course);
+        CourseMapper.applyScalars(request, course);
+		course.setDepartment(departmentRepository.findById(request.getDepartmentId())
+				.orElseThrow(() -> new ResourceNotFoundException("Department not found: " + request.getDepartmentId())));
+		course.setInstructor(userRepository.findById(request.getInstructorUserId())
+				.orElseThrow(() -> new ResourceNotFoundException("Instructor user not found: " + request.getInstructorUserId())));
 
 		return CourseMapper.toResponse(courseRepository.save(course));
 	}
