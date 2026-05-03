@@ -9,6 +9,6 @@ import com.eduproject.modules.course.entity.CourseEntity;
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
 
 	Optional<CourseEntity> findByTitle(String title);
-//    List<CourseEntity> findAll
 
+    boolean existsByTitle(String title);
 }

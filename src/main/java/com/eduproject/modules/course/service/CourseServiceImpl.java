@@ -1,8 +1,10 @@
 package com.eduproject.modules.course.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.eduproject.common.exception.DuplicateResourceException;
 import com.eduproject.common.exception.UserNotFoundException;
 import com.eduproject.modules.course.dto.CourseRequest;
 import com.eduproject.modules.course.dto.CourseResponse;
@@ -50,25 +52,39 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@Transactional
-	public String createCourse(CourseRequest courseRequest){
-		CourseEntity entity = toEntity(courseDto);
-		return courseRepository.save(entity).getTitle();
+	public CourseResponse createCourse(CourseRequest courseRequest){
+
+        //checking if course already present or not
+        if(courseRepository.existsByTitle(courseRequest.getTitle())){
+            throw new DuplicateResourceException( "Course with title " + courseRequest.getTitle() + " already exists!");
+        }
+        CourseEntity course = this.courseRepository.save(CourseMapper.toEntity(courseRequest));
+        return CourseMapper.toResponse(course);
 	}
 
-    /*
+
 	@Override
 	@Transactional
-	public void updateCourse(CourseDTO courseDto) {
-		// Load the managed entity first to preserve version, audit fields
-		CourseEntity entity = courseRepository.findById(courseDto.getId())
-				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + courseDto.getId() + " not found"));
+	public CourseResponse updateCourse(Long id ,CourseRequest request) {
+        // 1. Fetch existing entity
+		CourseEntity course = courseRepository.findById(id)
+				.orElseThrow(() -> new CourseNotFoundException("Course with ID " + id + " not found"));
 
-		// Copy only user-editable fields; exclude id, version, and audit columns
-		BeanUtils.copyProperties(courseDto, entity, "id", "version", "createdBy", "createdDate");
-		courseRepository.save(entity);
+        // doubt not the best method to handle update, I guess there are a better way to handle validation problem
+
+        // 2. Update entity from request (does NOT create new object)
+        CourseMapper.updateEntityFromRequest(request, course);
+
+		return CourseMapper.toResponse(courseRepository.save(course));
 	}
 
-	@Override
+    @Override
+    public CourseResponse patchCourse(Long id, Map<String, Object> updates) {
+        return null;
+    }
+
+
+    @Override
 	@Transactional
 	public void deleteCourseById(Long courseId) {
 		if (!courseRepository.existsById(courseId)) {
@@ -76,25 +92,7 @@ public class CourseServiceImpl implements CourseService {
 		}
 		courseRepository.deleteById(courseId);
 	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public long getCourseCount() {
-		return courseRepository.count();
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public boolean existsByTitle(String title) {
-		return courseRepository.findByTitle(title).isPresent();
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public boolean existsByTitleExcludingId(String title, Long id) {
-		Optional<CourseEntity> existing = courseRepository.findByTitle(title);
-		return existing.isPresent() && !existing.get().getId().equals(id);
-	}
+/*
 
     @Override
     @Transactional(readOnly = true)
@@ -113,23 +111,5 @@ public class CourseServiceImpl implements CourseService {
 
     }
 
-    @Override
-    public Long getUserId(String username) {
-        return this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User Not found the given username : " + username)).getId();
-    }
-
-    // --- Mapping methods ---
-
-	private CourseDTO toDTO(CourseEntity entity) {
-		CourseDTO dto = new CourseDTO();
-		BeanUtils.copyProperties(entity, dto);
-		return dto;
-	}
-
-	private CourseEntity toEntity(CourseDTO dto) {
-		CourseEntity entity = new CourseEntity();
-		BeanUtils.copyProperties(dto, entity);
-		return entity;
-	}
     */
 }

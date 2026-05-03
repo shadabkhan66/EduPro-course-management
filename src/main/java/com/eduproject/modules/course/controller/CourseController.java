@@ -4,6 +4,7 @@ import com.eduproject.common.response.ApiResponse;
 import com.eduproject.modules.course.dto.CourseRequest;
 import com.eduproject.modules.course.dto.CourseResponse;
 import com.eduproject.modules.course.service.CourseServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,8 +17,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles all course-related web requests.
@@ -43,11 +46,13 @@ public class CourseController {
 	// ==================== LIST ALL COURSES ====================
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CourseResponse>>> listAllCourses() {
-        log.info("Request received to list all courses");
-        List<CourseResponse> courses = this.courseService.getAllCourses();
+    public ResponseEntity<ApiResponse<List<CourseResponse>>> getAllCourses() {
 
-        if (courses.isEmpty()) {
+        log.info("Fetching all courses");
+
+        List<CourseResponse> courses = courseService.getAllCourses();
+
+        if (courses.isEmpty()) { // doubt if this conditional statment is good
             return ResponseEntity.noContent().build(); // Returns 204 or should we return any other status code
         }
 
@@ -56,144 +61,114 @@ public class CourseController {
 
 	// ==================== GET COURSE BY ID ====================
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //	@GetMapping("/{id:\\d+}") maybe this may help
     public ResponseEntity<ApiResponse<CourseResponse>> getCourseById(@PathVariable Long id) { // problem what if we encounter String how to handle it
         log.info("Request received to get course by id {}", id);
         CourseResponse course = this.courseService.getCourseById(id);
 
-        if(course == null) {  // i don't really course will ever come null because if course not found it will throw exception , do don't know if this line was necessary
-            return ResponseEntity.noContent().build();
-        }
+//        if(course == null) {  // i don't really course will ever come null because if course not found it will throw exception , do don't know if this line was necessary
+//            return ResponseEntity.noContent().build();
+//        }
 
-        return ResponseEntity.ok(ApiResponse.success(course,"Course found"));
+        return ResponseEntity.ok(
+                ApiResponse.success(course,"Course found")
+        );
     }
 
-    /*
-	@GetMapping("/{id:\\d+}")
-	public ResponseEntity<CourseResponse> getCourseById(@PathVariable Long id) {
-		log.info("Viewing course with ID: {}", id);
-        CourseResponse course = this.courseService.getCourseById(id);
+    // ==================== CREATE COURSE ====================
 
-		return ResponseEntity.ok(course);
-	}
-*/
-	// ==================== CREATE ====================
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<ApiResponse<CourseResponse>> createCourse(
+            @Valid @RequestBody CourseRequest courseRequest) {
 
+        log.info("Creating course: {}", courseRequest.getTitle());
 
+        CourseResponse course = courseService.createCourse(courseRequest);
 
-	@PostMapping
-	public String createCourse(
-			@Valid @RequestBody CourseRequest courseRequest,
-//			BindingResult bindingResult,
-			) {
+        String msg = String.format(
+                "Course '%s' created successfully with id %d",
+                course.getTitle(),
+                course.getId()
+        );
 
-		log.info("Creating course: {}", courseRequest.getTitle());
+        URI location = URI.create("/v1/courses/" + course.getId());
 
-//		if (courseService.existsByTitle(courseDTO.getTitle())) {
-//			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
-//		}
+        return ResponseEntity
+                .created(location)
+                .body(ApiResponse.success(course, msg));
+    }
 
-		String savedTitle = courseService.createCourse(courseDTO);
-		redirectAttributes.addFlashAttribute("successMessage", "Course '" + savedTitle + "' created successfully!");
-		return "redirect:/courses";
-	}
+    // ==================== UPDATE COURSE (FULL) ====================
 
-	// ==================== EDIT ====================
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CourseResponse>> updateCourse(
+            @PathVariable Long id,
+            @Valid @RequestBody CourseRequest request) {
 
-	@GetMapping("/{id}/edit")
-	public String showEditForm(@PathVariable Long id, Model model) {
-		log.info("Showing edit form for course ID: {}", id);
-		model.addAttribute("courseDTO", courseService.getCourseById(id));
-		model.addAttribute("pageHeading", "Edit Course");
-		model.addAttribute("submitLabel", "Update Course");
-		model.addAttribute("editMode", true);
-		return "course/form";
-	}
+        log.info("Updating course id: {}", id);
 
-	@PostMapping("/{id}")
-	public String updateCourse(
-			@PathVariable Long id,
-			@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO,
-			BindingResult bindingResult,
-			Model model,
-			RedirectAttributes redirectAttributes) {
+        CourseResponse updated = courseService.updateCourse(id, request);
 
-		log.info("Updating course ID: {}", id);
+        return ResponseEntity.ok(
+                ApiResponse.success(updated, "Course updated successfully")
+        );
+    }
 
-		// Security: trust the URL path ID, not the form's hidden field
-		courseDTO.setId(id);
+    // ==================== PATCH COURSE (PARTIAL UPDATE) ====================
 
-		if (courseService.existsByTitleExcludingId(courseDTO.getTitle(), id)) {
-			bindingResult.rejectValue("title", "duplicate", "Course title already exists");
-		}
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<CourseResponse>> patchCourse(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
 
-		if (bindingResult.hasErrors()) {
-			log.warn("Validation errors: {}", bindingResult.getAllErrors());
-			model.addAttribute("pageHeading", "Edit Course");
-			model.addAttribute("submitLabel", "Update Course");
-			model.addAttribute("editMode", true);
-			return "course/form";
-		}
+        log.info("Patching course id: {}", id);
 
-		try {
-			courseService.updateCourse(courseDTO);
-			redirectAttributes.addFlashAttribute("successMessage",
-					"Course '" + courseDTO.getTitle() + "' updated successfully!");
-		} catch (CourseNotFoundException e) {
-			log.error("Course not found during update: {}", e.getMessage());
-			redirectAttributes.addFlashAttribute("errorMessage", "Course not found. Update failed.");
-		}
+        CourseResponse updated = courseService.patchCourse(id, updates);
 
-		return "redirect:/courses";
-	}
+        return ResponseEntity.ok(
+                ApiResponse.success(updated, "Course partially updated successfully")
+        );
+    }
+    // ==================== DELETE COURSE ====================
 
-	// ==================== DELETE ====================
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Long id) {
 
-	@PostMapping("/{id}/delete")
-	public String deleteCourse(@PathVariable Long id,
-                               RedirectAttributes redirectAttributes) {
-		log.info("Deleting course ID: {}", id);
-		try {
-			CourseDTO course = courseService.getCourseById(id);
-			courseService.deleteCourseById(id);
-			redirectAttributes.addFlashAttribute("successMessage",
-					"Course '" + course.getTitle() + "' deleted successfully!");
-		} catch (CourseNotFoundException e) {
-			log.error("Course not found for deletion: {}", e.getMessage());
-			redirectAttributes.addFlashAttribute("errorMessage", "Course not found for deletion.");
-		}
-		return "redirect:/courses";
-	}
+        log.info("Deleting course id: {}", id);
+
+        courseService.deleteCourseById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(null, "Course deleted successfully")
+        );
+    }
 
     // ================== Enroll ====================
+/*
+    @PostMapping("/{courseId}/enroll")
+    public ResponseEntity<ApiResponse<Void>> enroll(
+            @PathVariable Long courseId,
+            Principal principal) {
 
-    @PostMapping("/enroll")
-    public String enroll(@RequestParam("courseId") Long courseId,
-                         Principal principal,
-                         RedirectAttributes redirectAttributes
-    ) {
-
-        //checking if user is logId in or not if not redirect to log in page and moment after log in redirect to seme page
-        //but i think my savedreqeust is not working so i get redirected back to same page
-        if(principal == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Please login! First Before Enrolling!");
-            return "redirect:/login?enroll";
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Please login first"));
         }
+
         String username = principal.getName();
-        log.info("Enrolling course ID: {} for user {}", courseId, username);
+
+        log.info("User {} enrolling in course {}", username, courseId);
 
         if (courseService.isCourseAlreadyEnrolled(courseId, username)) {
-            redirectAttributes.addFlashAttribute("errorMessage",
-                    "You are already enrolled in this course.");
-            return "redirect:/courses/" + courseId;
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(ApiResponse.error("Already enrolled in this course"));
         }
 
         courseService.enrollUser(courseId, username);
-        Long userId = this.courseService.getUserId(username);
-        redirectAttributes.addFlashAttribute("successMessage",
-                "Successfully enrolled in the course.");
 
-        return "redirect:/users/" + userId;
+        return ResponseEntity.ok(
+                ApiResponse.success(null, "Enrolled successfully")
+        );
     }
 
  */

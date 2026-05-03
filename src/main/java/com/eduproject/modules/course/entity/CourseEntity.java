@@ -51,8 +51,29 @@ public class CourseEntity {
 	@Column(name = "COURSE_FEES")
 	private BigDecimal fees;
 
-    @ManyToMany(mappedBy = "course")
-    private List<UserEntity> enrolledUsers;
+    @Column(name= "COURSE_CAPACITY")
+    private Integer capacity;
+
+    @Column(name = "COURSE_ENROLLED_COUNT")
+    private Integer enrolledCount;  // i have written logic for enrolled Count in the end
+
+    @Column(name = "IS_COURSE_ACTIVE")
+    @Builder.Default
+    private boolean isActive = true;
+
+    @ManyToMany(mappedBy = "courses")
+    private List<UserEntity> enrolledUsers; //later i will introduce Enrollments entity
+
+//    i will implement this later
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "department_id")
+//    private DepartmentEntity department;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "instructor_id")
+//    private InstructorEntity instructor;
+
+//    ================= META-DATA ==============================
 
 	@Version
 	@Column(name = "VERSION")
@@ -71,4 +92,12 @@ public class CourseEntity {
 
 	@Column(name = "UPDATED_BY", insertable = false)
 	private String updatedBy;
+
+//    this logic is very wrong, instead i will be building logic in service class
+//    @PrePersist
+//    protected void incrementEnrolledCount() {
+//
+//        this.enrolledCount = this.enrolledCount + 1;
+//    }
+
 }

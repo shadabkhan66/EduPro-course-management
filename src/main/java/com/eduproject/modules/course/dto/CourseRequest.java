@@ -19,7 +19,7 @@ public class CourseRequest {
 
 //    Is it necessary or recommended to use validation annotations on outgoing response DTOs (CourseResponse)?"
 
-    private Long id;
+//    private Long id;
 
     @NotBlank(message = "Course title is required")
     @Size(max = 100, message = "Title must not exceed 100 characters")

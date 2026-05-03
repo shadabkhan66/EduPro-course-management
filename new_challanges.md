@@ -29,3 +29,16 @@
     -- → separator between branch and file
     new_challanges.md → the file you want
     
+5. @PrePersist for enrolledCount
+   @PrePersist
+   protected void incrementEnrolledCount() {
+   this.enrolledCount = this.enrolledCount + 1;
+   }
+   @PrePersist runs only when the entity is first saved, not when users enroll.
+   So every new course will start with enrolledCount = 1, which is incorrect.
+   Enrollment is a business operation, not a persistence lifecycle concern.
+
+6. @ManyToMany(mappedBy = "course")
+   private List<UserEntity> enrolledUsers;
+    here  mappedBy = "course" looks wrong (should likely be "courses" in UserEntity)
+7. Avoid primitive for nullable DB fields

@@ -73,7 +73,7 @@ public class UserEntity
                 joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "COURSE_ID", referencedColumnName = "id")//intensely writing wrong referance Id to varify
     )
-    private Set<CourseEntity> course;
+    private Set<CourseEntity> courses;
 
 
 	@Builder.Default

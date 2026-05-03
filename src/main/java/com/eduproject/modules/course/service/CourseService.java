@@ -1,6 +1,7 @@
 package com.eduproject.modules.course.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.eduproject.modules.course.dto.CourseRequest;
 import com.eduproject.modules.course.dto.CourseResponse;
@@ -11,11 +12,13 @@ public interface CourseService {
 
 	CourseResponse getCourseById(Long courseId);
 
-	String createCourse(CourseRequest courseRequest);
+	CourseResponse createCourse(CourseRequest courseRequest);
 
-//	void updateCourse(CourseDTO courseDto);
-//
-//	void deleteCourseById(Long courseId);
+    CourseResponse updateCourse(Long id, CourseRequest courseRequest);
+
+    CourseResponse patchCourse(Long id, Map<String, Object> updates);
+
+	void deleteCourseById(Long courseId);
 //
 //	long getCourseCount();
 //
