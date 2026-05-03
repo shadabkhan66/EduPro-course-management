@@ -1,0 +1,2 @@
+-- V1: users, roles, user_role — align with docs/ER_DIAGRAM.md
+-- TODO: add DDL when entities are finalized

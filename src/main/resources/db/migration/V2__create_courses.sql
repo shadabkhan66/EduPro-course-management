@@ -1,0 +1,2 @@
+-- V2: departments, courses — align with docs/ER_DIAGRAM.md
+-- TODO: add DDL when entities are finalized

@@ -1,0 +1,4 @@
+spring:
+  application:
+    name: edupro-campus-management
+  # Datasource and profiles: extend or merge with application.properties during migration.

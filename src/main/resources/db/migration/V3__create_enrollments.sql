@@ -1,0 +1,2 @@
+-- V3: enrollments, grades, schedules, course_materials, notifications — align with docs/ER_DIAGRAM.md
+-- TODO: add DDL when entities are finalized
